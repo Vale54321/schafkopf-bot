@@ -2,6 +2,7 @@ package org.example;
 
 import java.io.IOException;
 import java.util.Locale;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CountDownLatch;
 
 import com.google.gson.Gson;
@@ -13,23 +14,19 @@ import org.slf4j.LoggerFactory;
 
 public class EventEndpoint extends WebSocketAdapter
 {
+    private static final CopyOnWriteArrayList<Session> sessions = new CopyOnWriteArrayList<>();
     private static final Logger LOG = LoggerFactory.getLogger(EventEndpoint.class);
     private final CountDownLatch closureLatch = new CountDownLatch(1);
 
     private Schafkopf schafkopf;
     @Override
-    public void onWebSocketConnect(Session sess)
+    public void onWebSocketConnect(Session session)
     {
-        super.onWebSocketConnect(sess);
-        LOG.debug("Endpoint connected: {}", sess);
-        System.out.println("Endpoint connected:" + sess);
+        super.onWebSocketConnect(session);
+        LOG.debug("Endpoint connected: {}", session);
+        System.out.println("Endpoint connected:" + session);
 
-        schafkopf = new Schafkopf(getSession());
-        try {
-            schafkopf.initializeCardDeck();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        sessions.add(session);
     }
 
     @Override
@@ -73,6 +70,7 @@ public class EventEndpoint extends WebSocketAdapter
     public void onWebSocketClose(int statusCode, String reason)
     {
         super.onWebSocketClose(statusCode, reason);
+        sessions.remove(getSession());
         LOG.debug("Socket Closed: [{}] {}", statusCode, reason);
         closureLatch.countDown();
     }
