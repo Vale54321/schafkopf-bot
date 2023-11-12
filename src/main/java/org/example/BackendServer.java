@@ -58,7 +58,7 @@ public class BackendServer
             wsContainer.setMaxTextMessageSize(65535);
             wsContainer.setIdleTimeout(Duration.ofDays(300000));
             // Add websockets
-            wsContainer.addMapping("/schafkopf-events/*", new EventEndpointCreator());
+            wsContainer.addMapping("/schafkopf-events/*", new FrontendEndpointCreator());
         });
     }
 
