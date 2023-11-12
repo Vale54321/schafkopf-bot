@@ -8,6 +8,6 @@ public class EventEndpointCreator implements JettyWebSocketCreator
     @Override
     public Object createWebSocket(JettyServerUpgradeRequest jettyServerUpgradeRequest, JettyServerUpgradeResponse jettyServerUpgradeResponse)
     {
-        return new EventEndpoint();
+        return new FrontendEndpoint();
     }
 }

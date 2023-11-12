@@ -17,13 +17,13 @@ import org.eclipse.jetty.servlet.FilterHolder;
 import org.eclipse.jetty.servlets.CrossOriginFilter;
 import io.github.cdimascio.dotenv.Dotenv;
 
-public class EventServer
+public class BackendServer
 {
-    private static final Logger LOG = LoggerFactory.getLogger(EventServer.class);
+    private static final Logger LOG = LoggerFactory.getLogger(BackendServer.class);
 
     public static void main(String[] args) throws Exception
     {
-        EventServer server = new EventServer();
+        BackendServer server = new BackendServer();
         server.setPort(8080);
         server.start();
         server.join();
@@ -32,7 +32,7 @@ public class EventServer
     private final Server server;
     private final ServerConnector connector;
 
-    public EventServer()
+    public BackendServer()
     {
         Dotenv dotenv = Dotenv.configure().load();
         server = new Server();

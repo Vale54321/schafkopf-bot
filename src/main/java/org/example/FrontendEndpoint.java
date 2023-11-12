@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CountDownLatch;
 
-public class EventEndpoint extends WebSocketAdapter {
+public class FrontendEndpoint extends WebSocketAdapter {
     private static final CopyOnWriteArrayList<Session> sessions = new CopyOnWriteArrayList<>();
     private final CountDownLatch closureLatch = new CountDownLatch(1);
 
