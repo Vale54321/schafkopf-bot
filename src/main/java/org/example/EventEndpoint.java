@@ -64,6 +64,7 @@ public class EventEndpoint extends WebSocketAdapter
                 throw new RuntimeException(e);
             }
         }
+
         for (Session session : sessions) {
             try {
                 session.getRemote().sendString(message);
@@ -93,5 +94,15 @@ public class EventEndpoint extends WebSocketAdapter
     {
         LOG.debug("Awaiting closure from remote");
         closureLatch.await();
+    }
+
+    public void sendMessage(String message){
+        for (Session session : sessions) {
+            try {
+                session.getRemote().sendString(message);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
