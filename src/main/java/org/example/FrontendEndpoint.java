@@ -9,10 +9,12 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CountDownLatch;
 
 public class FrontendEndpoint extends WebSocketAdapter {
-    private static final CopyOnWriteArrayList<Session> sessions = new CopyOnWriteArrayList<>();
     private final CountDownLatch closureLatch = new CountDownLatch(1);
-
-    private Schafkopf schafkopf;
+    private BackendServer backendServer;
+    public FrontendEndpoint(BackendServer backendServer) {
+        this.backendServer = backendServer;
+        System.out.println("new FrontendEndpoint");
+    }
 
     @Override
     public void onWebSocketConnect(Session session) {
@@ -20,7 +22,7 @@ public class FrontendEndpoint extends WebSocketAdapter {
         String clientIp = session.getRemoteAddress().toString();
         System.out.println("Endpoint connected from ip: " + clientIp);
 
-        sessions.add(session);
+        backendServer.addFrontendEndpoint(this);
     }
 
     @Override
@@ -29,22 +31,20 @@ public class FrontendEndpoint extends WebSocketAdapter {
         System.out.println("Received TEXT message:" + message);
 
         if (message.contains("startsimulation")) {
-            Gson gson = new Gson();
-            String jsonData = gson.toJson("Start");
-            sendMessage(jsonData);
+            backendServer.startSchafkopfGame();
         }
 
         if (message.contains("stopsimulation")) {
-            Gson gson = new Gson();
-            String jsonData = gson.toJson("Stop");
-            sendMessage(jsonData);
+            backendServer.stopSchafkopfGame();
         }
     }
 
     @Override
     public void onWebSocketClose(int statusCode, String reason) {
         super.onWebSocketClose(statusCode, reason);
-        sessions.remove(getSession());
+
+        backendServer.removeFrontendEndpoint(this);
+
         System.out.println("Socket Closed: [" + statusCode + "] " + reason);
         closureLatch.countDown();
     }
@@ -56,12 +56,10 @@ public class FrontendEndpoint extends WebSocketAdapter {
     }
 
     public void sendMessage(String message) {
-        for (Session session : sessions) {
             try {
-                session.getRemote().sendString(message);
+                getRemote().sendString(message);
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }
     }
 }

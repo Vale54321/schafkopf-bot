@@ -10,8 +10,9 @@ import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.websocket.server.config.JettyWebSocketServletContainerInitializer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.jetty.servlet.FilterHolder;
 import org.eclipse.jetty.servlets.CrossOriginFilter;
@@ -19,8 +20,7 @@ import io.github.cdimascio.dotenv.Dotenv;
 
 public class BackendServer
 {
-    private static final Logger LOG = LoggerFactory.getLogger(BackendServer.class);
-
+    private List<FrontendEndpoint> frontendEndpoints = new ArrayList<>();
     public static void main(String[] args) throws Exception
     {
         BackendServer server = new BackendServer();
@@ -32,6 +32,8 @@ public class BackendServer
     private final Server server;
     private final ServerConnector connector;
 
+    private final Schafkopf schafkopfGame;
+
     public BackendServer()
     {
         Dotenv dotenv = Dotenv.configure().load();
@@ -41,7 +43,7 @@ public class BackendServer
         connector.setHost(address.getHostName());
         connector.setPort(address.getPort());
         server.addConnector(connector);
-
+        schafkopfGame = new Schafkopf(this);
         // Setup the basic application "context" for this application at "/"
         // This is also known as the handler tree (in jetty speak)
         ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
@@ -58,7 +60,8 @@ public class BackendServer
             wsContainer.setMaxTextMessageSize(65535);
             wsContainer.setIdleTimeout(Duration.ofDays(300000));
             // Add websockets
-            wsContainer.addMapping("/schafkopf-events/*", new FrontendEndpointCreator());
+            wsContainer.addMapping("/schafkopf-events/*", new FrontendEndpointCreator(this));
+
         });
     }
 
@@ -98,7 +101,28 @@ public class BackendServer
 
     public void join() throws InterruptedException
     {
-        LOG.info("Use Ctrl+C to stop server");
         server.join();
+    }
+
+    public void addFrontendEndpoint(FrontendEndpoint endpoint) {
+        frontendEndpoints.add(endpoint);
+    }
+
+    public void removeFrontendEndpoint(FrontendEndpoint endpoint) {
+        frontendEndpoints.remove(endpoint);
+    }
+
+    public void sendMessageToAllFrontendEndpoints(String message) {
+        for (FrontendEndpoint endpoint : frontendEndpoints) {
+            endpoint.sendMessage(message);
+        }
+    }
+
+    public void startSchafkopfGame() {
+        schafkopfGame.startGame();
+    }
+
+    public void stopSchafkopfGame() {
+        schafkopfGame.stopGame();
     }
 }
