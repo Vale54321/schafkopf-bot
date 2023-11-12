@@ -12,7 +12,6 @@ import java.util.concurrent.CountDownLatch;
 
 public class EventEndpoint extends WebSocketAdapter {
     private static final CopyOnWriteArrayList<Session> sessions = new CopyOnWriteArrayList<>();
-    private static final Logger LOG = LoggerFactory.getLogger(EventEndpoint.class);
     private final CountDownLatch closureLatch = new CountDownLatch(1);
 
     private Schafkopf schafkopf;
