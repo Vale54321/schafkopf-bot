@@ -14,9 +14,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.eclipse.jetty.servlet.FilterHolder;
-import org.eclipse.jetty.servlet.FilterMapping;
-import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlets.CrossOriginFilter;
+import io.github.cdimascio.dotenv.Dotenv;
 
 public class EventServer
 {
@@ -35,8 +34,9 @@ public class EventServer
 
     public EventServer()
     {
+        Dotenv dotenv = Dotenv.configure().load();
         server = new Server();
-        InetSocketAddress address = new InetSocketAddress("192.168.178.126", 8080);
+        InetSocketAddress address = new InetSocketAddress(dotenv.get("VITE_APP_WEBSOCKET_IP"), 8080);
         connector = new ServerConnector(server);
         connector.setHost(address.getHostName());
         connector.setPort(address.getPort());
