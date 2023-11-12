@@ -1,14 +1,22 @@
 package org.example;
 
+import java.net.InetSocketAddress;
 import java.net.URI;
 import java.time.Duration;
+import java.util.EnumSet;
 
+import jakarta.servlet.DispatcherType;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.websocket.server.config.JettyWebSocketServletContainerInitializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import org.eclipse.jetty.servlet.FilterHolder;
+import org.eclipse.jetty.servlet.FilterMapping;
+import org.eclipse.jetty.servlet.ServletContextHandler;
+import org.eclipse.jetty.servlets.CrossOriginFilter;
 
 public class EventServer
 {
@@ -28,7 +36,10 @@ public class EventServer
     public EventServer()
     {
         server = new Server();
+        InetSocketAddress address = new InetSocketAddress("192.168.2.160", 8080);
         connector = new ServerConnector(server);
+        connector.setHost(address.getHostName());
+        connector.setPort(address.getPort());
         server.addConnector(connector);
 
         // Setup the basic application "context" for this application at "/"
@@ -37,6 +48,8 @@ public class EventServer
         context.setContextPath("/");
         server.setHandler(context);
 
+        // Configure CORS settings
+        configureCORS(context);
 
         // Configure specific websocket behavior
         JettyWebSocketServletContainerInitializer.configure(context, (servletContext, wsContainer) ->
@@ -45,8 +58,22 @@ public class EventServer
             wsContainer.setMaxTextMessageSize(65535);
             wsContainer.setIdleTimeout(Duration.ofDays(300000));
             // Add websockets
-            wsContainer.addMapping("/events/*", new EventEndpointCreator());
+            wsContainer.addMapping("/schafkopf-events/*", new EventEndpointCreator());
         });
+    }
+
+    private void configureCORS(ServletContextHandler context) {
+        // Enable CORS for all paths
+        FilterHolder cors = context.addFilter(CrossOriginFilter.class, "/*", null);
+
+        // Configure allowed origins, headers, and methods
+        cors.setInitParameter("allowedOrigins", "http://192.168.2.160:5173");
+        cors.setInitParameter("allowedHeaders", "X-Requested-With,Content-Type,Accept,Origin");
+        cors.setInitParameter("allowedMethods", "GET,POST,PUT,DELETE,OPTIONS");
+
+        // Add filter mappings
+        EnumSet<DispatcherType> types = EnumSet.of(DispatcherType.REQUEST);
+        context.addFilter(cors, "*", types);
     }
 
     public void setPort(int port)

@@ -64,6 +64,13 @@ public class EventEndpoint extends WebSocketAdapter
                 throw new RuntimeException(e);
             }
         }
+        for (Session session : sessions) {
+            try {
+                session.getRemote().sendString(message);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override
