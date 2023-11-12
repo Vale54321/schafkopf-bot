@@ -1,12 +1,18 @@
 package org.example;
 
 public class Karte {
-    private int id;
-    Karte(int id){
+    private String id;
+    private String name;
+    Karte(String id, String name){
         this.id = id;
+        this.name = name;
     }
 
-    public int getId(){
+    public String getId(){
         return this.id;
+    }
+
+    public String getName(){
+        return this.name;
     }
 }

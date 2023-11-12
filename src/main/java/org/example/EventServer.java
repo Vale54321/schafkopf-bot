@@ -36,7 +36,7 @@ public class EventServer
     public EventServer()
     {
         server = new Server();
-        InetSocketAddress address = new InetSocketAddress("192.168.2.160", 8080);
+        InetSocketAddress address = new InetSocketAddress("192.168.178.126", 8080);
         connector = new ServerConnector(server);
         connector.setHost(address.getHostName());
         connector.setPort(address.getPort());
@@ -67,7 +67,7 @@ public class EventServer
         FilterHolder cors = context.addFilter(CrossOriginFilter.class, "/*", null);
 
         // Configure allowed origins, headers, and methods
-        cors.setInitParameter("allowedOrigins", "http://192.168.2.160:5173");
+        cors.setInitParameter("allowedOrigins", "http://192.168.178.126:5173");
         cors.setInitParameter("allowedHeaders", "X-Requested-With,Content-Type,Accept,Origin");
         cors.setInitParameter("allowedMethods", "GET,POST,PUT,DELETE,OPTIONS");
 

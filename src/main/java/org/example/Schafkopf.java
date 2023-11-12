@@ -5,13 +5,13 @@ import java.io.IOException;
 
 public class Schafkopf {
     private Karte[] deck;
-    private Session session;
-    Schafkopf(Session session){
-        this.session = session;
+    private EventEndpoint endpoint;
+    Schafkopf(EventEndpoint endpoint){
+        this.endpoint = endpoint;
     }
     public void initializeCardDeck() throws IOException {
         Gson gson = new Gson();
         String jsonData = gson.toJson("Initialisiere Kartendeck");
-        session.getRemote().sendString(jsonData);
+        endpoint.sendMessage("test");
     }
 }
