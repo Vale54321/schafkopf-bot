@@ -7,7 +7,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.util.Locale;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CountDownLatch;
 
@@ -21,8 +20,8 @@ public class EventEndpoint extends WebSocketAdapter {
     @Override
     public void onWebSocketConnect(Session session) {
         super.onWebSocketConnect(session);
-        LOG.debug("Endpoint connected: {}", session);
-        System.out.println("Endpoint connected:" + session);
+        String clientIp = session.getRemoteAddress().toString();
+        System.out.println("Endpoint connected from ip: " + clientIp);
 
         sessions.add(session);
     }
@@ -30,33 +29,18 @@ public class EventEndpoint extends WebSocketAdapter {
     @Override
     public void onWebSocketText(String message) {
         super.onWebSocketText(message);
-        LOG.debug("Received TEXT message: {}", message);
         System.out.println("Received TEXT message:" + message);
 
+        if (message.contains("startsimulation")) {
+            Gson gson = new Gson();
+            String jsonData = gson.toJson("Start");
+            sendMessage(jsonData);
+        }
 
-        for (Session session : sessions) {
-            if (message.toLowerCase(Locale.US).contains("startsimulation")) {
-                try {
-                    Gson gson = new Gson();
-                    String jsonData = gson.toJson("Start");
-                    session.getRemote().sendString(jsonData);
-
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-
-            if (message.toLowerCase(Locale.US).contains("stopsimulation")) {
-                try {
-                    Gson gson = new Gson();
-                    String jsonData = gson.toJson("Stop");
-                    session.getRemote().sendString(jsonData);
-
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-
+        if (message.contains("stopsimulation")) {
+            Gson gson = new Gson();
+            String jsonData = gson.toJson("Stop");
+            sendMessage(jsonData);
         }
     }
 
@@ -64,7 +48,7 @@ public class EventEndpoint extends WebSocketAdapter {
     public void onWebSocketClose(int statusCode, String reason) {
         super.onWebSocketClose(statusCode, reason);
         sessions.remove(getSession());
-        LOG.debug("Socket Closed: [{}] {}", statusCode, reason);
+        System.out.println("Socket Closed: [" + statusCode + "] " + reason);
         closureLatch.countDown();
     }
 
@@ -74,12 +58,7 @@ public class EventEndpoint extends WebSocketAdapter {
         cause.printStackTrace(System.err);
     }
 
-    public void awaitClosure() throws InterruptedException {
-        LOG.debug("Awaiting closure from remote");
-        closureLatch.await();
-    }
-
-    public void sendMessage(String message){
+    public void sendMessage(String message) {
         for (Session session : sessions) {
             try {
                 session.getRemote().sendString(message);
