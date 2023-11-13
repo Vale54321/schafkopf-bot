@@ -8,7 +8,7 @@ public abstract class SpielController {
     protected List<Karte> trumpfKarten;
     protected List<Karte> farbKarten;
 
-
+    public abstract void welcheKarteSpielich();
 
     public List<Karte> getTrumpfKarten() {
         return trumpfKarten;
@@ -17,4 +17,6 @@ public abstract class SpielController {
     public List<Karte> getFarbKarten() {
         return farbKarten;
     }
+
+
 }
