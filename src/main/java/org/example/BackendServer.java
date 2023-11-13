@@ -125,4 +125,12 @@ public class BackendServer
     public void stopSchafkopfGame() {
         schafkopfGame.stopGame();
     }
+
+    public void showTrumpf() {
+        schafkopfGame.showTrumpf();
+    }
+
+    public void showFarbe() {
+        schafkopfGame.showFarbe();
+    }
 }
