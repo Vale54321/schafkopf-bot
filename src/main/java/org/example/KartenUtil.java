@@ -29,7 +29,6 @@ public class KartenUtil {
         String[] farben = {"schell", "herz", "blatt", "eichel"};
         String[] symbole = {"6", "7", "8", "9", "u", "o", "k", "x", "a"};
 
-        int totalCards = farben.length * symbole.length;
         List<Karte> deck = new ArrayList<>();
 
         for (String farbe : farben) {
