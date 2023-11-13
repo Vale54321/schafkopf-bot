@@ -1,12 +1,32 @@
 package org.example;
 
 public class Karte {
-    private int id;
-    Karte(int id){
+    private String id;
+    private String name;
+    private String farbe;
+    private String symbol;
+    private int punkte;
+    Karte(String id, String name, String farbe, String symbol, int punkte){
         this.id = id;
+        this.name = name;
+        this.farbe = farbe;
+        this.symbol = symbol;
+        this.punkte = punkte;
     }
 
-    public int getId(){
+    public String getId(){
         return this.id;
+    }
+
+    public String getName(){
+        return this.name;
+    }
+
+    public String getFarbe(){
+        return this.farbe;
+    }
+
+    public String getSymbol() {
+        return this.symbol;
     }
 }

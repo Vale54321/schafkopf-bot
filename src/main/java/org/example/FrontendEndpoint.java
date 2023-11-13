@@ -1,0 +1,73 @@
+package org.example;
+
+import com.google.gson.Gson;
+import org.eclipse.jetty.websocket.api.Session;
+import org.eclipse.jetty.websocket.api.WebSocketAdapter;
+
+import java.io.IOException;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.CountDownLatch;
+
+public class FrontendEndpoint extends WebSocketAdapter {
+    private final CountDownLatch closureLatch = new CountDownLatch(1);
+    private BackendServer backendServer;
+    public FrontendEndpoint(BackendServer backendServer) {
+        this.backendServer = backendServer;
+        System.out.println("new FrontendEndpoint");
+    }
+
+    @Override
+    public void onWebSocketConnect(Session session) {
+        super.onWebSocketConnect(session);
+        String clientIp = session.getRemoteAddress().toString();
+        System.out.println("Endpoint connected from ip: " + clientIp);
+
+        backendServer.addFrontendEndpoint(this);
+    }
+
+    @Override
+    public void onWebSocketText(String message) {
+        super.onWebSocketText(message);
+        System.out.println("Received TEXT message:" + message);
+
+        if (message.contains("startsimulation")) {
+            backendServer.startSchafkopfGame();
+        }
+
+        if (message.contains("stopsimulation")) {
+            backendServer.stopSchafkopfGame();
+        }
+
+        if(message.contains("showtrumpf")) {
+            backendServer.showTrumpf();
+        }
+
+        if(message.contains("showfarben")) {
+            backendServer.showFarbe();
+        }
+    }
+
+    @Override
+    public void onWebSocketClose(int statusCode, String reason) {
+        super.onWebSocketClose(statusCode, reason);
+
+        backendServer.removeFrontendEndpoint(this);
+
+        System.out.println("Socket Closed: [" + statusCode + "] " + reason);
+        closureLatch.countDown();
+    }
+
+    @Override
+    public void onWebSocketError(Throwable cause) {
+        super.onWebSocketError(cause);
+        cause.printStackTrace(System.err);
+    }
+
+    public void sendMessage(String message) {
+            try {
+                getRemote().sendString(message);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+    }
+}
