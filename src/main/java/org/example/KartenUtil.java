@@ -89,15 +89,28 @@ public class KartenUtil {
         return gezogeneKarten;
     }
 
-    public static void removeKarten(List<Karte> karten, List<Karte> kartenWeg) {
+    public static void removeKarten(List<Karte> karten, List<Karte> kartenWeg){
         for (Karte karteWeg : kartenWeg) {
             for (Karte karte : karten) {
-                if (karte.getId().equals(karteWeg.getId())) {
+                if(karte.getId().equals(karteWeg.getId())){
                     karten.remove(karte);
                     break;
                 }
             }
         }
+    }
+
+    public static void sortiereKarten(List<Karte> karten, List<Karte> farbkarten, List<Karte> trumpfkarten) {
+        List<Karte> kartenReihenfolge = new ArrayList<>(farbkarten);
+        kartenReihenfolge.addAll(trumpfkarten);
+
+        List<Karte> kartenListe = initializeSchafKopfCardDeck();
+
+        removeKarten(kartenListe, karten);
+        removeKarten(kartenReihenfolge, kartenListe);
+
+        karten.clear();
+        karten.addAll(kartenReihenfolge);
     }
     public static String getIdOfUid(String uid){
         switch (uid){
