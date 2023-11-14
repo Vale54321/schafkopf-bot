@@ -1,7 +1,6 @@
 package org.example;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class KartenUtil {
 
@@ -75,7 +74,42 @@ public class KartenUtil {
         return cardName;
     }
 
-    public static void removeCards(List<Karte> allCards, List<Karte> cardsToRemove) {
-        allCards.removeAll(cardsToRemove);
+    public static ArrayList<Karte> zieheZufallsHand(int anzahl) {
+        List<Karte> karten = initializeSchafKopfCardDeck();
+        ArrayList<Karte> gezogeneKarten = new ArrayList<>();
+        Random random = new Random();
+
+        // Ziehe zufällige Karten
+        for (int i = 0; i < anzahl; i++) {
+            int zufallsIndex = random.nextInt(karten.size());
+            Karte gezogeneKarte = karten.get(zufallsIndex);
+            gezogeneKarten.add(gezogeneKarte);
+            karten.remove(gezogeneKarte);
+        }
+        return gezogeneKarten;
+    }
+
+    public static void removeKarten(List<Karte> karten, List<Karte> kartenWeg){
+        for (Karte karteWeg : kartenWeg) {
+            for (Karte karte : karten) {
+                if(karte.getId().equals(karteWeg.getId())){
+                    karten.remove(karte);
+                    break;
+                }
+            }
+        }
+    }
+
+    public static void sortiereKarten(List<Karte> karten, List<Karte> farbkarten, List<Karte> trumpfkarten) {
+        List<Karte> kartenReihenfolge = new ArrayList<>(farbkarten);
+        kartenReihenfolge.addAll(trumpfkarten);
+
+        List<Karte> kartenListe = initializeSchafKopfCardDeck();
+
+        removeKarten(kartenListe, karten);
+        removeKarten(kartenReihenfolge, kartenListe);
+
+        karten.clear();
+        karten.addAll(kartenReihenfolge);
     }
 }
