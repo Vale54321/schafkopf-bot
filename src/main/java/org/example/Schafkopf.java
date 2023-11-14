@@ -1,11 +1,14 @@
 package org.example;
 
 import com.google.gson.Gson;
-import org.example.spielController.GeierController;
+import org.example.spielController.SauSpielController;
 import org.example.spielController.SpielController;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Schafkopf {
-    private final SpielController spielController = new GeierController();
+    private final SpielController spielController = new SauSpielController("eichel", false);
     private final BackendServer server;
     private boolean gameState = false;
 
@@ -21,16 +24,21 @@ public class Schafkopf {
             String karteJson = gson.toJson(karte);
             server.sendMessageToAllFrontendEndpoints(karteJson);
         }
-        spielController.welcheKarteSpielich();
     }
 
     public void showFarbe() {
+        List<Karte> testHand = KartenUtil.zieheZufallsHand(8);
+        KartenUtil.sortiereKarten(testHand, spielController.getFarbKarten(), spielController.getTrumpfKarten());
         Gson gson = new Gson();
-        for (Karte karte : spielController.getFarbKarten()) {
+        for (Karte karte : testHand) {
             String karteJson = gson.toJson(karte);
             server.sendMessageToAllFrontendEndpoints(karteJson);
         }
-        spielController.welcheKarteSpielich();
+        List<Karte> testTischKarten = new ArrayList<>();
+        testTischKarten.add(new Karte("eichel_9","Bla","eichel","9",0));
+        String karteJson = gson.toJson(spielController.welcheKarteSpielich(new ArrayList<Karte>(), testHand, testTischKarten));
+        server.sendMessageToAllFrontendEndpoints(karteJson);
+
     }
 
     public void startGame() {
