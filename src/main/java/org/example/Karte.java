@@ -29,4 +29,8 @@ public class Karte {
     public String getSymbol() {
         return this.symbol;
     }
+
+    public int getPunkte() {
+        return this.punkte;
+    }
 }
