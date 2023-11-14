@@ -1,7 +1,11 @@
 package org.example.spielController;
 
+import org.example.Karte;
+
+import java.util.List;
+
 public abstract class SoloController extends SpielController{
-    public void welcheKarteSpielich(){
-        System.out.println("Ich spiele eine Karte Solo");
+    public Karte welcheKarteSpielich(List<Karte> gespielteKarten, List<Karte> meineHand, List<Karte> tischKarten){
+        return null;
     }
 }

@@ -22,4 +22,8 @@ public class FarbSoloController extends SoloController {
         this.trumpfKarten = new ArrayList<>(farbTrumpfKarten);
         this.farbKarten = new ArrayList<>(kartenList);
     }
+
+    public Karte welcheKarteSpielich(List<Karte> gespielteKarten, List<Karte> meineHand, List<Karte> tischKarten, boolean istSpieler){
+        return null;
+    }
 }

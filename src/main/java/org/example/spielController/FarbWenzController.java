@@ -19,4 +19,7 @@ public class FarbWenzController extends SoloController{
         this.farbKarten = new ArrayList<>(kartenList);
     }
 
+    public Karte welcheKarteSpielich(List<Karte> gespielteKarten, List<Karte> meineHand, List<Karte> tischKarten, boolean istSpieler){
+        return null;
+    }
 }
