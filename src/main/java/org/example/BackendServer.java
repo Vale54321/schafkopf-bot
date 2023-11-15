@@ -33,6 +33,9 @@ public class BackendServer
     private final ServerConnector connector;
 
     private final Schafkopf schafkopfGame;
+    private final KartenLeser nfcLeser;
+
+    private List<String> geleseneKarten = new ArrayList<String>();
 
     public BackendServer()
     {
@@ -43,7 +46,10 @@ public class BackendServer
         connector.setHost(address.getHostName());
         connector.setPort(address.getPort());
         server.addConnector(connector);
+        
         schafkopfGame = new Schafkopf(this);
+        nfcLeser = new KartenLeser(this);
+
         // Setup the basic application "context" for this application at "/"
         // This is also known as the handler tree (in jetty speak)
         ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
@@ -132,5 +138,18 @@ public class BackendServer
 
     public void showFarbe() {
         schafkopfGame.showFarbe();
+    }
+
+    public void karteGelesen(String uidString) {
+        System.out.println("Karte gelesen!");
+
+        if(geleseneKarten.contains(uidString)){
+            System.out.println("bereits gelesen");
+        } else {
+            geleseneKarten.add(uidString);
+            System.out.println("Karte: " + uidString);
+
+            sendMessageToAllFrontendEndpoints(uidString);
+        }
     }
 }
