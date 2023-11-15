@@ -7,12 +7,29 @@ import java.util.List;
 import mk.hsilomedus.pn532.*;
 import mk.hsilomedus.pn532.Pn532SamThread.Pn532SamThreadListener;
 
-public final class Example {
-    public static final void main(String[] args) throws IOException {
-        new ExampleListener().run();
+public final class KartenLeser {
+    
+    private static BackendServer server;
+
+    public KartenLeser(BackendServer server){
+        this.server = server;
+
+       new Thread(new Runnable() {
+            public void run(){
+                        try {
+           new KartenListener().run(); 
+        } catch(Exception e){}
+            }
+       }).start();
     }
 
-    private static class ExampleListener implements Pn532SamThreadListener {
+
+
+    public static final void main(String[] args) throws IOException {
+   
+    }
+
+    private static class KartenListener implements Pn532SamThreadListener {
 
         @SuppressWarnings("rawtypes")
         private List<Pn532SamThread> samThreads = new ArrayList<>();
@@ -21,8 +38,6 @@ public final class Example {
             Pn532ContextHelper.initialize();
 
             samThreads.add(new Pn532SamThread<>(this, new Pn532I2c()));
-//            samThreads.add(new Pn532SamThread<>(this, new Pn532Serial()));
-//            samThreads.add(new Pn532SamThread<>(this, new Pn532Spi()));
 
             for (var samThread : samThreads) {
                 samThread.start();
@@ -40,12 +55,13 @@ public final class Example {
 
         @Override
         public void receiveMessage(String message) {
-            System.out.println(message);
+            //System.out.println(message);
         }
 
         @Override
         public void uidReceived(String displayName, byte[] uid) {
             System.out.println(displayName + ": UID '" + Pn532SamThreadListener.getUidString(uid) + "' received.");
+            server.karteGelesen(Pn532SamThreadListener.getUidString(uid) );
         }
 
         @SuppressWarnings("rawtypes")
