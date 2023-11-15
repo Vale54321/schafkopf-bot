@@ -149,7 +149,8 @@ public class BackendServer
             geleseneKarten.add(uidString);
             System.out.println("Karte: " + uidString);
 
-            sendMessageToAllFrontendEndpoints(uidString);
+
+            sendMessageToAllFrontendEndpoints(KartenUtil.getKarteOfUid(uidString));
         }
     }
 }
