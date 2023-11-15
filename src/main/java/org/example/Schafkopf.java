@@ -1,14 +1,13 @@
 package org.example;
 
 import com.google.gson.Gson;
-import org.example.spielController.SauSpielController;
-import org.example.spielController.SpielController;
+import org.example.spielController.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Schafkopf {
-    private final SpielController spielController = new SauSpielController("eichel", false);
+    private SpielController spielController = new SauSpielController("eichel", false);
     private final BackendServer server;
     private boolean gameState = false;
 
@@ -18,7 +17,6 @@ public class Schafkopf {
     }
 
     public void showTrumpf() {
-
         Gson gson = new Gson();
         for (Karte karte : spielController.getTrumpfKarten()) {
             String karteJson = gson.toJson(karte);
@@ -27,6 +25,14 @@ public class Schafkopf {
     }
 
     public void showFarbe() {
+        Gson gson = new Gson();
+        for (Karte karte : spielController.getFarbKarten()) {
+            String karteJson = gson.toJson(karte);
+            server.sendMessageToAllFrontendEndpoints(karteJson);
+        }
+    }
+
+    public void testHand() {
         List<Karte> testHand = KartenUtil.zieheZufallsHand(8);
         KartenUtil.sortiereKarten(testHand, spielController.getFarbKarten(), spielController.getTrumpfKarten());
         Gson gson = new Gson();
@@ -62,5 +68,68 @@ public class Schafkopf {
             server.sendMessageToAllFrontendEndpoints("Stop Game");
         }
 
+    }
+
+    public void setGame(String message) {
+        System.out.println("Set Game: " + message);
+        switch (message)
+        {
+            case "setgame:herzsolo":
+                this.spielController = new FarbSoloController("herz");
+                break;
+            case "setgame:blattsolo":
+                this.spielController = new FarbSoloController("blatt");
+                break;
+            case "setgame:eichelsolo":
+                this.spielController = new FarbSoloController("eichel");
+                break;
+            case "setgame:shellsolo":
+                this.spielController = new FarbSoloController("schell");
+                break;
+
+
+            case "setgame:wenz":
+                this.spielController = new WenzController();
+                break;
+            case "setgame:geier":
+                this.spielController = new GeierController();
+                break;
+
+
+            case "setgame:eichelwenz":
+                this.spielController = new FarbWenzController("eichel");
+                break;
+            case "setgame:herzwenz":
+                this.spielController = new FarbWenzController("herz");
+                break;
+            case "setgame:blattwenz":
+                this.spielController = new FarbWenzController("blatt");
+                break;
+            case "setgame:schellwenz":
+                this.spielController = new FarbWenzController("schell");
+                break;
+
+
+            case "setgame:eichelgeier":
+                this.spielController = new FarbGeierController("eichel");
+                break;
+            case "setgame:herzgeier":
+                this.spielController = new FarbGeierController("herz");
+                break;
+            case "setgame:blattgeier":
+                this.spielController = new FarbGeierController("blatt");
+                break;
+            case "setgame:schellgeier":
+                this.spielController = new FarbGeierController("schell");
+                break;
+
+
+
+            case "setgame:sauspiel":
+                this.spielController = new SauSpielController("eichel", false);
+                break;
+            default:
+                System.out.println("Ungültiges Spiel");
+        }
     }
 }

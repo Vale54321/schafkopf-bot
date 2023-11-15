@@ -45,6 +45,14 @@ public class FrontendEndpoint extends WebSocketAdapter {
         if(message.contains("showfarben")) {
             backendServer.showFarbe();
         }
+
+        if(message.contains("testhand")) {
+            backendServer.testHand();
+        }
+
+        if(message.contains("setgame")) {
+            backendServer.setGame(message);
+        }
     }
 
     @Override

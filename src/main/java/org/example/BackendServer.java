@@ -133,4 +133,12 @@ public class BackendServer
     public void showFarbe() {
         schafkopfGame.showFarbe();
     }
+
+    public void testHand() {
+        schafkopfGame.testHand();
+    }
+
+    public void setGame(String message) {
+        schafkopfGame.setGame(message);
+    }
 }
