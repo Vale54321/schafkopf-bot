@@ -5,6 +5,7 @@ import java.net.URI;
 import java.time.Duration;
 import java.util.EnumSet;
 
+import com.google.gson.Gson;
 import jakarta.servlet.DispatcherType;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
@@ -149,8 +150,10 @@ public class BackendServer
             geleseneKarten.add(uidString);
             System.out.println("Karte: " + uidString);
 
+            Karte karte = KartenUtil.getKarteById(KartenUtil.getIdOfUid(uidString));
+            String karteJson = new Gson().toJson(karte);
 
-            sendMessageToAllFrontendEndpoints(KartenUtil.getKarteOfUid(uidString));
+            sendMessageToAllFrontendEndpoints(karteJson);
             if(geleseneKarten.size() == 32){
                 geleseneKarten.clear();
                 System.out.println("Alle Karten gelesen!");

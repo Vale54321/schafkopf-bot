@@ -76,7 +76,7 @@ public class KartenUtil {
         return cardName;
     }
 
-    public static String getKarteOfUid(String uid){
+    public static String getIdOfUid(String uid){
         switch (uid){
             case "04A56BB4780000":
                 return "eichel_7";
@@ -146,6 +146,17 @@ public class KartenUtil {
             case "04AC6BB4780000":
                 return "herz_o";
         }
+        return null;
+    }
+
+    public static Karte getKarteById(String id){
+        List<Karte> kartenList = initializeSchafKopfCardDeck();
+        for (Karte karte : kartenList) {
+            if (karte.getId().equalsIgnoreCase(id)) {
+                return karte;
+            }
+        }
+        return null;
     }
 
     public static void removeCards(List<Karte> allCards, List<Karte> cardsToRemove) {
