@@ -51,4 +51,8 @@ public abstract class SpielController {
         }
         return null;
     }
+
+    public int welcheKarteSticht(List<Karte> karten){
+        return 0;
+    }
 }
