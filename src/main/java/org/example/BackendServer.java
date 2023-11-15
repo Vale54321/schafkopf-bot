@@ -151,6 +151,10 @@ public class BackendServer
 
 
             sendMessageToAllFrontendEndpoints(KartenUtil.getKarteOfUid(uidString));
+            if(geleseneKarten.size() == 32){
+                geleseneKarten.clear();
+                System.out.println("Alle Karten gelesen!");
+            }
         }
     }
 }
