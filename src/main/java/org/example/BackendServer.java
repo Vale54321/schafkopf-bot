@@ -44,7 +44,7 @@ public class BackendServer
 
     public BackendServer()
     {
-        Dotenv dotenv = Dotenv.configure().directory(System.getProperty("user.home")).load();
+        Dotenv dotenv = Dotenv.configure().directory("./").load();
         server = new Server();
         InetSocketAddress address = new InetSocketAddress(dotenv.get("VITE_APP_WEBSOCKET_IP"), 8080);
         connector = new ServerConnector(server);
