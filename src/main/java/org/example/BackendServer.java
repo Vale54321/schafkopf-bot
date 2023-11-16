@@ -13,6 +13,7 @@ import org.eclipse.jetty.websocket.server.config.JettyWebSocketServletContainerI
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
 import org.eclipse.jetty.servlet.FilterHolder;
 import org.eclipse.jetty.servlets.CrossOriginFilter;
@@ -33,10 +34,15 @@ public class BackendServer
     private final ServerConnector connector;
 
     private final Schafkopf schafkopfGame;
+    private final KartenLeser nfcLeser;
+    private CountDownLatch nfcLatch = new CountDownLatch(1);
+
+    private Boolean readingMode = false;
+    private String uidString = "";
 
     public BackendServer()
     {
-        Dotenv dotenv = Dotenv.configure().load();
+        Dotenv dotenv = Dotenv.configure().directory("./").load();
         server = new Server();
         InetSocketAddress address = new InetSocketAddress(dotenv.get("VITE_APP_WEBSOCKET_IP"), 8080);
         connector = new ServerConnector(server);
@@ -44,6 +50,8 @@ public class BackendServer
         connector.setPort(address.getPort());
         server.addConnector(connector);
         schafkopfGame = new Schafkopf(this);
+        nfcLeser = new KartenLeser(this);
+
         // Setup the basic application "context" for this application at "/"
         // This is also known as the handler tree (in jetty speak)
         ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
@@ -132,6 +140,25 @@ public class BackendServer
 
     public void showFarbe() {
         schafkopfGame.showFarbe();
+    }
+    public void nfcGelesen(String uidString) {
+        if(this.uidString.equals(uidString)){
+            return;
+        }
+        if(!this.readingMode){
+            return;
+        }
+
+        this.uidString = uidString;
+        nfcLatch.countDown();
+    }
+
+    public String waitForCardScan() throws InterruptedException {
+        this.readingMode = true;
+        nfcLatch.await();
+        this.readingMode = false;
+        nfcLatch = new CountDownLatch(1);
+        return this.uidString;
     }
 
     public void testHand() {
