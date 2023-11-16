@@ -42,7 +42,8 @@ public class BackendServer
     private final KartenLeser nfcLeser;
     private CountDownLatch nfcLatch = new CountDownLatch(1);
 
-    private List<String> geleseneKarten = new ArrayList<String>();
+    private Boolean readingMode = false;
+    private String uidString = "";
 
     public BackendServer()
     {
@@ -147,10 +148,10 @@ public class BackendServer
         schafkopfGame.showFarbe();
     }
     public void nfcGelesen(String uidString) {
-        if(geleseneKarten.contains(uidString)){
+        if(this.uidString.equals(uidString) || !this.readingMode){
             System.out.println("bereits gelesen");
         } else {
-            geleseneKarten.add(uidString);
+            this.uidString = uidString;
             System.out.println("Karte: " + uidString);
 
             System.out.println("latch countdown");
@@ -160,11 +161,6 @@ public class BackendServer
             String karteJson = new Gson().toJson(karte);
 
             sendMessageToAllFrontendEndpoints(karteJson);
-
-            if(geleseneKarten.size() == 32){
-                geleseneKarten.clear();
-                System.out.println("Alle Karten gelesen!");
-            }
         }
 
 
@@ -172,10 +168,12 @@ public class BackendServer
 
     public String waitForCardScan() throws InterruptedException {
         System.out.println("Warte auf Karte");
+        this.readingMode = true;
         nfcLatch.await();
         System.out.println("await finished");
+        this.readingMode = false;
         nfcLatch = new CountDownLatch(1);
-        // Rückgabe der gescannten UID
-        return geleseneKarten.getLast();
+
+        return this.uidString;
     }
 }
