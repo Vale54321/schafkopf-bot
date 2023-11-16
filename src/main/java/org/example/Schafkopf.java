@@ -73,20 +73,10 @@ public class Schafkopf {
 
     public void showTrumpf() {
 
-//        Gson gson = new Gson();
-//        for (Karte karte : spielController.getTrumpfKarten()) {
-//            String karteJson = gson.toJson(karte);
-//            server.sendMessageToAllFrontendEndpoints(karteJson);
-//        }
-        while(true) {
-            try {
-                Karte karte = KartenUtil.getKarteById(KartenUtil.getIdOfUid(server.waitForCardScan()));
-                String karteJson = new Gson().toJson(karte);
-
-                server.sendMessageToAllFrontendEndpoints(karteJson);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
+        Gson gson = new Gson();
+        for (Karte karte : spielController.getTrumpfKarten()) {
+            String karteJson = gson.toJson(karte);
+            server.sendMessageToAllFrontendEndpoints(karteJson);
         }
     }
 
