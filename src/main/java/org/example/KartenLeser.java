@@ -34,6 +34,7 @@ public final class KartenLeser {
 
         public void run() throws IOException {
             Pn532ContextHelper.initialize();
+            System.out.println("Sart Leser");
             samThread.start();
         }
 
@@ -44,7 +45,7 @@ public final class KartenLeser {
 
         @Override
         public void receiveMessage(String message) {
-            //System.out.println(message);
+            System.out.println(message);
         }
 
         @Override
