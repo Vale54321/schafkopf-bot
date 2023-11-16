@@ -46,7 +46,7 @@ public class Schafkopf {
         String karteJson = gson.toJson(testHand.get(test));
         server.sendMessageToAllFrontendEndpoints(karteJson);
 
-        server.sendMessageToAllFrontendEndpoints(gson.toJson(testHand.get(spiel.welcheKarteSticht(testHand))));
+//        server.sendMessageToAllFrontendEndpoints(gson.toJson(testHand.get(spiel.welcheKarteSticht(testHand))));
     }
 
     public void startGame() {
