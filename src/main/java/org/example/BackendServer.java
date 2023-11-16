@@ -146,14 +146,14 @@ public class BackendServer
     public void showFarbe() {
         schafkopfGame.showFarbe();
     }
-    public void karteGelesen(String uidString) throws InterruptedException {
-        System.out.println("Karte gelesen!");
-
+    public void nfcGelesen(String uidString) {
         if(geleseneKarten.contains(uidString)){
             System.out.println("bereits gelesen");
         } else {
             geleseneKarten.add(uidString);
             System.out.println("Karte: " + uidString);
+
+            System.out.println("latch countdown");
             nfcLatch.countDown();
 
             Karte karte = KartenUtil.getKarteById(KartenUtil.getIdOfUid(uidString));
@@ -171,8 +171,9 @@ public class BackendServer
     }
 
     public String waitForCardScan() throws InterruptedException {
+        System.out.println("Warte auf Karte");
         nfcLatch.await();
-
+        System.out.println("await finished");
         // Rückgabe der gescannten UID
         return geleseneKarten.getLast();
     }

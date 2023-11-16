@@ -55,7 +55,7 @@ public final class KartenLeser {
         public void uidReceived(String displayName, byte[] uid) {
             System.out.println(displayName + ": UID '" + Pn532SamThreadListener.getUidString(uid) + "' received.");
             try {
-                server.karteGelesen(Pn532SamThreadListener.getUidString(uid) );
+                server.nfcGelesen(Pn532SamThreadListener.getUidString(uid) );
             } catch (InterruptedException e) {
             }
         }
