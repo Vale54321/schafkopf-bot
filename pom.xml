@@ -19,7 +19,7 @@
 
     </properties>
     <build>
-        <finalName>pi4j-example-fatjar</finalName>
+        <finalName>schafkopf-backend-build</finalName>
         <plugins>
             <plugin>
                 <artifactId>maven-jar-plugin</artifactId>
