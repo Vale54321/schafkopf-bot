@@ -78,7 +78,6 @@ public class Schafkopf {
             String karteJson = gson.toJson(karte);
             server.sendMessageToAllFrontendEndpoints(karteJson);
         }
-
     }
 
     public void showFarbe() {
