@@ -18,6 +18,7 @@ import org.eclipse.jetty.websocket.server.config.JettyWebSocketServletContainerI
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
 import org.eclipse.jetty.servlet.FilterHolder;
 import org.eclipse.jetty.servlets.CrossOriginFilter;
@@ -39,6 +40,7 @@ public class BackendServer
 
     private final Schafkopf schafkopfGame;
     private final KartenLeser nfcLeser;
+    private CountDownLatch nfcLatch = new CountDownLatch(1);
 
     private List<String> geleseneKarten = new ArrayList<String>();
 
@@ -152,6 +154,7 @@ public class BackendServer
         } else {
             geleseneKarten.add(uidString);
             System.out.println("Karte: " + uidString);
+            nfcLatch.countDown();
 
             Karte karte = KartenUtil.getKarteById(KartenUtil.getIdOfUid(uidString));
             String karteJson = new Gson().toJson(karte);
@@ -165,5 +168,12 @@ public class BackendServer
         }
 
 
+    }
+
+    public String waitForCardScan() throws InterruptedException {
+        nfcLatch.await();
+
+        // Rückgabe der gescannten UID
+        return geleseneKarten.getLast();
     }
 }
