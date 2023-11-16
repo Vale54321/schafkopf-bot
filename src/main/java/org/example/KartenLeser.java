@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.pi4j.Pi4J;
 import com.pi4j.io.i2c.I2C;
 import mk.hsilomedus.pn532.*;
 import mk.hsilomedus.pn532.Pn532SamThread.Pn532SamThreadListener;
@@ -36,6 +37,7 @@ public final class KartenLeser {
 
         public void run() throws IOException {
             Pn532ContextHelper.initialize();
+            Pi4J.newAutoContext();
             System.out.println("Sart Leser");
             i2cThread.start();
         }
