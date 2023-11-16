@@ -37,7 +37,6 @@ public final class KartenLeser {
 
         public void run() throws IOException {
             Pn532ContextHelper.initialize();
-            Pi4J.newAutoContext();
             System.out.println("Sart Leser");
             i2cThread.start();
         }
