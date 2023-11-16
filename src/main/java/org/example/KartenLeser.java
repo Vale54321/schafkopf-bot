@@ -14,12 +14,10 @@ public final class KartenLeser {
     public KartenLeser(BackendServer server){
         this.server = server;
 
-       new Thread(new Runnable() {
-            public void run(){
-                        try {
-           new KartenListener().run(); 
-        } catch(Exception e){}
-            }
+       new Thread(() -> {
+                   try {
+      new KartenListener().run();
+   } catch(Exception ignored){}
        }).start();
     }
 
@@ -32,24 +30,15 @@ public final class KartenLeser {
     private static class KartenListener implements Pn532SamThreadListener {
 
         @SuppressWarnings("rawtypes")
-        private List<Pn532SamThread> samThreads = new ArrayList<>();
+        private Pn532SamThread samThread = new Pn532SamThread<>(this, new Pn532I2c());
 
         public void run() throws IOException {
             Pn532ContextHelper.initialize();
+            samThread.start();
+        }
 
-            samThreads.add(new Pn532SamThread<>(this, new Pn532I2c()));
-
-            for (var samThread : samThreads) {
-                samThread.start();
-            }
-
-            System.out.println("Press Enter to exit...");
-            System.in.read();
-
-            for (var samThread : samThreads) {
-                closeThread(samThread);
-            }
-
+        public void close() {
+            closeThread(samThread);
             Pn532ContextHelper.shutdown();
         }
 
