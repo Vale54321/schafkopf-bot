@@ -40,11 +40,21 @@ public class Schafkopf {
             String karteJson = gson.toJson(karte);
             server.sendMessageToAllFrontendEndpoints(karteJson);
         }
-        List<Karte> testTischKarten = new ArrayList<>();
-        testTischKarten.add(new Karte("eichel_9","Bla","eichel","9",0));
-        int test = spiel.welcheKarteSpielich(new ArrayList<Karte>(), testHand, testTischKarten);
-        String karteJson = gson.toJson(testHand.get(test));
-        server.sendMessageToAllFrontendEndpoints(karteJson);
+
+        while(true){
+            try {
+                Karte scanKarte = KartenUtil.getKarteById(KartenUtil.getIdOfUid(server.waitForCardScan()));
+                server.sendMessageToAllFrontendEndpoints(gson.toJson(scanKarte));
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+//        List<Karte> testTischKarten = new ArrayList<>();
+//        testTischKarten.add(new Karte("eichel_9","Bla","eichel","9",0));
+//        int test = spiel.welcheKarteSpielich(new ArrayList<Karte>(), testHand, testTischKarten);
+//        String karteJson = gson.toJson(testHand.get(test));
+//        server.sendMessageToAllFrontendEndpoints(karteJson);
 
 //        server.sendMessageToAllFrontendEndpoints(gson.toJson(testHand.get(spiel.welcheKarteSticht(testHand))));
     }
