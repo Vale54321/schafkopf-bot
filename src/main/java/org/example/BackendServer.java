@@ -144,13 +144,8 @@ public class BackendServer
     public void showFarbe() {
         schafkopfGame.showFarbe();
     }
-    private static final int PIN_LED = 22; // PIN 15 = BCM 22
     public void karteGelesen(String uidString) throws InterruptedException {
-        var pi4j = Pi4J.newAutoContext();
-        Platforms platforms = pi4j.platforms();
         System.out.println("Karte gelesen!");
-
-
 
         if(geleseneKarten.contains(uidString)){
             System.out.println("bereits gelesen");
@@ -158,25 +153,11 @@ public class BackendServer
             geleseneKarten.add(uidString);
             System.out.println("Karte: " + uidString);
 
-            var ledConfig = DigitalOutput.newConfigBuilder(pi4j)
-                    .id("led")
-                    .name("LED Flasher")
-                    .address(PIN_LED)
-                    .shutdown(DigitalState.LOW)
-                    .initial(DigitalState.LOW)
-                    .provider("pigpio-digital-output");
-
-            var led = pi4j.create(ledConfig);
-            led.high();
-
             Karte karte = KartenUtil.getKarteById(KartenUtil.getIdOfUid(uidString));
             String karteJson = new Gson().toJson(karte);
 
             sendMessageToAllFrontendEndpoints(karteJson);
 
-            Thread.sleep(500);
-            led.low();
-            pi4j.shutdown();
             if(geleseneKarten.size() == 32){
                 geleseneKarten.clear();
                 System.out.println("Alle Karten gelesen!");
