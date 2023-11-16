@@ -5,11 +5,6 @@ import java.net.URI;
 import java.time.Duration;
 import java.util.EnumSet;
 
-import com.google.gson.Gson;
-import com.pi4j.Pi4J;
-import com.pi4j.io.gpio.digital.DigitalOutput;
-import com.pi4j.io.gpio.digital.DigitalState;
-import com.pi4j.platform.Platforms;
 import jakarta.servlet.DispatcherType;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
