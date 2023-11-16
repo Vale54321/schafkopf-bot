@@ -1,19 +1,21 @@
 package org.example.spielController;
 
-import org.example.Karte;
-import org.example.KartenUtil;
+import org.example.karte.Karte;
+import org.example.karte.KartenListe;
+import org.example.karte.KartenSymbol;
+import org.example.karte.KartenUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class GeierController extends GeierWenzController {
     public GeierController() {
-        List<Karte> kartenList = KartenUtil.initializeSchafKopfCardDeck();
-        List<Karte> oberKarten = KartenUtil.getKartenBySymbol(kartenList, "o");
+        KartenListe kartenList = KartenUtil.initializeSchafKopfCardDeck();
+        KartenListe oberKarten = kartenList.getKarten(KartenSymbol.OBER);
 
-        kartenList.removeAll(oberKarten);
+        kartenList.removeKarten(oberKarten);
 
-        this.trumpfKarten = new ArrayList<>(oberKarten);
-        this.farbKarten = new ArrayList<>(kartenList);
+        this.trumpfKarten = new KartenListe(oberKarten);
+        this.farbKarten = new KartenListe(kartenList);
     }
 }

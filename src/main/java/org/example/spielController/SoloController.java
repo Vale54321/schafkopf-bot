@@ -1,11 +1,12 @@
 package org.example.spielController;
 
-import org.example.Karte;
+import org.example.karte.Karte;
+import org.example.karte.KartenListe;
 
 import java.util.List;
 
 public abstract class SoloController extends SpielController{
-    public int welcheKarteSpielich(List<Karte> gespielteKarten, List<Karte> meineHand, List<Karte> tischKarten){
+    public int welcheKarteSpielich(KartenListe gespielteKarten, KartenListe meineHand, KartenListe tischKarten){
         return 0;
     }
 }

@@ -1,13 +1,13 @@
 package org.example;
 
 import com.google.gson.Gson;
+import org.example.karte.Karte;
+import org.example.karte.KartenFarbe;
+import org.example.karte.KartenUtil;
 import org.example.spielController.*;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Schafkopf {
-    private SpielController spiel = new SauSpielController("eichel", false);
+    private SpielController spiel = new SauSpielController(KartenFarbe.EICHEL, false);
     private final BackendServer server;
     private boolean gameState = false;
 
@@ -18,7 +18,7 @@ public class Schafkopf {
 
     public void showTrumpf() {
         Gson gson = new Gson();
-        for (Karte karte : spiel.getTrumpfKarten()) {
+        for (Karte karte : spiel.getTrumpfKarten().getKartenListe()) {
             String karteJson = gson.toJson(karte);
             server.sendMessageToAllFrontendEndpoints(karteJson);
         }
@@ -26,7 +26,7 @@ public class Schafkopf {
 
     public void showFarbe() {
         Gson gson = new Gson();
-        for (Karte karte : spiel.getFarbKarten()) {
+        for (Karte karte : spiel.getFarbKarten().getKartenListe()) {
             String karteJson = gson.toJson(karte);
             server.sendMessageToAllFrontendEndpoints(karteJson);
         }
@@ -86,16 +86,16 @@ public class Schafkopf {
         switch (message)
         {
             case "setgame:herzsolo":
-                this.spiel = new FarbSoloController("herz");
+                this.spiel = new FarbSoloController(KartenFarbe.HERZ);
                 break;
             case "setgame:blattsolo":
-                this.spiel = new FarbSoloController("blatt");
+                this.spiel = new FarbSoloController(KartenFarbe.BLATT);
                 break;
             case "setgame:eichelsolo":
-                this.spiel = new FarbSoloController("eichel");
+                this.spiel = new FarbSoloController(KartenFarbe.EICHEL);
                 break;
             case "setgame:shellsolo":
-                this.spiel = new FarbSoloController("schell");
+                this.spiel = new FarbSoloController(KartenFarbe.SCHELL);
                 break;
 
 
@@ -108,36 +108,36 @@ public class Schafkopf {
 
 
             case "setgame:eichelwenz":
-                this.spiel = new FarbWenzController("eichel");
+                this.spiel = new FarbWenzController(KartenFarbe.EICHEL);
                 break;
             case "setgame:herzwenz":
-                this.spiel = new FarbWenzController("herz");
+                this.spiel = new FarbWenzController(KartenFarbe.HERZ);
                 break;
             case "setgame:blattwenz":
-                this.spiel = new FarbWenzController("blatt");
+                this.spiel = new FarbWenzController(KartenFarbe.BLATT);
                 break;
             case "setgame:schellwenz":
-                this.spiel = new FarbWenzController("schell");
+                this.spiel = new FarbWenzController(KartenFarbe.SCHELL);
                 break;
 
 
             case "setgame:eichelgeier":
-                this.spiel = new FarbGeierController("eichel");
+                this.spiel = new FarbGeierController(KartenFarbe.EICHEL);
                 break;
             case "setgame:herzgeier":
-                this.spiel = new FarbGeierController("herz");
+                this.spiel = new FarbGeierController(KartenFarbe.HERZ);
                 break;
             case "setgame:blattgeier":
-                this.spiel = new FarbGeierController("blatt");
+                this.spiel = new FarbGeierController(KartenFarbe.BLATT);
                 break;
             case "setgame:schellgeier":
-                this.spiel = new FarbGeierController("schell");
+                this.spiel = new FarbGeierController(KartenFarbe.SCHELL);
                 break;
 
 
 
             case "setgame:sauspiel":
-                this.spiel = new SauSpielController("eichel", false);
+                this.spiel = new SauSpielController(KartenFarbe.EICHEL, false);
                 break;
             default:
                 System.out.println("Ungültiges Spiel");

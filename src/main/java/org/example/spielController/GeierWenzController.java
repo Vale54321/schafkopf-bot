@@ -1,6 +1,6 @@
 package org.example.spielController;
 
-import org.example.Karte;
+import org.example.karte.Karte;
 
 import java.util.List;
 

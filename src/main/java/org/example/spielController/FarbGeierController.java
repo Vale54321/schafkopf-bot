@@ -1,21 +1,20 @@
 package org.example.spielController;
 
-import org.example.Karte;
-import org.example.KartenUtil;
+import org.example.karte.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class FarbGeierController extends SoloController{
-    public FarbGeierController(String farbe) {
-        List<Karte> kartenList = KartenUtil.initializeSchafKopfCardDeck();
-        List<Karte> oberKarten = KartenUtil.getKartenBySymbol(kartenList, "o");
-        List<Karte> farbTrumpfKarten = KartenUtil.getKartenByFarbe(kartenList, farbe);
-        farbTrumpfKarten.removeAll(KartenUtil.getKartenBySymbol(kartenList, "o"));
-        farbTrumpfKarten.addAll(oberKarten);
-        kartenList.removeAll(farbTrumpfKarten);
+    public FarbGeierController(KartenFarbe farbe) {
+        KartenListe kartenList = KartenUtil.initializeSchafKopfCardDeck();
+        KartenListe oberKarten = kartenList.getKarten(KartenSymbol.OBER);
+        KartenListe farbTrumpfKarten = kartenList.getKarten(farbe);
+        farbTrumpfKarten.removeKarten(KartenSymbol.OBER);
+        farbTrumpfKarten.addKarten(oberKarten);
+        kartenList.removeKarten(farbTrumpfKarten);
 
-        this.trumpfKarten = new ArrayList<>(farbTrumpfKarten);
-        this.farbKarten = new ArrayList<>(kartenList);
+        this.trumpfKarten = new KartenListe(farbTrumpfKarten);
+        this.farbKarten = new KartenListe(kartenList);
     }
 }

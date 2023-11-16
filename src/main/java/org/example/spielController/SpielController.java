@@ -1,32 +1,29 @@
 package org.example.spielController;
 
-import org.example.Karte;
-import org.example.KartenUtil;
+import org.example.karte.KartenFarbe;
+import org.example.karte.KartenListe;
+import org.example.karte.KartenUtil;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.example.KartenUtil.removeKarten;
 
 public abstract class SpielController {
-    protected static List<Karte> trumpfKarten;
-    protected static List<Karte> farbKarten;
+    protected static KartenListe trumpfKarten;
+    protected static KartenListe farbKarten;
 
-    public abstract int welcheKarteSpielich(List<Karte> gespielteKarten, List<Karte> meineHand, List<Karte> tischKarten);
+    public abstract int welcheKarteSpielich(KartenListe gespielteKarten, KartenListe meineHand, KartenListe tischKarten);
 
-    public List<Karte> getTrumpfKarten() {
+    public KartenListe getTrumpfKarten() {
         return trumpfKarten;
     }
 
-    public List<Karte> getFarbKarten() {
+    public KartenListe getFarbKarten() {
         return farbKarten;
     }
 
-    public static int farbeZugeben(List<Karte> meineHand, String farbe, int mode){
-        List<Karte> farbKarten = KartenUtil.getKartenByFarbe(meineHand, farbe);
-        removeKarten(farbKarten, trumpfKarten);
+    public static int farbeZugeben(KartenListe meineHand, KartenFarbe farbe, int mode){
+        KartenListe farbKarten = meineHand.getKarten(farbe);
+        farbKarten.removeKarten(trumpfKarten);
         if(farbKarten.size() == 1){
-            return meineHand.indexOf(farbKarten.get(0));
+            return meineHand.indexOf(farbKarten.getByIndex(0));
         }
         if(farbKarten.size() > 1){
             switch (mode){
@@ -55,21 +52,21 @@ public abstract class SpielController {
         return 0;
     }
 
-    public static void sortiereKarten(List<Karte> karten) {
-        List<Karte> kartenReihenfolge = new ArrayList<>(farbKarten);
-        kartenReihenfolge.addAll(trumpfKarten);
+    public static void sortiereKarten(KartenListe karten) {
+        KartenListe kartenReihenfolge = new KartenListe(farbKarten);
+        kartenReihenfolge.addKarten(trumpfKarten);
 
-        List<Karte> kartenListe = KartenUtil.initializeSchafKopfCardDeck();
+        KartenListe kartenListe = KartenUtil.initializeSchafKopfCardDeck();
 
-        removeKarten(kartenListe, karten);
-        removeKarten(kartenReihenfolge, kartenListe);
+        kartenListe.removeKarten(karten);
+        kartenReihenfolge.removeKarten(kartenListe);
 
         karten.clear();
-        karten.addAll(kartenReihenfolge);
+        karten.addKarten(kartenReihenfolge);
     }
 
-    public static int welcheKarteSticht(List<Karte> karten){
-        List<Karte> kartenNew = new ArrayList<>(karten);
+    public static int welcheKarteSticht(KartenListe karten){
+        KartenListe kartenNew = new KartenListe(karten);
         sortiereKarten(kartenNew);
 
         int i = karten.indexOf(kartenNew.getLast());

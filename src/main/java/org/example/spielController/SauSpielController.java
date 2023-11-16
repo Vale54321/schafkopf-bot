@@ -1,20 +1,20 @@
 package org.example.spielController;
-import org.example.Karte;
-import org.example.KartenUtil;
+import org.example.karte.Karte;
+import org.example.karte.KartenFarbe;
+import org.example.karte.KartenListe;
 
 import java.util.List;
-import java.util.ArrayList;
 
 public class SauSpielController extends StandardController{
 
-    String suchFarbe;
+    KartenFarbe suchFarbe;
     boolean istSpieler;
 
-    public SauSpielController(String suchFarbe, boolean istSpieler){
+    public SauSpielController(KartenFarbe suchFarbe, boolean istSpieler){
         this.suchFarbe = suchFarbe;
         this.istSpieler = istSpieler;
     }
-    public int welcheKarteSpielich(List<Karte> gespielteKarten, List<Karte> meineHand, List<Karte> tischKarten){
+    public int welcheKarteSpielich(KartenListe gespielteKarten, KartenListe meineHand, KartenListe tischKarten){
         System.out.println("Ich spiele eine Karte Sauspiel");
 
         int spielerNummer = tischKarten.size();

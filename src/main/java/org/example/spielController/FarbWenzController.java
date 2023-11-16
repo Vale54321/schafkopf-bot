@@ -1,25 +1,24 @@
 package org.example.spielController;
 
-import org.example.Karte;
-import org.example.KartenUtil;
+import org.example.karte.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class FarbWenzController extends SoloController{
-    public FarbWenzController(String farbe) {
-        List<Karte> kartenList = KartenUtil.initializeSchafKopfCardDeck();
-        List<Karte> unterKarten = KartenUtil.getKartenBySymbol(kartenList, "u");
-        List<Karte> farbTrumpfKarten = KartenUtil.getKartenByFarbe(kartenList, farbe);
-        farbTrumpfKarten.removeAll(KartenUtil.getKartenBySymbol(kartenList, "u"));
-        farbTrumpfKarten.addAll(unterKarten);
-        kartenList.removeAll(farbTrumpfKarten);
+    public FarbWenzController(KartenFarbe farbe) {
+        KartenListe kartenList = KartenUtil.initializeSchafKopfCardDeck();
+        KartenListe unterKarten = kartenList.getKarten(KartenSymbol.UNTER);
+        KartenListe farbTrumpfKarten = kartenList.getKarten(farbe);
+        farbTrumpfKarten.removeKarten(KartenSymbol.UNTER);
+        farbTrumpfKarten.addKarten(unterKarten);
+        kartenList.removeKarten(farbTrumpfKarten);
 
-        this.trumpfKarten = new ArrayList<>(farbTrumpfKarten);
-        this.farbKarten = new ArrayList<>(kartenList);
+        this.trumpfKarten = new KartenListe(farbTrumpfKarten);
+        this.farbKarten = new KartenListe(kartenList);
     }
 
-    public Karte welcheKarteSpielich(List<Karte> gespielteKarten, List<Karte> meineHand, List<Karte> tischKarten, boolean istSpieler){
+    public Karte welcheKarteSpielich(KartenListe gespielteKarten, KartenListe meineHand, KartenListe tischKarten, boolean istSpieler){
         return null;
     }
 }
