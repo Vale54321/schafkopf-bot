@@ -168,12 +168,4 @@ public class BackendServer
         nfcLatch = new CountDownLatch(1);
         return this.uidString;
     }
-
-    public void testHand() {
-        schafkopfGame.testHand();
-    }
-
-    public void setGame(String message) {
-        schafkopfGame.setGame(message);
-    }
 }
