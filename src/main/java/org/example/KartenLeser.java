@@ -54,7 +54,10 @@ public final class KartenLeser {
         @Override
         public void uidReceived(String displayName, byte[] uid) {
             System.out.println(displayName + ": UID '" + Pn532SamThreadListener.getUidString(uid) + "' received.");
-            server.karteGelesen(Pn532SamThreadListener.getUidString(uid) );
+            try {
+                server.karteGelesen(Pn532SamThreadListener.getUidString(uid) );
+            } catch (InterruptedException e) {
+            }
         }
 
         @SuppressWarnings("rawtypes")
