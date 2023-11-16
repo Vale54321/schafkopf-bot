@@ -148,21 +148,25 @@ public class BackendServer
         schafkopfGame.showFarbe();
     }
     public void nfcGelesen(String uidString) {
-        if(this.uidString.equals(uidString) || !this.readingMode){
+        if(this.uidString.equals(uidString)){
             System.out.println("bereits gelesen");
-        } else {
-            this.uidString = uidString;
-            System.out.println("Karte: " + uidString);
-
-            System.out.println("latch countdown");
-            nfcLatch.countDown();
-
-            Karte karte = KartenUtil.getKarteById(KartenUtil.getIdOfUid(uidString));
-            String karteJson = new Gson().toJson(karte);
-
-            sendMessageToAllFrontendEndpoints(karteJson);
+            return;
+        }
+        if(!this.readingMode){
+            System.out.println("nicht im reading mode");
+            return;
         }
 
+        this.uidString = uidString;
+        System.out.println("Karte: " + uidString);
+
+        System.out.println("latch countdown");
+        nfcLatch.countDown();
+
+        Karte karte = KartenUtil.getKarteById(KartenUtil.getIdOfUid(uidString));
+        String karteJson = new Gson().toJson(karte);
+
+        sendMessageToAllFrontendEndpoints(karteJson);
 
     }
 

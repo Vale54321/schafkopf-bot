@@ -78,10 +78,12 @@ public class Schafkopf {
 //            String karteJson = gson.toJson(karte);
 //            server.sendMessageToAllFrontendEndpoints(karteJson);
 //        }
-        try {
-            System.out.println(server.waitForCardScan());
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+        while(true) {
+            try {
+                System.out.println(server.waitForCardScan());
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 
