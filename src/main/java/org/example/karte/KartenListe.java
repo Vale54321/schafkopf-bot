@@ -40,7 +40,6 @@ public class KartenListe {
             for (Karte karte : this.kartenListe) {
                 if (karte.getId().equals(karteWeg.getId())) {
                     result.addKarten(karte);
-                    this.kartenListe.remove(karte);
                     break;
                 }
             }
@@ -48,6 +47,7 @@ public class KartenListe {
         if (result.getKartenListe().isEmpty()) {
             throw new RuntimeException("Karte haben keine Überschneidung");
         }
+        this.kartenListe.removeAll(result.getKartenListe());
         return result;
     }
 
@@ -60,12 +60,12 @@ public class KartenListe {
         for (Karte karte : this.kartenListe) {
             if (karte.getFarbe().equals(farbe)) {
                 result.addKarten(karte);
-                this.kartenListe.remove(karte);
             }
         }
         if (result.getKartenListe().isEmpty()) {
             throw new RuntimeException("Karte haben keine Überschneidung");
         }
+        this.kartenListe.removeAll(result.getKartenListe());
         return result;
     }
 
@@ -74,12 +74,12 @@ public class KartenListe {
         for (Karte karte : this.kartenListe) {
             if (karte.getSymbol().equals(symbol)) {
                 result.addKarten(karte);
-                this.kartenListe.remove(karte);
             }
         }
         if (result.isEmpty()) {
             throw new RuntimeException("Karte haben keine Überschneidung");
         }
+        this.kartenListe.removeAll(result.getKartenListe());
         return result;
     }
 
