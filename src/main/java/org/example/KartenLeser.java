@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.pi4j.io.i2c.I2C;
 import mk.hsilomedus.pn532.*;
 import mk.hsilomedus.pn532.Pn532SamThread.Pn532SamThreadListener;
 
@@ -30,16 +31,17 @@ public final class KartenLeser {
     private static class KartenListener implements Pn532SamThreadListener {
 
         @SuppressWarnings("rawtypes")
-        private Pn532SamThread samThread = new Pn532SamThread<>(this, new Pn532I2c());
+        Pn532SamThread<I2C> i2cThread = new Pn532SamThread<>(this, new Pn532I2c());
+
 
         public void run() throws IOException {
             Pn532ContextHelper.initialize();
             System.out.println("Sart Leser");
-            samThread.start();
+            i2cThread.start();
         }
 
         public void close() {
-            closeThread(samThread);
+            closeThread(i2cThread);
             Pn532ContextHelper.shutdown();
         }
 
