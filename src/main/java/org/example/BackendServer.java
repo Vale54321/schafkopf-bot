@@ -149,35 +149,21 @@ public class BackendServer
     }
     public void nfcGelesen(String uidString) {
         if(this.uidString.equals(uidString)){
-            System.out.println("bereits gelesen");
             return;
         }
         if(!this.readingMode){
-            System.out.println("nicht im reading mode");
             return;
         }
 
         this.uidString = uidString;
-        System.out.println("Karte: " + uidString);
-
-        System.out.println("latch countdown");
         nfcLatch.countDown();
-
-        Karte karte = KartenUtil.getKarteById(KartenUtil.getIdOfUid(uidString));
-        String karteJson = new Gson().toJson(karte);
-
-        sendMessageToAllFrontendEndpoints(karteJson);
-
     }
 
     public String waitForCardScan() throws InterruptedException {
-        System.out.println("Warte auf Karte");
         this.readingMode = true;
         nfcLatch.await();
-        System.out.println("await finished");
         this.readingMode = false;
         nfcLatch = new CountDownLatch(1);
-
         return this.uidString;
     }
 }

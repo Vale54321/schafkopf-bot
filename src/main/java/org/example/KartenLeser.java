@@ -37,7 +37,6 @@ public final class KartenLeser {
 
         public void run() {
             Pn532ContextHelper.initialize();
-            System.out.println("Sart Leser");
             i2cThread.start();
         }
 
@@ -53,8 +52,6 @@ public final class KartenLeser {
 
         @Override
         public void uidReceived(String displayName, byte[] uid) {
-            System.out.println(displayName + ": UID '" + Pn532SamThreadListener.getUidString(uid) + "' received.");
-
             server.nfcGelesen(Pn532SamThreadListener.getUidString(uid) );
         }
 

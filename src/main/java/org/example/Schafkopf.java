@@ -80,7 +80,10 @@ public class Schafkopf {
 //        }
         while(true) {
             try {
-                System.out.println(server.waitForCardScan());
+                Karte karte = KartenUtil.getKarteById(KartenUtil.getIdOfUid(server.waitForCardScan()));
+                String karteJson = new Gson().toJson(karte);
+
+                server.sendMessageToAllFrontendEndpoints(karteJson);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
