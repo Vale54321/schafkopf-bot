@@ -60,6 +60,7 @@ public class Schafkopf {
 
     public Karte wartetAufKarte() {
         String uid = null;
+        System.out.println("Starte Warten auf Karte");
         try{
             uid = server.waitForCardScan();
         }catch(InterruptedException e){
@@ -72,7 +73,11 @@ public class Schafkopf {
             System.out.println("Ungültige Karte");
             return wartetAufKarte();
         }
-
+        Karte karte = KartenUtil.getKarteById(kartenId);
+        Gson gson = new Gson();
+        server.sendMessageToAllFrontendEndpoints(gson.toJson(karte));
+        System.out.println("Karte gescannt: " + karte.getName());
+        System.out.println("Beende Warten auf Karte");
         return KartenUtil.getKarteById(kartenId);
     }
 
@@ -84,7 +89,12 @@ public class Schafkopf {
             gameState = true;
             System.out.println("Start Game");
             server.sendMessageToAllFrontendEndpoints("Start Game");
-            new Spielablauf(this, spiel, KartenUtil.zieheZufallsHand(4), 0, true);
+            new Thread(() -> {
+
+                new Spielablauf(this, spiel, KartenUtil.zieheZufallsHand(4), 0, true);
+
+            }).start();
+
         }
     }
 

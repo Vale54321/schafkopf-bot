@@ -36,25 +36,41 @@ public class Spielablauf {
     }
 
     public void einStich(){
+        System.out.println();
+        System.out.println();
+        System.out.println();
+        System.out.println();
+        System.out.println("Starte Stiche");
         while(gemachteStiche<8){
+            System.out.println("Stich: " + gemachteStiche);
             int i = startSpieler;
             while (i % 4 != 0) {
+                System.out.println("warte auf Karte von Spieler " + i);
                 Karte gelegteKarte = schafkopf.wartetAufKarte(); //warten auf Karteneingabe
+                System.out.println("erwartete Karte angekommen");
                 tischKarten.addKarten(gelegteKarte);
-                unbekannteKarten.removeKarten(gelegteKarte);
+//                unbekannteKarten.removeKarten(gelegteKarte);
                 i++;
             }
-
+            System.out.println("Eigene Karte legen");
             //eigeneKarteLegen
             int eigeneGelegteKarte = spiel.welcheKarteSpielIch(gespielteKarten, eigeneKarten, tischKarten); //Welche KArte soll der Bot spielen, Achtung! unterschiedliche Länge der Listen pro Anfrage, aktiverSpieler hinzufügen
             tischKarten.addKarten(eigeneKarten.getByIndex(eigeneGelegteKarte));
             eigeneKarten.removeKarten(eigeneKarten.getByIndex(eigeneGelegteKarte));
 
             while (tischKarten.size() < 4) { //tischkarten zählen
+                System.out.println("warte auf Karte von Spieler " + tischKarten.size());
                 Karte gelegteKarte = schafkopf.wartetAufKarte(); //warten auf Karteneingabe
+                System.out.println("erwartete Karte angekommen");
                 tischKarten.addKarten(gelegteKarte);
-                unbekannteKarten.removeKarten(gelegteKarte);
+//                unbekannteKarten.removeKarten(gelegteKarte);
             }
+            System.out.println("Stiche ende");
+            System.out.println();
+            System.out.println();
+            System.out.println();
+            System.out.println();
+            System.out.println();
 
 //            int stichSpieler = spiel.werHatGestochen(tischKarten); //returns int(0,1,2,3)
             int stichSpieler = 0;

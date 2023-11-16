@@ -164,6 +164,7 @@ public class BackendServer
     public String waitForCardScan() throws InterruptedException {
         this.readingMode = true;
         nfcLatch.await();
+        Thread.sleep(20);
         this.readingMode = false;
         nfcLatch = new CountDownLatch(1);
         return this.uidString;
