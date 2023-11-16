@@ -17,9 +17,9 @@ public final class KartenLeser {
         this.server = server;
 
        new Thread(() -> {
-                   try {
+
       new KartenListener().run();
-   } catch(Exception ignored){}
+
        }).start();
     }
 
@@ -35,7 +35,7 @@ public final class KartenLeser {
         Pn532SamThread<I2C> i2cThread = new Pn532SamThread<>(this, new Pn532I2c());
 
 
-        public void run() throws IOException {
+        public void run() {
             Pn532ContextHelper.initialize();
             System.out.println("Sart Leser");
             i2cThread.start();
