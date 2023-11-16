@@ -8,7 +8,7 @@ public class Karte {
     private int punkte;
 
     Karte(KartenFarbe farbe, KartenSymbol symbol){
-        this.id = farbe.getDisplayName().toLowerCase() + "_" + symbol.getDisplayName().toLowerCase();
+        this.id = farbe.getDisplayName().toLowerCase() + "_" + symbol.getId().toLowerCase();
         this.name = farbe.getDisplayName() + " " + symbol.getDisplayName();
         this.farbe = farbe;
         this.symbol = symbol;
