@@ -5,7 +5,7 @@ import java.util.*;
 public class KartenUtil {
 
     public static KartenListe initializeSchafKopfCardDeck() {
-        KartenFarbe[] farben = {KartenFarbe.HERZ, KartenFarbe.BLATT, KartenFarbe.EICHEL, KartenFarbe.SCHELL};
+        KartenFarbe[] farben = { KartenFarbe.SCHELL, KartenFarbe.BLATT, KartenFarbe.HERZ, KartenFarbe.EICHEL,};
         KartenSymbol[] symbole = {KartenSymbol.SIX, KartenSymbol.SEVEN, KartenSymbol.EIGHT, KartenSymbol.NINE, KartenSymbol.TEN, KartenSymbol.UNTER, KartenSymbol.OBER, KartenSymbol.KOENIG, KartenSymbol.ASS};
 
         KartenListe deck = new KartenListe();
@@ -115,9 +115,5 @@ public class KartenUtil {
             }
         }
         return null;
-    }
-
-    public static void removeCards(List<Karte> allCards, List<Karte> cardsToRemove) {
-        allCards.removeAll(cardsToRemove);
     }
 }
