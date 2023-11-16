@@ -6,7 +6,7 @@ import org.example.karte.KartenListe;
 import java.util.List;
 
 public abstract class SoloController extends SpielController{
-    public int welcheKarteSpielich(KartenListe gespielteKarten, KartenListe meineHand, KartenListe tischKarten){
+    public int welcheKarteSpielIch(KartenListe gespielteKarten, KartenListe meineHand, KartenListe tischKarten){
         return 0;
     }
 }

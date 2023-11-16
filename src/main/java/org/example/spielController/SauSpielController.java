@@ -14,7 +14,7 @@ public class SauSpielController extends StandardController{
         this.suchFarbe = suchFarbe;
         this.istSpieler = istSpieler;
     }
-    public int welcheKarteSpielich(KartenListe gespielteKarten, KartenListe meineHand, KartenListe tischKarten){
+    public int welcheKarteSpielIch(KartenListe gespielteKarten, KartenListe meineHand, KartenListe tischKarten){
         System.out.println("Ich spiele eine Karte Sauspiel");
 
         int spielerNummer = tischKarten.size();

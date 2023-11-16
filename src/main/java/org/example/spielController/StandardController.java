@@ -21,5 +21,5 @@ public abstract class StandardController extends SpielController{
         this.trumpfKarten = new KartenListe(herzKarten);
         this.farbKarten = new KartenListe(kartenList);
     }
-    public abstract int welcheKarteSpielich(KartenListe gespielteKarten, KartenListe meineHand, KartenListe tischKarten);
+    public abstract int welcheKarteSpielIch(KartenListe gespielteKarten, KartenListe meineHand, KartenListe tischKarten);
 }
