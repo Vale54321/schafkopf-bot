@@ -7,11 +7,11 @@ public class KartenListe {
     private List<Karte> kartenListe;
 
     public KartenListe() {
-        this.kartenListe = new ArrayList<Karte>();
+        this.kartenListe = new ArrayList<>();
     }
 
     public KartenListe(KartenListe liste) {
-        this.kartenListe = new ArrayList<Karte>(liste.getKartenListe());
+        this.kartenListe = new ArrayList<>(liste.getKartenListe());
     }
 
     public List<Karte> getKartenListe() {
@@ -77,7 +77,7 @@ public class KartenListe {
                 this.kartenListe.remove(karte);
             }
         }
-        if (result.getKartenListe().isEmpty()) {
+        if (result.isEmpty()) {
             throw new RuntimeException("Karte haben keine Überschneidung");
         }
         return result;

@@ -12,7 +12,6 @@ public class KartenUtil {
 
         for (KartenFarbe farbe : farben) {
             for (KartenSymbol symbol : symbole) {
-                String cardId = farbe + "_" + symbol;
                 deck.addKarten(new Karte(farbe, symbol));
             }
         }
