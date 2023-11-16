@@ -14,7 +14,7 @@ public class SauSpielController extends StandardController{
         this.suchFarbe = suchFarbe;
         this.istSpieler = istSpieler;
     }
-    public Karte welcheKarteSpielich(List<Karte> gespielteKarten, List<Karte> meineHand, List<Karte> tischKarten){
+    public int welcheKarteSpielich(List<Karte> gespielteKarten, List<Karte> meineHand, List<Karte> tischKarten){
         System.out.println("Ich spiele eine Karte Sauspiel");
 
         int spielerNummer = tischKarten.size();
@@ -26,9 +26,9 @@ public class SauSpielController extends StandardController{
         switch (spielerNummer) {
             case 0:
                 if (istSpieler) {
-                    return meineHand.getLast();
+                    return meineHand.size() - 1;
                 } else {
-                    return meineHand.getFirst();
+                    return 0;
                 }
             case 1:
                 if (istSpieler) {
@@ -51,6 +51,6 @@ public class SauSpielController extends StandardController{
             default:
                 System.out.println("Ungültige SpielerNummer");
         }
-        return null;
+        return 0;
     }
 }

@@ -99,17 +99,4 @@ public class KartenUtil {
             }
         }
     }
-
-    public static void sortiereKarten(List<Karte> karten, List<Karte> farbkarten, List<Karte> trumpfkarten) {
-        List<Karte> kartenReihenfolge = new ArrayList<>(farbkarten);
-        kartenReihenfolge.addAll(trumpfkarten);
-
-        List<Karte> kartenListe = initializeSchafKopfCardDeck();
-
-        removeKarten(kartenListe, karten);
-        removeKarten(kartenReihenfolge, kartenListe);
-
-        karten.clear();
-        karten.addAll(kartenReihenfolge);
-    }
 }

@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Schafkopf {
-    private SpielController spielController = new SauSpielController("eichel", false);
+    private SpielController spiel = new SauSpielController("eichel", false);
     private final BackendServer server;
     private boolean gameState = false;
 
@@ -18,7 +18,7 @@ public class Schafkopf {
 
     public void showTrumpf() {
         Gson gson = new Gson();
-        for (Karte karte : spielController.getTrumpfKarten()) {
+        for (Karte karte : spiel.getTrumpfKarten()) {
             String karteJson = gson.toJson(karte);
             server.sendMessageToAllFrontendEndpoints(karteJson);
         }
@@ -26,15 +26,15 @@ public class Schafkopf {
 
     public void showFarbe() {
         Gson gson = new Gson();
-        for (Karte karte : spielController.getFarbKarten()) {
+        for (Karte karte : spiel.getFarbKarten()) {
             String karteJson = gson.toJson(karte);
             server.sendMessageToAllFrontendEndpoints(karteJson);
         }
     }
 
     public void testHand() {
-        List<Karte> testHand = KartenUtil.zieheZufallsHand(8);
-        KartenUtil.sortiereKarten(testHand, spielController.getFarbKarten(), spielController.getTrumpfKarten());
+        List<Karte> testHand = KartenUtil.zieheZufallsHand(4);
+        //spielController.sortiereKarten(testHand);
         Gson gson = new Gson();
         for (Karte karte : testHand) {
             String karteJson = gson.toJson(karte);
@@ -42,9 +42,12 @@ public class Schafkopf {
         }
         List<Karte> testTischKarten = new ArrayList<>();
         testTischKarten.add(new Karte("eichel_9","Bla","eichel","9",0));
-        String karteJson = gson.toJson(spielController.welcheKarteSpielich(new ArrayList<Karte>(), testHand, testTischKarten));
+        int test = spiel.welcheKarteSpielich(new ArrayList<Karte>(), testHand, testTischKarten);
+        String karteJson = gson.toJson(testHand.get(test));
         server.sendMessageToAllFrontendEndpoints(karteJson);
 
+
+        server.sendMessageToAllFrontendEndpoints(gson.toJson(testHand.get(spiel.welcheKarteSticht(testHand))));
     }
 
     public void startGame() {
@@ -75,58 +78,58 @@ public class Schafkopf {
         switch (message)
         {
             case "setgame:herzsolo":
-                this.spielController = new FarbSoloController("herz");
+                this.spiel = new FarbSoloController("herz");
                 break;
             case "setgame:blattsolo":
-                this.spielController = new FarbSoloController("blatt");
+                this.spiel = new FarbSoloController("blatt");
                 break;
             case "setgame:eichelsolo":
-                this.spielController = new FarbSoloController("eichel");
+                this.spiel = new FarbSoloController("eichel");
                 break;
             case "setgame:shellsolo":
-                this.spielController = new FarbSoloController("schell");
+                this.spiel = new FarbSoloController("schell");
                 break;
 
 
             case "setgame:wenz":
-                this.spielController = new WenzController();
+                this.spiel = new WenzController();
                 break;
             case "setgame:geier":
-                this.spielController = new GeierController();
+                this.spiel = new GeierController();
                 break;
 
 
             case "setgame:eichelwenz":
-                this.spielController = new FarbWenzController("eichel");
+                this.spiel = new FarbWenzController("eichel");
                 break;
             case "setgame:herzwenz":
-                this.spielController = new FarbWenzController("herz");
+                this.spiel = new FarbWenzController("herz");
                 break;
             case "setgame:blattwenz":
-                this.spielController = new FarbWenzController("blatt");
+                this.spiel = new FarbWenzController("blatt");
                 break;
             case "setgame:schellwenz":
-                this.spielController = new FarbWenzController("schell");
+                this.spiel = new FarbWenzController("schell");
                 break;
 
 
             case "setgame:eichelgeier":
-                this.spielController = new FarbGeierController("eichel");
+                this.spiel = new FarbGeierController("eichel");
                 break;
             case "setgame:herzgeier":
-                this.spielController = new FarbGeierController("herz");
+                this.spiel = new FarbGeierController("herz");
                 break;
             case "setgame:blattgeier":
-                this.spielController = new FarbGeierController("blatt");
+                this.spiel = new FarbGeierController("blatt");
                 break;
             case "setgame:schellgeier":
-                this.spielController = new FarbGeierController("schell");
+                this.spiel = new FarbGeierController("schell");
                 break;
 
 
 
             case "setgame:sauspiel":
-                this.spielController = new SauSpielController("eichel", false);
+                this.spiel = new SauSpielController("eichel", false);
                 break;
             default:
                 System.out.println("Ungültiges Spiel");

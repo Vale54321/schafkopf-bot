@@ -3,13 +3,16 @@ package org.example.spielController;
 import org.example.Karte;
 import org.example.KartenUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public abstract class SpielController {
-    protected List<Karte> trumpfKarten;
-    protected List<Karte> farbKarten;
+import static org.example.KartenUtil.removeKarten;
 
-    public abstract Karte welcheKarteSpielich(List<Karte> gespielteKarten, List<Karte> meineHand, List<Karte> tischKarten);
+public abstract class SpielController {
+    protected static List<Karte> trumpfKarten;
+    protected static List<Karte> farbKarten;
+
+    public abstract int welcheKarteSpielich(List<Karte> gespielteKarten, List<Karte> meineHand, List<Karte> tischKarten);
 
     public List<Karte> getTrumpfKarten() {
         return trumpfKarten;
@@ -19,40 +22,59 @@ public abstract class SpielController {
         return farbKarten;
     }
 
-    public Karte farbeZugeben(List<Karte> meineHand, String farbe, int mode){
+    public static int farbeZugeben(List<Karte> meineHand, String farbe, int mode){
         List<Karte> farbKarten = KartenUtil.getKartenByFarbe(meineHand, farbe);
-        KartenUtil.removeKarten(farbKarten, trumpfKarten);
+        removeKarten(farbKarten, trumpfKarten);
         if(farbKarten.size() == 1){
-            return farbKarten.get(0);
+            return meineHand.indexOf(farbKarten.get(0));
         }
         if(farbKarten.size() > 1){
             switch (mode){
                 case 0:
-                    return farbKarten.getFirst();
+                    return 0;
                 case 1:
-                    return farbKarten.getLast();
+                    return meineHand.indexOf(farbKarten.getLast());
                 case 2:
-                    return farbKarten.getLast();
+                    return meineHand.indexOf(farbKarten.getLast());
                 default:
-                    return null;
+                    return 0;
             }
         }
         if(farbKarten.isEmpty()){
             switch (mode){
                 case 0:
-                    return meineHand.getFirst();
+                    return 0;
                 case 1:
-                    return meineHand.getFirst();
+                    return 0;
                 case 2:
-                    return meineHand.getLast();
+                    return meineHand.size()-1;
                 default:
-                    return null;
+                    return 0;
             }
         }
-        return null;
+        return 0;
     }
 
-    public int welcheKarteSticht(List<Karte> karten){
-        return 0;
+    public static void sortiereKarten(List<Karte> karten) {
+        List<Karte> kartenReihenfolge = new ArrayList<>(farbKarten);
+        kartenReihenfolge.addAll(trumpfKarten);
+
+        List<Karte> kartenListe = KartenUtil.initializeSchafKopfCardDeck();
+
+        removeKarten(kartenListe, karten);
+        removeKarten(kartenReihenfolge, kartenListe);
+
+        karten.clear();
+        karten.addAll(kartenReihenfolge);
+    }
+
+    public static int welcheKarteSticht(List<Karte> karten){
+        List<Karte> kartenNew = new ArrayList<>(karten);
+        sortiereKarten(kartenNew);
+
+        int i = karten.indexOf(kartenNew.getLast());
+
+        System.out.println("karte sticht: " + i);
+        return i;
     }
 }
