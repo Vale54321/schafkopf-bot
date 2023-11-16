@@ -174,6 +174,7 @@ public class BackendServer
         System.out.println("Warte auf Karte");
         nfcLatch.await();
         System.out.println("await finished");
+        nfcLatch = new CountDownLatch(1);
         // Rückgabe der gescannten UID
         return geleseneKarten.getLast();
     }
