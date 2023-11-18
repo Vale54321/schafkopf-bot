@@ -6,7 +6,7 @@ public class KartenUtil {
 
     public static KartenListe initializeSchafKopfCardDeck() {
         KartenFarbe[] farben = { KartenFarbe.SCHELL, KartenFarbe.BLATT, KartenFarbe.HERZ, KartenFarbe.EICHEL,};
-        KartenSymbol[] symbole = {KartenSymbol.SIX, KartenSymbol.SEVEN, KartenSymbol.EIGHT, KartenSymbol.NINE, KartenSymbol.TEN, KartenSymbol.UNTER, KartenSymbol.OBER, KartenSymbol.KOENIG, KartenSymbol.ASS};
+        KartenSymbol[] symbole = {KartenSymbol.SIX, KartenSymbol.SEVEN, KartenSymbol.EIGHT, KartenSymbol.NINE, KartenSymbol.UNTER, KartenSymbol.OBER, KartenSymbol.KOENIG, KartenSymbol.TEN, KartenSymbol.ASS};
 
         KartenListe deck = new KartenListe();
 
