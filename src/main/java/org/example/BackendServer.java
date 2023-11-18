@@ -78,7 +78,7 @@ public class BackendServer
         FilterHolder cors = context.addFilter(CrossOriginFilter.class, "/*", null);
 
         // Configure allowed origins, headers, and methods
-        cors.setInitParameter("allowedOrigins", "http://192.168.178.126:5173");
+        cors.setInitParameter("allowedOrigins", "*");
         cors.setInitParameter("allowedHeaders", "X-Requested-With,Content-Type,Accept,Origin");
         cors.setInitParameter("allowedMethods", "GET,POST,PUT,DELETE,OPTIONS");
 
