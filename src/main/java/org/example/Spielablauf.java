@@ -40,15 +40,15 @@ public class Spielablauf {
     }
 
     public void einStich() throws InterruptedException {
-        schafkopf.getServer().sendMessageToAllFrontendEndpoints("gespielte Karten:");
-        schafkopf.getServer().sendMessageToAllFrontendEndpoints(gespielteKarten.getJson());
-        Thread.sleep(5000);
         System.out.println();
         System.out.println();
         System.out.println();
         System.out.println();
         System.out.println("Starte Stiche");
         while(gemachteStiche<8){
+            schafkopf.getServer().sendMessageToAllFrontendEndpoints("gespielte Karten:");
+            schafkopf.getServer().sendMessageToAllFrontendEndpoints(gespielteKarten.getJson());
+            Thread.sleep(5000);
             System.out.println("Stich: " + gemachteStiche);
             int i = startSpieler;
             while (i % 4 != 0) {
