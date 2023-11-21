@@ -47,8 +47,10 @@ public class Spielablauf {
         System.out.println("Starte Stiche");
         while(gemachteStiche<8){
             schafkopf.getServer().sendMessageToAllFrontendEndpoints("gespielte Karten:");
+            schafkopf.getServer().sendMessageToAllFrontendEndpoints(eigeneKarten.getJson());
+            Thread.sleep(10000);
             schafkopf.getServer().sendMessageToAllFrontendEndpoints(gespielteKarten.getJson());
-            Thread.sleep(5000);
+            Thread.sleep(10000);
             System.out.println("Stich: " + gemachteStiche);
             int i = startSpieler;
             while (i % 4 != 0) {
