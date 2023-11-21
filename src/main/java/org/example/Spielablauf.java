@@ -32,7 +32,11 @@ public class Spielablauf {
         gespielteKarten=new KartenListe();
         tischKarten=new KartenListe();
         gemachteStiche=0;
-        einStich();
+        try {
+            einStich();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void einStich() throws InterruptedException {
