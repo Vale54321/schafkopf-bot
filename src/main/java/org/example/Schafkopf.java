@@ -80,8 +80,13 @@ public class Schafkopf {
         spielThread.interrupt();
     }
 
+    public BackendServer getServer(){
+        return this.server;
+    }
+
     public void setGame(String message) {
         System.out.println("Set Game: " + message);
+        server.sendMessageToAllFrontendEndpoints("Set Game: " + message);
         switch (message)
         {
             case "setgame:herzsolo":

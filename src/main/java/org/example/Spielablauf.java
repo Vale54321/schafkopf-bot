@@ -54,7 +54,9 @@ public class Spielablauf {
             }
             System.out.println("Eigene Karte legen");
             //eigeneKarteLegen
+            schafkopf.getServer().sendMessageToAllFrontendEndpoints(tischKarten.getJson());
             int eigeneGelegteKarte = spiel.welcheKarteSpielIch(gespielteKarten, eigeneKarten, tischKarten); //Welche KArte soll der Bot spielen, Achtung! unterschiedliche Länge der Listen pro Anfrage, aktiverSpieler hinzufügen
+            schafkopf.getServer().sendMessageToAllFrontendEndpoints(eigeneKarten.getByIndex(eigeneGelegteKarte).getJson());
             tischKarten.addKarten(eigeneKarten.getByIndex(eigeneGelegteKarte));
             eigeneKarten.removeKarten(eigeneKarten.getByIndex(eigeneGelegteKarte));
 
