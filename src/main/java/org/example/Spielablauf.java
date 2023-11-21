@@ -41,8 +41,8 @@ public class Spielablauf {
 
     public void einStich() throws InterruptedException {
         schafkopf.getServer().sendMessageToAllFrontendEndpoints("gespielte Karten:");
-        Thread.sleep(5000);
         schafkopf.getServer().sendMessageToAllFrontendEndpoints(gespielteKarten.getJson());
+        Thread.sleep(5000);
         System.out.println();
         System.out.println();
         System.out.println();
