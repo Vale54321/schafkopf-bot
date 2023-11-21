@@ -61,7 +61,7 @@ public class Schafkopf {
             gameState = true;
             System.out.println("Start Game");
             server.sendMessageToAllFrontendEndpoints("Start Game");
-            spielThread = new Thread(() -> new Spielablauf(this, spiel, KartenUtil.zieheZufallsHand(4), 0, true));
+            spielThread = new Thread(() -> new Spielablauf(this, spiel, KartenUtil.zieheZufallsHand(8), 0, true));
 
             spielThread.start();
         }
