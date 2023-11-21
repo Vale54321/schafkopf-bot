@@ -1,6 +1,7 @@
 package org.example;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import org.example.karte.Karte;
 import org.example.karte.KartenFarbe;
 import org.example.karte.KartenUtil;
@@ -10,6 +11,8 @@ public class Schafkopf {
     private SpielController spiel = new SauSpielController(KartenFarbe.EICHEL, false);
     private final BackendServer server;
     private boolean gameState = false;
+
+    private Thread spielThread;
 
     Schafkopf(BackendServer server) {
         this.server = server;
@@ -30,6 +33,10 @@ public class Schafkopf {
             String karteJson = gson.toJson(karte);
             server.sendMessageToAllFrontendEndpoints(karteJson);
         }
+
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.add("cards", gson.toJsonTree(spiel.getFarbKarten().getKartenListe()));
+        server.sendMessageToAllFrontendEndpoints(jsonObject.toString());
     }
 
     public void testHand() {
@@ -89,11 +96,13 @@ public class Schafkopf {
             gameState = true;
             System.out.println("Start Game");
             server.sendMessageToAllFrontendEndpoints("Start Game");
-            new Thread(() -> {
+            spielThread = new Thread(() -> {
 
                 new Spielablauf(this, spiel, KartenUtil.zieheZufallsHand(4), 0, true);
 
-            }).start();
+            });
+
+            spielThread.start();
 
         }
     }
@@ -108,6 +117,7 @@ public class Schafkopf {
             server.sendMessageToAllFrontendEndpoints("Stop Game");
         }
 
+        spielThread.interrupt();
     }
 
     public void setGame(String message) {

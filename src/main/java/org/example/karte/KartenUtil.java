@@ -5,7 +5,7 @@ import java.util.*;
 public class KartenUtil {
 
     public static KartenListe initializeSchafKopfCardDeck() {
-        KartenFarbe[] farben = { KartenFarbe.SCHELL, KartenFarbe.BLATT, KartenFarbe.HERZ, KartenFarbe.EICHEL,};
+        KartenFarbe[] farben = { KartenFarbe.SCHELL, KartenFarbe.HERZ, KartenFarbe.BLATT, KartenFarbe.EICHEL,};
         KartenSymbol[] symbole = {KartenSymbol.SIX, KartenSymbol.SEVEN, KartenSymbol.EIGHT, KartenSymbol.NINE, KartenSymbol.UNTER, KartenSymbol.OBER, KartenSymbol.KOENIG, KartenSymbol.TEN, KartenSymbol.ASS};
 
         KartenListe deck = new KartenListe();
