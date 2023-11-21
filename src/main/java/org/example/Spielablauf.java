@@ -82,7 +82,7 @@ public class Spielablauf {
             System.out.println();
             System.out.println();
             System.out.println();
-
+            Thread.sleep(2000);
 //            int stichSpieler = spiel.werHatGestochen(tischKarten); //returns int(0,1,2,3)
             int stichSpieler = 0;
             startSpieler = startSpieler + stichSpieler;
