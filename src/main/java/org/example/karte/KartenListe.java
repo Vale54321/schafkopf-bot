@@ -1,5 +1,8 @@
 package org.example.karte;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -138,6 +141,14 @@ public class KartenListe {
             throw new RuntimeException("Karte haben keine Überschneidung");
         }
         return result;
+    }
+
+    public JsonObject getJson(){
+        Gson gson = new Gson();
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.add("cards", gson.toJsonTree(this.kartenListe));
+
+        return jsonObject;
     }
 
     public boolean isEmpty() {

@@ -20,49 +20,15 @@ public class Schafkopf {
     }
 
     public void showTrumpf() {
-        Gson gson = new Gson();
-        for (Karte karte : spiel.getTrumpfKarten().getKartenListe()) {
-            String karteJson = gson.toJson(karte);
-            server.sendMessageToAllFrontendEndpoints(karteJson);
-        }
+        server.sendMessageToAllFrontendEndpoints(spiel.getTrumpfKarten().getJson());
     }
 
     public void showFarbe() {
-        Gson gson = new Gson();
-        for (Karte karte : spiel.getFarbKarten().getKartenListe()) {
-            String karteJson = gson.toJson(karte);
-            server.sendMessageToAllFrontendEndpoints(karteJson);
-        }
-
-        JsonObject jsonObject = new JsonObject();
-        jsonObject.add("cards", gson.toJsonTree(spiel.getFarbKarten().getKartenListe()));
-        server.sendMessageToAllFrontendEndpoints(jsonObject.toString());
+        server.sendMessageToAllFrontendEndpoints(spiel.getFarbKarten().getJson());
     }
 
     public void testHand() {
-//        List<Karte> testHand = KartenUtil.zieheZufallsHand(4);
-//        //spielController.sortiereKarten(testHand);
-//
-//        for (Karte karte : testHand) {
-//            String karteJson = gson.toJson(karte);
-//            server.sendMessageToAllFrontendEndpoints(karteJson);
-//        }
-            Gson gson = new Gson();
-            try {
-                Karte scanKarte = KartenUtil.getKarteById(KartenUtil.getIdOfUid(server.waitForCardScan()));
-                server.sendMessageToAllFrontendEndpoints(gson.toJson(scanKarte));
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-
-
-//        List<Karte> testTischKarten = new ArrayList<>();
-//        testTischKarten.add(new Karte("eichel_9","Bla","eichel","9",0));
-//        int test = spiel.welcheKarteSpielich(new ArrayList<Karte>(), testHand, testTischKarten);
-//        String karteJson = gson.toJson(testHand.get(test));
-//        server.sendMessageToAllFrontendEndpoints(karteJson);
-
-//        server.sendMessageToAllFrontendEndpoints(gson.toJson(testHand.get(spiel.welcheKarteSticht(testHand))));
+        wartetAufKarte().getJson();
     }
 
     public Karte wartetAufKarte() {
@@ -81,8 +47,7 @@ public class Schafkopf {
             return wartetAufKarte();
         }
         Karte karte = KartenUtil.getKarteById(kartenId);
-        Gson gson = new Gson();
-        server.sendMessageToAllFrontendEndpoints(gson.toJson(karte));
+        server.sendMessageToAllFrontendEndpoints(karte.getJson());
         System.out.println("Karte gescannt: " + karte.getName());
         System.out.println("Beende Warten auf Karte");
         return KartenUtil.getKarteById(kartenId);
@@ -96,14 +61,9 @@ public class Schafkopf {
             gameState = true;
             System.out.println("Start Game");
             server.sendMessageToAllFrontendEndpoints("Start Game");
-            spielThread = new Thread(() -> {
-
-                new Spielablauf(this, spiel, KartenUtil.zieheZufallsHand(4), 0, true);
-
-            });
+            spielThread = new Thread(() -> new Spielablauf(this, spiel, KartenUtil.zieheZufallsHand(4), 0, true));
 
             spielThread.start();
-
         }
     }
 

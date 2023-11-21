@@ -1,5 +1,8 @@
 package org.example.karte;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+
 public class Karte {
     private String id;
     private String name;
@@ -33,5 +36,13 @@ public class Karte {
 
     public int getPunkte() {
         return this.punkte;
+    }
+
+    public JsonObject getJson(){
+        Gson gson = new Gson();
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.add("card", gson.toJsonTree(this));
+
+        return jsonObject;
     }
 }

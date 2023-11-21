@@ -5,6 +5,7 @@ import java.net.URI;
 import java.time.Duration;
 import java.util.EnumSet;
 
+import com.google.gson.JsonObject;
 import jakarta.servlet.DispatcherType;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
@@ -125,6 +126,12 @@ public class BackendServer
             endpoint.sendMessage(message);
         }
     }
+    public void sendMessageToAllFrontendEndpoints(JsonObject message) {
+        for (FrontendEndpoint endpoint : frontendEndpoints) {
+            endpoint.sendMessage(message.toString());
+        }
+    }
+
 
     public void startSchafkopfGame() {
         schafkopfGame.startGame();
