@@ -36,6 +36,8 @@ public class Spielablauf {
     }
 
     public void einStich(){
+        schafkopf.getServer().sendMessageToAllFrontendEndpoints("gespielte Karten:";
+        schafkopf.getServer().sendMessageToAllFrontendEndpoints(gespielteKarten.getJson());
         System.out.println();
         System.out.println();
         System.out.println();
