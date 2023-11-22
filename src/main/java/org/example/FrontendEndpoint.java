@@ -1,12 +1,9 @@
 package org.example;
 
-import com.google.gson.Gson;
+import java.io.IOException;
+import java.util.concurrent.CountDownLatch;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.WebSocketAdapter;
-
-import java.io.IOException;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.CountDownLatch;
 
 public class FrontendEndpoint extends WebSocketAdapter {
   private final CountDownLatch closureLatch = new CountDownLatch(1);

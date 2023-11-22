@@ -1,11 +1,7 @@
 package org.example;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-import com.pi4j.Pi4J;
 import com.pi4j.io.i2c.I2C;
+import java.io.IOException;
 import mk.hsilomedus.pn532.*;
 import mk.hsilomedus.pn532.Pn532SamThread.Pn532SamThreadListener;
 

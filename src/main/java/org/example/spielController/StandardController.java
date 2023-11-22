@@ -2,9 +2,6 @@ package org.example.spielController;
 
 import org.example.karte.*;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public abstract class StandardController extends SpielController {
 
   StandardController() {

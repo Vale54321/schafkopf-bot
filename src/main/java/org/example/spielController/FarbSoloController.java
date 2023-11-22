@@ -2,8 +2,6 @@ package org.example.spielController;
 
 import org.example.karte.*;
 
-import java.util.List;
-
 public class FarbSoloController extends SoloController {
   public FarbSoloController(KartenFarbe farbe) {
     KartenListe kartenList = KartenUtil.initializeSchafKopfCardDeck();
