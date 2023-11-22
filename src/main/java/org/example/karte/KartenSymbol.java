@@ -1,5 +1,8 @@
 package org.example.karte;
 
+/**
+ * Enum for all possible Card Symbols.
+ */
 public enum KartenSymbol {
   SIX("6", "6", 0),
   SEVEN("7", "7", 0),

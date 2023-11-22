@@ -3,6 +3,9 @@ package org.example.spielcontroller;
 import org.example.karte.KartenFarbe;
 import org.example.karte.KartenListe;
 
+/**
+ * SpielController that implements Logic of a Sau Spiel Game.
+ */
 public class SauSpielController extends StandardController {
 
   KartenFarbe suchFarbe;
@@ -13,6 +16,9 @@ public class SauSpielController extends StandardController {
     this.istSpieler = istSpieler;
   }
 
+  /**
+   * choose witch Card should be played with the right Game logic.
+   */
   public int welcheKarteSpielIch(
       KartenListe gespielteKarten, KartenListe meineHand, KartenListe tischKarten) {
     System.out.println("Ich spiele eine Karte Sauspiel");

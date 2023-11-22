@@ -3,6 +3,9 @@ package org.example.karte;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
+/**
+ * Class that represents one Card of the game.
+ */
 public class Karte {
   private String id;
   private String name;
@@ -38,6 +41,9 @@ public class Karte {
     return this.punkte;
   }
 
+  /**
+   * get the Card as a Json Object.
+   */
   public JsonObject getJson() {
     Gson gson = new Gson();
     JsonObject jsonObject = new JsonObject();

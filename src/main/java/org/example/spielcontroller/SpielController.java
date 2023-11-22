@@ -4,10 +4,20 @@ import org.example.karte.KartenFarbe;
 import org.example.karte.KartenListe;
 import org.example.karte.KartenUtil;
 
+/**
+ * Base Class of Game Controllers.
+ */
 public abstract class SpielController {
   protected static KartenListe trumpfKarten;
   protected static KartenListe farbKarten;
 
+  /**
+   * Create instance of SpielController.
+   *
+   * @param meineHand Cards one Player holds.
+   * @param farbe color the Player has to play.
+   * @param mode Mode the player chooses a Card if multiple are available.
+   */
   public static int farbeZugeben(KartenListe meineHand, KartenFarbe farbe, int mode) {
     KartenListe farbKarten = meineHand.getKarten(farbe);
     farbKarten.removeKarten(trumpfKarten);
@@ -41,6 +51,11 @@ public abstract class SpielController {
     return 0;
   }
 
+  /**
+   * sorts Cards, so they are in the right order for the active game.
+   *
+   * @param karten Trumpffarbe of the Farb Geier.
+   */
   public static void sortiereKarten(KartenListe karten) {
     KartenListe kartenReihenfolge = new KartenListe(farbKarten);
     kartenReihenfolge.addKarten(trumpfKarten);
@@ -54,6 +69,11 @@ public abstract class SpielController {
     karten.addKarten(kartenReihenfolge);
   }
 
+  /**
+   * checks, which card has the highest strength and will win one Stich.
+   *
+   * @param karten Cards to check.
+   */
   public static int welcheKarteSticht(KartenListe karten) {
     KartenListe kartenNew = new KartenListe(karten);
     sortiereKarten(kartenNew);

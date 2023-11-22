@@ -1,5 +1,8 @@
 package org.example.karte;
 
+/**
+ * Enum for all possible Card Colors.
+ */
 public enum KartenFarbe {
   EICHEL("Eichel"),
   BLATT("Blatt"),

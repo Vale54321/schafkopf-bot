@@ -7,10 +7,18 @@ import mk.hsilomedus.pn532.Pn532I2c;
 import mk.hsilomedus.pn532.Pn532SamThread;
 import mk.hsilomedus.pn532.Pn532SamThread.Pn532SamThreadListener;
 
+/**
+ * Class that represents the NFC Reader.
+ */
 public final class KartenLeser {
 
   private static BackendServer server;
 
+  /**
+   * Creates an Instance of the KartenLeser.
+   *
+   * @param server Backend Server to call methods on.
+   */
   public KartenLeser(BackendServer server) {
     this.server = server;
 

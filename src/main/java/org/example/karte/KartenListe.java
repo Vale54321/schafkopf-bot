@@ -5,6 +5,9 @@ import com.google.gson.JsonObject;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * A Class that represents a list of Cards.
+ */
 public class KartenListe {
   private List<Karte> kartenListe;
 
@@ -20,6 +23,9 @@ public class KartenListe {
     return this.kartenListe;
   }
 
+  /**
+   * A Class that represents a list of Cards.
+   */
   public void addKarten(Karte karte) {
     if (!this.containsKarte(karte)) {
       this.kartenListe.add(karte);
@@ -30,12 +36,18 @@ public class KartenListe {
 
   // methoden zum hinzufügen von karten
 
+  /**
+   * A Class that represents a list of Cards.
+   */
   public void addKarten(KartenListe karten) {
     for (Karte karte : karten.getKartenListe()) {
       this.addKarten(karte);
     }
   }
 
+  /**
+   * A Class that represents a list of Cards.
+   */
   public KartenListe removeKarten(KartenListe karten) {
     KartenListe result = new KartenListe();
     for (Karte karteWeg : karten.getKartenListe()) {
@@ -55,6 +67,9 @@ public class KartenListe {
 
   // methoden zum entfernen von karten
 
+  /**
+   * A Class that represents a list of Cards.
+   */
   public KartenListe removeKarten(KartenFarbe farbe) {
     KartenListe result = new KartenListe();
     for (Karte karte : this.kartenListe) {
@@ -69,6 +84,9 @@ public class KartenListe {
     return result;
   }
 
+  /**
+   * A Class that represents a list of Cards.
+   */
   public KartenListe removeKarten(KartenSymbol symbol) {
     KartenListe result = new KartenListe();
     for (Karte karte : this.kartenListe) {
@@ -83,6 +101,9 @@ public class KartenListe {
     return result;
   }
 
+  /**
+   * A Class that represents a list of Cards.
+   */
   public Karte removeKarten(Karte karteToRemove) {
     for (Karte karte : this.kartenListe) {
       if (karte.getId().equals(karteToRemove.getId())) {
@@ -93,6 +114,9 @@ public class KartenListe {
     throw new RuntimeException("Karte nicht gefunden");
   }
 
+  /**
+   * A Class that represents a list of Cards.
+   */
   public Karte removeKarten(String idToRemove) {
     for (Karte karte : this.kartenListe) {
       if (karte.getId().equals(idToRemove)) {
@@ -103,6 +127,9 @@ public class KartenListe {
     throw new RuntimeException("Karte nicht gefunden");
   }
 
+  /**
+   * A Class that represents a list of Cards.
+   */
   private boolean containsKarte(Karte karte) {
     for (Karte karteInListe : this.kartenListe) {
       if (karteInListe.getId().equals(karte.getId())) {
@@ -114,6 +141,9 @@ public class KartenListe {
 
   // get Karten
 
+  /**
+   * A Class that represents a list of Cards.
+   */
   public KartenListe getKarten(KartenFarbe farbe) {
     KartenListe result = new KartenListe();
     for (Karte karte : this.kartenListe) {
@@ -127,6 +157,9 @@ public class KartenListe {
     return result;
   }
 
+  /**
+   * A Class that represents a list of Cards.
+   */
   public KartenListe getKarten(KartenSymbol symbol) {
     KartenListe result = new KartenListe();
     for (Karte karte : this.kartenListe) {
@@ -140,6 +173,9 @@ public class KartenListe {
     return result;
   }
 
+  /**
+   * A Class that represents a list of Cards.
+   */
   public JsonObject getJson() {
     Gson gson = new Gson();
     JsonObject jsonObject = new JsonObject();
@@ -164,6 +200,9 @@ public class KartenListe {
     return this.kartenListe.size();
   }
 
+  /**
+   * A Class that represents a list of Cards.
+   */
   public int indexOf(Karte karte) {
     for (Karte karteInListe : this.kartenListe) {
       if (karteInListe.getId().equals(karte.getId())) {

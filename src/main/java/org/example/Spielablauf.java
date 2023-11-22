@@ -41,6 +41,9 @@ public class Spielablauf {
     }
   }
 
+  /**
+   * Method to Handle flow of one Game.
+   */
   public void einStich() throws InterruptedException {
     System.out.println();
     System.out.println();

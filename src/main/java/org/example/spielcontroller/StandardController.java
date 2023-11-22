@@ -1,7 +1,13 @@
 package org.example.spielcontroller;
 
-import org.example.karte.*;
+import org.example.karte.KartenFarbe;
+import org.example.karte.KartenListe;
+import org.example.karte.KartenSymbol;
+import org.example.karte.KartenUtil;
 
+/**
+ * SpielController that has the standard Card Deck for Sauspiel, Bettel und Co.
+ */
 public abstract class StandardController extends SpielController {
 
   StandardController() {
