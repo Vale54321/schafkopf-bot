@@ -9,13 +9,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class WenzController extends GeierWenzController {
-    public WenzController() {
-        KartenListe kartenList = KartenUtil.initializeSchafKopfCardDeck();
-        KartenListe unterKarten = kartenList.getKarten(KartenSymbol.UNTER);
+  public WenzController() {
+    KartenListe kartenList = KartenUtil.initializeSchafKopfCardDeck();
+    KartenListe unterKarten = kartenList.getKarten(KartenSymbol.UNTER);
 
-        kartenList.removeKarten(unterKarten);
+    kartenList.removeKarten(unterKarten);
 
-        this.trumpfKarten = new KartenListe(unterKarten);
-        this.farbKarten = new KartenListe(kartenList);
-    }
+    this.trumpfKarten = new KartenListe(unterKarten);
+    this.farbKarten = new KartenListe(kartenList);
+  }
 }

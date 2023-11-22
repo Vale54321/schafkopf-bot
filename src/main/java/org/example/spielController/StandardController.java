@@ -5,21 +5,23 @@ import org.example.karte.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class StandardController extends SpielController{
+public abstract class StandardController extends SpielController {
 
-    StandardController(){
-        KartenListe kartenList = KartenUtil.initializeSchafKopfCardDeck();
-        KartenListe herzKarten = kartenList.getKarten(KartenFarbe.HERZ);
-        herzKarten.removeKarten(KartenSymbol.UNTER);
-        herzKarten.removeKarten(KartenSymbol.OBER);
+  StandardController() {
+    KartenListe kartenList = KartenUtil.initializeSchafKopfCardDeck();
+    KartenListe herzKarten = kartenList.getKarten(KartenFarbe.HERZ);
+    herzKarten.removeKarten(KartenSymbol.UNTER);
+    herzKarten.removeKarten(KartenSymbol.OBER);
 
-        herzKarten.addKarten(kartenList.getKarten(KartenSymbol.UNTER));
-        herzKarten.addKarten(kartenList.getKarten(KartenSymbol.OBER));
+    herzKarten.addKarten(kartenList.getKarten(KartenSymbol.UNTER));
+    herzKarten.addKarten(kartenList.getKarten(KartenSymbol.OBER));
 
-        kartenList.removeKarten(herzKarten);
+    kartenList.removeKarten(herzKarten);
 
-        this.trumpfKarten = new KartenListe(herzKarten);
-        this.farbKarten = new KartenListe(kartenList);
-    }
-    public abstract int welcheKarteSpielIch(KartenListe gespielteKarten, KartenListe meineHand, KartenListe tischKarten);
+    this.trumpfKarten = new KartenListe(herzKarten);
+    this.farbKarten = new KartenListe(kartenList);
+  }
+
+  public abstract int welcheKarteSpielIch(
+      KartenListe gespielteKarten, KartenListe meineHand, KartenListe tischKarten);
 }

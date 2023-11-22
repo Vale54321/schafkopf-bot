@@ -1,7 +1,5 @@
 package org.example;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import org.example.karte.Karte;
 import org.example.karte.KartenFarbe;
 import org.example.karte.KartenUtil;
@@ -11,11 +9,11 @@ import org.example.spielController.*;
  * The main class representing the Schafkopf game.
  */
 public class Schafkopf {
+    private final BackendServer server;
     /**
      * The game controller. This is the class that implements the game logic.
      */
     private SpielController spiel = new SauSpielController(KartenFarbe.EICHEL, false);
-    private final BackendServer server;
     private boolean gameState = false;
     private Thread spielThread;
 

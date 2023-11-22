@@ -1,46 +1,32 @@
 package org.example;
 
+import com.google.gson.JsonObject;
+import io.github.cdimascio.dotenv.Dotenv;
+import jakarta.servlet.DispatcherType;
 import java.net.InetSocketAddress;
 import java.net.URI;
 import java.time.Duration;
-import java.util.EnumSet;
-
-import com.google.gson.JsonObject;
-import jakarta.servlet.DispatcherType;
-import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.server.ServerConnector;
-import org.eclipse.jetty.servlet.ServletContextHandler;
-import org.eclipse.jetty.websocket.server.config.JettyWebSocketServletContainerInitializer;
-
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
-
+import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.servlet.FilterHolder;
+import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlets.CrossOriginFilter;
-import io.github.cdimascio.dotenv.Dotenv;
+import org.eclipse.jetty.websocket.server.config.JettyWebSocketServletContainerInitializer;
 
 public class BackendServer
 {
-    private List<FrontendEndpoint> frontendEndpoints = new ArrayList<>();
-    public static void main(String[] args) throws Exception
-    {
-        BackendServer server = new BackendServer();
-        server.setPort(8080);
-        server.start();
-        server.join();
-    }
-
     private final Server server;
     private final ServerConnector connector;
-
     private final Schafkopf schafkopfGame;
     private final KartenLeser nfcLeser;
+    private List<FrontendEndpoint> frontendEndpoints = new ArrayList<>();
     private CountDownLatch nfcLatch = new CountDownLatch(1);
-
     private Boolean readingMode = false;
     private String uidString = "";
-
     public BackendServer()
     {
         Dotenv dotenv = Dotenv.configure().directory("./").load();
@@ -73,6 +59,14 @@ public class BackendServer
             wsContainer.addMapping("/schafkopf-events/*", new FrontendEndpointCreator(this));
 
         });
+    }
+
+    public static void main(String[] args) throws Exception
+    {
+        BackendServer server = new BackendServer();
+        server.setPort(8080);
+        server.start();
+        server.join();
     }
 
     private void configureCORS(ServletContextHandler context) {

@@ -1,11 +1,14 @@
 package org.example.spielController;
 
+import java.util.List;
 import org.example.karte.Karte;
 
-import java.util.List;
-
-public class GeierWenzController extends SoloController{
-    public Karte welcheKarteSpielich(List<Karte> gespielteKarten, List<Karte> meineHand, List<Karte> tischKarten, boolean istSpieler){
-        return null;
-    }
+public class GeierWenzController extends SoloController {
+  public Karte welcheKarteSpielich(
+      List<Karte> gespielteKarten,
+      List<Karte> meineHand,
+      List<Karte> tischKarten,
+      boolean istSpieler) {
+    return null;
+  }
 }
