@@ -1,4 +1,4 @@
-package org.example.karte;
+package org.schafkopf.karte;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;

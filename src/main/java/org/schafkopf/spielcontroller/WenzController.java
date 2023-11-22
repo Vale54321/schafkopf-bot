@@ -1,8 +1,8 @@
-package org.example.spielcontroller;
+package org.schafkopf.spielcontroller;
 
-import org.example.karte.KartenListe;
-import org.example.karte.KartenSymbol;
-import org.example.karte.KartenUtil;
+import org.schafkopf.karte.KartenListe;
+import org.schafkopf.karte.KartenSymbol;
+import org.schafkopf.karte.KartenUtil;
 
 /**
  * SpielController that implements Logic of a Wenz Game.

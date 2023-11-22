@@ -1,30 +1,26 @@
-package org.example.spielcontroller;
+package org.schafkopf.spielcontroller;
 
-import org.example.karte.Karte;
-import org.example.karte.KartenFarbe;
-import org.example.karte.KartenListe;
-import org.example.karte.KartenSymbol;
-import org.example.karte.KartenUtil;
+import org.schafkopf.karte.Karte;
+import org.schafkopf.karte.KartenFarbe;
+import org.schafkopf.karte.KartenListe;
+import org.schafkopf.karte.KartenSymbol;
+import org.schafkopf.karte.KartenUtil;
 
 /**
- * SpielController that implements Logic of a Farb Solo.
+ * SpielController that implements Logic of a Farb Wenz.
  */
-public class FarbSoloController extends SoloController {
+public class FarbWenzController extends SoloController {
   /**
    * Create instance of SpielController.
    *
-   * @param farbe Trumpffarbe of the Farb Solo.
+   * @param farbe Trumpffarbe of the Farb Wenz.
    */
-  public FarbSoloController(KartenFarbe farbe) {
+  public FarbWenzController(KartenFarbe farbe) {
     KartenListe kartenList = KartenUtil.initializeSchafKopfCardDeck();
     KartenListe unterKarten = kartenList.getKarten(KartenSymbol.UNTER);
-
     KartenListe farbTrumpfKarten = kartenList.getKarten(farbe);
     farbTrumpfKarten.removeKarten(KartenSymbol.UNTER);
-    farbTrumpfKarten.removeKarten(KartenSymbol.OBER);
-    farbTrumpfKarten.addKarten(kartenList.getKarten(KartenSymbol.UNTER));
-    farbTrumpfKarten.addKarten(kartenList.getKarten(KartenSymbol.OBER));
-
+    farbTrumpfKarten.addKarten(unterKarten);
     kartenList.removeKarten(farbTrumpfKarten);
 
     this.trumpfKarten = new KartenListe(farbTrumpfKarten);

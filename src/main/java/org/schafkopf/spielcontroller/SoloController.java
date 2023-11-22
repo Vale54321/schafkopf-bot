@@ -1,6 +1,6 @@
-package org.example.spielcontroller;
+package org.schafkopf.spielcontroller;
 
-import org.example.karte.KartenListe;
+import org.schafkopf.karte.KartenListe;
 
 /**
  * abstract Class that represents Logic of a Solo like Game.

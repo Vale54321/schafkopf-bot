@@ -1,4 +1,4 @@
-package org.example;
+package org.schafkopf;
 
 import java.io.IOException;
 import java.util.concurrent.CountDownLatch;

@@ -1,7 +1,7 @@
-package org.example.spielcontroller;
+package org.schafkopf.spielcontroller;
 
 import java.util.List;
-import org.example.karte.Karte;
+import org.schafkopf.karte.Karte;
 
 /**
  * SpielController that implements Logic of a Geier/Wenz Game.

@@ -1,9 +1,9 @@
-package org.example;
+package org.schafkopf;
 
-import org.example.karte.Karte;
-import org.example.karte.KartenListe;
-import org.example.karte.KartenUtil;
-import org.example.spielcontroller.SpielController;
+import org.schafkopf.karte.Karte;
+import org.schafkopf.karte.KartenListe;
+import org.schafkopf.karte.KartenUtil;
+import org.schafkopf.spielcontroller.SpielController;
 
 /** The main class that controlls the game flow. */
 public class Spielablauf {

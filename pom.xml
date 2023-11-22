@@ -32,7 +32,7 @@
         <configuration>
           <archive>
             <manifest>
-              <mainClass>org.example.BackendServer</mainClass>
+              <mainClass>org.schafkopf.BackendServer</mainClass>
             </manifest>
           </archive>
         </configuration>

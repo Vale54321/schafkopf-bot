@@ -1,4 +1,4 @@
-package org.example.karte;
+package org.schafkopf.karte;
 
 /**
  * Enum for all possible Card Symbols.

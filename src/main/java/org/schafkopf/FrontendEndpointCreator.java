@@ -1,4 +1,4 @@
-package org.example;
+package org.schafkopf;
 
 import org.eclipse.jetty.websocket.server.JettyServerUpgradeRequest;
 import org.eclipse.jetty.websocket.server.JettyServerUpgradeResponse;

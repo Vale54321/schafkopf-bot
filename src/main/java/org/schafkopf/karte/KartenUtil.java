@@ -1,4 +1,4 @@
-package org.example.karte;
+package org.schafkopf.karte;
 
 import java.util.Random;
 

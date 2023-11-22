@@ -1,4 +1,4 @@
-package org.example;
+package org.schafkopf;
 
 import com.pi4j.io.i2c.I2C;
 import java.io.IOException;

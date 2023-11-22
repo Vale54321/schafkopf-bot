@@ -1,8 +1,8 @@
-package org.example.spielcontroller;
+package org.schafkopf.spielcontroller;
 
-import org.example.karte.KartenFarbe;
-import org.example.karte.KartenListe;
-import org.example.karte.KartenUtil;
+import org.schafkopf.karte.KartenFarbe;
+import org.schafkopf.karte.KartenListe;
+import org.schafkopf.karte.KartenUtil;
 
 /**
  * Base Class of Game Controllers.

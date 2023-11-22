@@ -1,4 +1,4 @@
-package org.example;
+package org.schafkopf;
 
 import com.google.gson.JsonObject;
 import io.github.cdimascio.dotenv.Dotenv;

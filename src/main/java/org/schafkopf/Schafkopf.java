@@ -1,15 +1,15 @@
-package org.example;
+package org.schafkopf;
 
-import org.example.karte.Karte;
-import org.example.karte.KartenFarbe;
-import org.example.karte.KartenUtil;
-import org.example.spielcontroller.FarbGeierController;
-import org.example.spielcontroller.FarbSoloController;
-import org.example.spielcontroller.FarbWenzController;
-import org.example.spielcontroller.GeierController;
-import org.example.spielcontroller.SauSpielController;
-import org.example.spielcontroller.SpielController;
-import org.example.spielcontroller.WenzController;
+import org.schafkopf.karte.Karte;
+import org.schafkopf.karte.KartenFarbe;
+import org.schafkopf.karte.KartenUtil;
+import org.schafkopf.spielcontroller.FarbGeierController;
+import org.schafkopf.spielcontroller.FarbSoloController;
+import org.schafkopf.spielcontroller.FarbWenzController;
+import org.schafkopf.spielcontroller.GeierController;
+import org.schafkopf.spielcontroller.SauSpielController;
+import org.schafkopf.spielcontroller.SpielController;
+import org.schafkopf.spielcontroller.WenzController;
 
 /** The main class representing the Schafkopf game. */
 public class Schafkopf {

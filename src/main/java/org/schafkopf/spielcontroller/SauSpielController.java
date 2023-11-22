@@ -1,7 +1,7 @@
-package org.example.spielcontroller;
+package org.schafkopf.spielcontroller;
 
-import org.example.karte.KartenFarbe;
-import org.example.karte.KartenListe;
+import org.schafkopf.karte.KartenFarbe;
+import org.schafkopf.karte.KartenListe;
 
 /**
  * SpielController that implements Logic of a Sau Spiel Game.
