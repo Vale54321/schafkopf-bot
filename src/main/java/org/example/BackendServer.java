@@ -50,6 +50,7 @@ public class BackendServer
         connector.setHost(address.getHostName());
         connector.setPort(address.getPort());
         server.addConnector(connector);
+
         schafkopfGame = new Schafkopf(this);
         nfcLeser = new KartenLeser(this);
 
