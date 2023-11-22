@@ -1,4 +1,4 @@
-package org.example.spielController;
+package org.example.spielcontroller;
 
 import org.example.karte.KartenFarbe;
 import org.example.karte.KartenListe;

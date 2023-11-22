@@ -5,6 +5,9 @@ import java.util.concurrent.CountDownLatch;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.WebSocketAdapter;
 
+/**
+ * Class that represents one Frontend Connection.
+ */
 public class FrontendEndpoint extends WebSocketAdapter {
   private final CountDownLatch closureLatch = new CountDownLatch(1);
   private BackendServer backendServer;
@@ -69,6 +72,9 @@ public class FrontendEndpoint extends WebSocketAdapter {
     cause.printStackTrace(System.err);
   }
 
+  /**
+   * send a Message to the connected FrontEnd.
+   */
   public void sendMessage(String message) {
     try {
       getRemote().sendString(message);

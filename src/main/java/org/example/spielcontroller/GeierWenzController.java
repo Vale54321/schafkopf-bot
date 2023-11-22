@@ -1,4 +1,4 @@
-package org.example.spielController;
+package org.example.spielcontroller;
 
 import java.util.List;
 import org.example.karte.Karte;

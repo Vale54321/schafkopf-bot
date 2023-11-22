@@ -17,16 +17,18 @@ import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlets.CrossOriginFilter;
 import org.eclipse.jetty.websocket.server.config.JettyWebSocketServletContainerInitializer;
 
+/** Main Class that represents the Backend Server. */
 public class BackendServer {
   private final Server server;
   private final ServerConnector connector;
   private final Schafkopf schafkopfGame;
   private final KartenLeser nfcLeser;
-  private List<FrontendEndpoint> frontendEndpoints = new ArrayList<>();
+  private final List<FrontendEndpoint> frontendEndpoints = new ArrayList<>();
   private CountDownLatch nfcLatch = new CountDownLatch(1);
   private Boolean readingMode = false;
   private String uidString = "";
 
+  /** Creates an Instance of the Backend Server. */
   public BackendServer() {
     Dotenv dotenv = Dotenv.configure().directory("./").load();
     server = new Server();
@@ -46,7 +48,7 @@ public class BackendServer {
     server.setHandler(context);
 
     // Configure CORS settings
-    configureCORS(context);
+    configureCors(context);
 
     // Configure specific websocket behavior
     JettyWebSocketServletContainerInitializer.configure(
@@ -60,6 +62,7 @@ public class BackendServer {
         });
   }
 
+  /** The main entrypoint of the Application. */
   public static void main(String[] args) throws Exception {
     BackendServer server = new BackendServer();
     server.setPort(8080);
@@ -67,7 +70,7 @@ public class BackendServer {
     server.join();
   }
 
-  private void configureCORS(ServletContextHandler context) {
+  private void configureCors(ServletContextHandler context) {
     // Enable CORS for all paths
     FilterHolder cors = context.addFilter(CrossOriginFilter.class, "/*", null);
 
@@ -89,7 +92,7 @@ public class BackendServer {
     server.start();
   }
 
-  public URI getURI() {
+  public URI getUri() {
     return server.getURI();
   }
 
@@ -109,12 +112,22 @@ public class BackendServer {
     frontendEndpoints.remove(endpoint);
   }
 
+  /**
+   * Sends Message to all Frontend Instances.
+   *
+   * @param message Message to send (String).
+   */
   public void sendMessageToAllFrontendEndpoints(String message) {
     for (FrontendEndpoint endpoint : frontendEndpoints) {
       endpoint.sendMessage(message);
     }
   }
 
+  /**
+   * Sends Message to all Frontend Instances.
+   *
+   * @param message Message to send (JsonObject).
+   */
   public void sendMessageToAllFrontendEndpoints(JsonObject message) {
     for (FrontendEndpoint endpoint : frontendEndpoints) {
       endpoint.sendMessage(message.toString());
@@ -145,6 +158,11 @@ public class BackendServer {
     schafkopfGame.setGame(message);
   }
 
+  /**
+   * checks uid of scanned card and do nothing if Server is not in reading mode.
+   *
+   * @param uidString uid to check.
+   */
   public void nfcGelesen(String uidString) {
     if (this.uidString.equals(uidString)) {
       return;
@@ -157,6 +175,9 @@ public class BackendServer {
     nfcLatch.countDown();
   }
 
+  /**
+   * method to call to wait for NFC input.
+   */
   public String waitForCardScan() throws InterruptedException {
     this.readingMode = true;
     nfcLatch.await();

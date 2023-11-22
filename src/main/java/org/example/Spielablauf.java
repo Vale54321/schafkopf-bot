@@ -3,7 +3,7 @@ package org.example;
 import org.example.karte.Karte;
 import org.example.karte.KartenListe;
 import org.example.karte.KartenUtil;
-import org.example.spielController.SpielController;
+import org.example.spielcontroller.SpielController;
 
 /** The main class that controlls the game flow. */
 public class Spielablauf {

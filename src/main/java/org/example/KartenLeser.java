@@ -2,7 +2,9 @@ package org.example;
 
 import com.pi4j.io.i2c.I2C;
 import java.io.IOException;
-import mk.hsilomedus.pn532.*;
+import mk.hsilomedus.pn532.Pn532ContextHelper;
+import mk.hsilomedus.pn532.Pn532I2c;
+import mk.hsilomedus.pn532.Pn532SamThread;
 import mk.hsilomedus.pn532.Pn532SamThread.Pn532SamThreadListener;
 
 public final class KartenLeser {
