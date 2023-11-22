@@ -11,7 +11,8 @@ public class SauSpielController extends StandardController {
   KartenFarbe suchFarbe;
   boolean istSpieler;
 
-  public SauSpielController(KartenFarbe suchFarbe, boolean istSpieler) {
+  public SauSpielController(int activePlayer, KartenFarbe farbe) {
+    super(activePlayer);
     this.suchFarbe = suchFarbe;
     this.istSpieler = istSpieler;
   }
@@ -19,7 +20,7 @@ public class SauSpielController extends StandardController {
   /**
    * choose witch Card should be played with the right Game logic.
    */
-  public int welcheKarteSpielIch(
+  public int welcheKarteSpielIch(int meinePosition,
       KartenListe gespielteKarten, KartenListe meineHand, KartenListe tischKarten) {
     System.out.println("Ich spiele eine Karte Sauspiel");
 

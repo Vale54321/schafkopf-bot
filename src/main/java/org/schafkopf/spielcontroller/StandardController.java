@@ -10,7 +10,8 @@ import org.schafkopf.karte.KartenUtil;
  */
 public abstract class StandardController extends SpielController {
 
-  StandardController() {
+  StandardController (int activePlayer) {
+    super(activePlayer);
     KartenListe kartenList = KartenUtil.initializeSchafKopfCardDeck();
     KartenListe herzKarten = kartenList.getKarten(KartenFarbe.HERZ);
     herzKarten.removeKarten(KartenSymbol.UNTER);
@@ -25,6 +26,6 @@ public abstract class StandardController extends SpielController {
     this.farbKarten = new KartenListe(kartenList);
   }
 
-  public abstract int welcheKarteSpielIch(
+  public abstract int welcheKarteSpielIch(int meinePosition,
       KartenListe gespielteKarten, KartenListe meineHand, KartenListe tischKarten);
 }

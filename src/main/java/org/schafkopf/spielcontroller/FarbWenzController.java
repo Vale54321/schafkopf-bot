@@ -15,7 +15,8 @@ public class FarbWenzController extends SoloController {
    *
    * @param farbe Trumpffarbe of the Farb Wenz.
    */
-  public FarbWenzController(KartenFarbe farbe) {
+  public FarbWenzController(int activePlayer, KartenFarbe farbe) {
+    super(activePlayer);
     KartenListe kartenList = KartenUtil.initializeSchafKopfCardDeck();
     KartenListe unterKarten = kartenList.getKarten(KartenSymbol.UNTER);
     KartenListe farbTrumpfKarten = kartenList.getKarten(farbe);

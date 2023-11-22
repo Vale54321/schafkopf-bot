@@ -11,6 +11,12 @@ public abstract class SpielController {
   protected static KartenListe trumpfKarten;
   protected static KartenListe farbKarten;
 
+  protected static int activePlayer;
+
+  public SpielController(int activePlayer) {
+    this.activePlayer = activePlayer;
+  }
+
   /**
    * Create instance of SpielController.
    *
@@ -84,7 +90,7 @@ public abstract class SpielController {
     return i;
   }
 
-  public abstract int welcheKarteSpielIch(
+  public abstract int welcheKarteSpielIch(int meinePosition,
       KartenListe gespielteKarten, KartenListe meineHand, KartenListe tischKarten);
 
   public KartenListe getTrumpfKarten() {

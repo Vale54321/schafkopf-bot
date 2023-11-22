@@ -1,8 +1,12 @@
 package org.schafkopf;
 
+import java.lang.constant.PackageDesc;
 import org.schafkopf.karte.Karte;
 import org.schafkopf.karte.KartenFarbe;
 import org.schafkopf.karte.KartenUtil;
+import org.schafkopf.player.BotPlayer;
+import org.schafkopf.player.LocalPlayer;
+import org.schafkopf.player.Player;
 import org.schafkopf.spielcontroller.FarbGeierController;
 import org.schafkopf.spielcontroller.FarbSoloController;
 import org.schafkopf.spielcontroller.FarbWenzController;
@@ -16,10 +20,21 @@ public class Schafkopf {
   private final BackendServer server;
 
   /** The game controller. This is the class that implements the game logic. */
-  private SpielController spiel = new SauSpielController(KartenFarbe.EICHEL, false);
+  private SpielController spiel = new SauSpielController(0, KartenFarbe.EICHEL);
+
+  private final Player[] player = {
+      new BotPlayer(KartenUtil.zieheZufallsHand(8)),
+      new LocalPlayer(this),
+      new LocalPlayer(this),
+      new LocalPlayer(this)
+  };
 
   private boolean gameState = false;
   private Thread spielThread;
+
+  public Player[] getPlayer() {
+    return player;
+  }
 
   /**
    * Constructor for the Schafkopf class.
@@ -89,7 +104,7 @@ public class Schafkopf {
       System.out.println("Start Game");
       server.sendMessageToAllFrontendEndpoints("Start Game");
       spielThread =
-          new Thread(() -> new Spielablauf(this, spiel, KartenUtil.zieheZufallsHand(8), 0, true));
+          new Thread(() -> new Spielablauf(this, spiel,  true));
 
       spielThread.start();
     }
@@ -114,65 +129,4 @@ public class Schafkopf {
   public BackendServer getServer() {
     return this.server;
   }
-
-  /**
-   * Set Game Type.
-   */
-  public void setGame(String message) {
-    System.out.println("Set Game: " + message);
-    server.sendMessageToAllFrontendEndpoints("Set Game: " + message);
-    switch (message) {
-      case "setgame:herzsolo":
-        this.spiel = new FarbSoloController(KartenFarbe.HERZ);
-        break;
-      case "setgame:blattsolo":
-        this.spiel = new FarbSoloController(KartenFarbe.BLATT);
-        break;
-      case "setgame:eichelsolo":
-        this.spiel = new FarbSoloController(KartenFarbe.EICHEL);
-        break;
-      case "setgame:shellsolo":
-        this.spiel = new FarbSoloController(KartenFarbe.SCHELL);
-        break;
-
-      case "setgame:wenz":
-        this.spiel = new WenzController();
-        break;
-      case "setgame:geier":
-        this.spiel = new GeierController();
-        break;
-
-      case "setgame:eichelwenz":
-        this.spiel = new FarbWenzController(KartenFarbe.EICHEL);
-        break;
-      case "setgame:herzwenz":
-        this.spiel = new FarbWenzController(KartenFarbe.HERZ);
-        break;
-      case "setgame:blattwenz":
-        this.spiel = new FarbWenzController(KartenFarbe.BLATT);
-        break;
-      case "setgame:schellwenz":
-        this.spiel = new FarbWenzController(KartenFarbe.SCHELL);
-        break;
-
-      case "setgame:eichelgeier":
-        this.spiel = new FarbGeierController(KartenFarbe.EICHEL);
-        break;
-      case "setgame:herzgeier":
-        this.spiel = new FarbGeierController(KartenFarbe.HERZ);
-        break;
-      case "setgame:blattgeier":
-        this.spiel = new FarbGeierController(KartenFarbe.BLATT);
-        break;
-      case "setgame:schellgeier":
-        this.spiel = new FarbGeierController(KartenFarbe.SCHELL);
-        break;
-
-      case "setgame:sauspiel":
-        this.spiel = new SauSpielController(KartenFarbe.EICHEL, false);
-        break;
-      default:
-        System.out.println("Ungültiges Spiel");
-    }
   }
-}

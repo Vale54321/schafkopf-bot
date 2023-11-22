@@ -15,7 +15,8 @@ public class FarbSoloController extends SoloController {
    *
    * @param farbe Trumpffarbe of the Farb Solo.
    */
-  public FarbSoloController(KartenFarbe farbe) {
+  public FarbSoloController(int activePlayer, KartenFarbe farbe) {
+    super(activePlayer);
     KartenListe kartenList = KartenUtil.initializeSchafKopfCardDeck();
     KartenListe unterKarten = kartenList.getKarten(KartenSymbol.UNTER);
 

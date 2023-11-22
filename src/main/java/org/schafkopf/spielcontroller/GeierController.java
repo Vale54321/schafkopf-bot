@@ -1,5 +1,6 @@
 package org.schafkopf.spielcontroller;
 
+import org.schafkopf.karte.KartenFarbe;
 import org.schafkopf.karte.KartenListe;
 import org.schafkopf.karte.KartenSymbol;
 import org.schafkopf.karte.KartenUtil;
@@ -11,7 +12,8 @@ public class GeierController extends GeierWenzController {
   /**
    * Create instance of Geier Game.
    */
-  public GeierController() {
+  public GeierController(int activePlayer) {
+    super(activePlayer);
     KartenListe kartenList = KartenUtil.initializeSchafKopfCardDeck();
     KartenListe oberKarten = kartenList.getKarten(KartenSymbol.OBER);
 

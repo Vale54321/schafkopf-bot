@@ -14,7 +14,8 @@ public class FarbGeierController extends SoloController {
    *
    * @param farbe Trumpffarbe of the Farb Geier.
    */
-  public FarbGeierController(KartenFarbe farbe) {
+  public FarbGeierController(int activePlayer, KartenFarbe farbe) {
+    super(activePlayer);
     KartenListe kartenList = KartenUtil.initializeSchafKopfCardDeck();
     KartenListe oberKarten = kartenList.getKarten(KartenSymbol.OBER);
     KartenListe farbTrumpfKarten = kartenList.getKarten(farbe);

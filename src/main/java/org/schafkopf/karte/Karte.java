@@ -13,7 +13,7 @@ public class Karte {
   private KartenSymbol symbol;
   private int punkte;
 
-  Karte(KartenFarbe farbe, KartenSymbol symbol) {
+  public Karte(KartenFarbe farbe, KartenSymbol symbol) {
     this.id = farbe.getDisplayName().toLowerCase() + "_" + symbol.getId().toLowerCase();
     this.name = farbe.getDisplayName() + " " + symbol.getDisplayName();
     this.farbe = farbe;
