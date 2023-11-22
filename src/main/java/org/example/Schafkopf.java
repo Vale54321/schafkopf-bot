@@ -31,18 +31,30 @@ public class Schafkopf {
     System.out.println("SchaffKopfGame erstellt");
   }
 
+  /**
+   * Sends all Trumpf Karten of the current GameType to the Frontend.
+   */
   public void showTrumpf() {
     server.sendMessageToAllFrontendEndpoints(spiel.getTrumpfKarten().getJson());
   }
 
+  /**
+   * Sends all Farb Karten of the current GameType to the Frontend.
+   */
   public void showFarbe() {
     server.sendMessageToAllFrontendEndpoints(spiel.getFarbKarten().getJson());
   }
 
+  /**
+   * Test to wait for one Card Input via NFC.
+   */
   public void testHand() {
     wartetAufKarte().getJson();
   }
 
+  /**
+   * Waits for a Card and returns a Karte Object.
+   */
   public Karte wartetAufKarte() {
     String uid = null;
     System.out.println("Starte Warten auf Karte");
@@ -65,6 +77,9 @@ public class Schafkopf {
     return KartenUtil.getKarteById(kartenId);
   }
 
+  /**
+   * Set GameState to "started" and start Game Thread.
+   */
   public void startGame() {
     if (gameState) {
       System.out.println("Game already started!");
@@ -80,6 +95,9 @@ public class Schafkopf {
     }
   }
 
+  /**
+   * Set GameState to "stopped" and interrupt Game Thread.
+   */
   public void stopGame() {
     if (!gameState) {
       System.out.println("no active Game!");
@@ -97,6 +115,9 @@ public class Schafkopf {
     return this.server;
   }
 
+  /**
+   * Set Game Type.
+   */
   public void setGame(String message) {
     System.out.println("Set Game: " + message);
     server.sendMessageToAllFrontendEndpoints("Set Game: " + message);
