@@ -129,4 +129,4 @@ public class Schafkopf {
   public BackendServer getServer() {
     return this.server;
   }
-  }
+}

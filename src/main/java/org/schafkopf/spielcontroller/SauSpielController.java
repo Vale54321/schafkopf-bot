@@ -11,6 +11,9 @@ public class SauSpielController extends StandardController {
   KartenFarbe suchFarbe;
   boolean istSpieler;
 
+  /**
+   * Class that represents one Card of the game.
+   */
   public SauSpielController(int activePlayer, KartenFarbe farbe) {
     super(activePlayer);
     this.suchFarbe = suchFarbe;

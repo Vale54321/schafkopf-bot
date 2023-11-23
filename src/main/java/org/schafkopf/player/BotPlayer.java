@@ -6,14 +6,19 @@ import org.schafkopf.karte.KartenListe;
 import org.schafkopf.karte.KartenSymbol;
 import org.schafkopf.spielcontroller.SpielController;
 
+/**
+ * Player that represents the Bot.
+ */
 public class BotPlayer extends Player {
 
   private final KartenListe eigeneKarten;
   private final KartenListe unbekannteKarten = new KartenListe();
+
   public BotPlayer(KartenListe hand) {
     this.eigeneKarten = hand;
     this.unbekannteKarten.removeKarten(this.eigeneKarten);
   }
+
   @Override
   public Karte play(SpielController spiel, KartenListe tischKarten) {
     spiel.welcheKarteSpielIch(1,

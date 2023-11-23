@@ -13,6 +13,9 @@ public class Karte {
   private KartenSymbol symbol;
   private int punkte;
 
+  /**
+   * Class that represents one Card of the game.
+   */
   public Karte(KartenFarbe farbe, KartenSymbol symbol) {
     this.id = farbe.getDisplayName().toLowerCase() + "_" + symbol.getId().toLowerCase();
     this.name = farbe.getDisplayName() + " " + symbol.getDisplayName();

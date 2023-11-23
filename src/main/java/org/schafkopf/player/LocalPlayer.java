@@ -7,6 +7,9 @@ import org.schafkopf.karte.KartenListe;
 import org.schafkopf.karte.KartenSymbol;
 import org.schafkopf.spielcontroller.SpielController;
 
+/**
+ * Player that plays in real life.
+ */
 public class LocalPlayer extends Player {
 
   private final Schafkopf schafkopf;
@@ -14,6 +17,7 @@ public class LocalPlayer extends Player {
   public LocalPlayer(Schafkopf schafkopf) {
     this.schafkopf = schafkopf;
   }
+
   @Override
   public Karte play(SpielController spiel, KartenListe tischKarten) {
     System.out.println("Eigene Karte legen");

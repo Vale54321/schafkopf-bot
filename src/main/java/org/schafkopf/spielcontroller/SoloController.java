@@ -10,6 +10,7 @@ public abstract class SoloController extends SpielController {
   SoloController(int activePlayer) {
     super(activePlayer);
   }
+  
   public int welcheKarteSpielIch(
       KartenListe gespielteKarten, KartenListe meineHand, KartenListe tischKarten) {
     return 0;

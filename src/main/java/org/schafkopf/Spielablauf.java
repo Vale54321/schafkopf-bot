@@ -1,8 +1,6 @@
 package org.schafkopf;
 
-import org.schafkopf.karte.Karte;
 import org.schafkopf.karte.KartenListe;
-import org.schafkopf.karte.KartenUtil;
 import org.schafkopf.player.Player;
 import org.schafkopf.spielcontroller.SpielController;
 
@@ -20,10 +18,7 @@ public class Spielablauf {
 
   private int gemachteStiche;
 
-  Spielablauf(
-      Schafkopf schafkopf,
-      SpielController spiel,
-      boolean aktiverSpieler) {
+  Spielablauf(Schafkopf schafkopf, SpielController spiel, boolean aktiverSpieler) {
     this.schafkopf = schafkopf;
     this.spiel = spiel;
     this.players = schafkopf.getPlayer();
@@ -37,19 +32,17 @@ public class Spielablauf {
     }
   }
 
-  /**
-   * Method to Handle flow of one Game.
-   */
-    public void einStich() throws InterruptedException {
+  /** Method to Handle flow of one Game. */
+  public void einStich() throws InterruptedException {
     System.out.println("Starte Stiche");
     int rauskommer = 0;
     while (gemachteStiche < 8) {
       System.out.println("Stich: " + gemachteStiche);
       for (int i = 0; i < 4; i++) {
-        tischKarten.addKarten(players[(i + rauskommer) % 4 ].play(spiel, tischKarten));
+        tischKarten.addKarten(players[(i + rauskommer) % 4].play(spiel, tischKarten));
       }
       schafkopf.getServer().sendMessageToAllFrontendEndpoints(tischKarten.getJson());
-      int stichSpieler = spiel.welcheKarteSticht(tischKarten);
+      int stichSpieler = SpielController.welcheKarteSticht(tischKarten);
       Thread.sleep(5000);
       System.out.println("Stiche ende");
 

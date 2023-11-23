@@ -10,7 +10,7 @@ import org.schafkopf.karte.KartenUtil;
  */
 public abstract class StandardController extends SpielController {
 
-  StandardController (int activePlayer) {
+  StandardController(int activePlayer) {
     super(activePlayer);
     KartenListe kartenList = KartenUtil.initializeSchafKopfCardDeck();
     KartenListe herzKarten = kartenList.getKarten(KartenFarbe.HERZ);
