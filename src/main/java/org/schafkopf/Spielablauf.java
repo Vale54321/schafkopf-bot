@@ -45,7 +45,7 @@ public class Spielablauf {
       }
       schafkopf.getServer().sendMessageToAllFrontendEndpoints(tischKarten.getJson());
       int stichSpieler = SpielController.welcheKarteSticht(tischKarten);
-      Thread.sleep(5000);
+      Thread.sleep(2000);
       System.out.println("Stiche ende");
 
       //rauskommer = (rauskommer + stichSpieler) % 4;
