@@ -39,10 +39,9 @@ public class BotPlayer extends Player {
    */
   public void setCards(KartenListe cards) {
     System.out.println("Eigene Karte setzen");
-    this.eigeneKarten.clear();
-    this.eigeneKarten.addKarten(cards);
+    this.eigeneKarten = cards;
     this.unbekannteKarten = KartenUtil.initializeSchafKopfCardDeck();
-    this.unbekannteKarten.removeKarten(cards);
+    this.unbekannteKarten.removeKarten(eigeneKarten);
     System.out.println("Eigene Karte fertig");
   }
 }
