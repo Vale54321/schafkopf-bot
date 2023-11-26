@@ -32,11 +32,8 @@ public class FarbSoloController extends SoloController {
     this.farbKarten = new KartenListe(kartenList);
   }
 
-  public Karte welcheKarteSpielich(
-      KartenListe gespielteKarten,
-      KartenListe meineHand,
-      KartenListe tischKarten,
-      boolean istSpieler) {
-    return null;
+  public int welcheKarteSpielIch(int meinePosition,
+      KartenListe gespielteKarten, KartenListe meineHand, KartenListe tischKarten) {
+    return 0;
   }
 }

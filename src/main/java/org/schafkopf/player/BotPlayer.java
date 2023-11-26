@@ -4,6 +4,7 @@ import org.schafkopf.karte.Karte;
 import org.schafkopf.karte.KartenFarbe;
 import org.schafkopf.karte.KartenListe;
 import org.schafkopf.karte.KartenSymbol;
+import org.schafkopf.karte.KartenUtil;
 import org.schafkopf.spielcontroller.SpielController;
 
 /**
@@ -12,7 +13,7 @@ import org.schafkopf.spielcontroller.SpielController;
 public class BotPlayer extends Player {
 
   private final KartenListe eigeneKarten;
-  private final KartenListe unbekannteKarten = new KartenListe();
+  private final KartenListe unbekannteKarten = KartenUtil.initializeSchafKopfCardDeck();
 
   public BotPlayer(KartenListe hand) {
     this.eigeneKarten = hand;

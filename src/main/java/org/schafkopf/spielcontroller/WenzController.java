@@ -11,7 +11,9 @@ public class WenzController extends GeierWenzController {
   /**
    * Create instance of Wenz Game.
    */
-  public WenzController() {
+  public WenzController(int activePlayer) {
+    super(activePlayer);
+    this.activePlayer = activePlayer;
     KartenListe kartenList = KartenUtil.initializeSchafKopfCardDeck();
     KartenListe unterKarten = kartenList.getKarten(KartenSymbol.UNTER);
 

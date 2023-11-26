@@ -126,6 +126,64 @@ public class Schafkopf {
     spielThread.interrupt();
   }
 
+  public void setGame(String message) {
+    System.out.println("Set Game: " + message);
+    server.sendMessageToAllFrontendEndpoints("Set Game: " + message);
+    switch (message) {
+      case "setgame:herzsolo":
+        this.spiel = new FarbSoloController(0, KartenFarbe.HERZ);
+        break;
+      case "setgame:blattsolo":
+        this.spiel = new FarbSoloController(0, KartenFarbe.BLATT);
+        break;
+      case "setgame:eichelsolo":
+        this.spiel = new FarbSoloController(0, KartenFarbe.EICHEL);
+        break;
+      case "setgame:shellsolo":
+        this.spiel = new FarbSoloController(0, KartenFarbe.SCHELL);
+        break;
+
+      case "setgame:wenz":
+        this.spiel = new WenzController(0);
+        break;
+      case "setgame:geier":
+        this.spiel = new GeierController(0);
+        break;
+
+      case "setgame:eichelwenz":
+        this.spiel = new FarbWenzController(0, KartenFarbe.EICHEL);
+        break;
+      case "setgame:herzwenz":
+        this.spiel = new FarbWenzController(0, KartenFarbe.HERZ);
+        break;
+      case "setgame:blattwenz":
+        this.spiel = new FarbWenzController(0, KartenFarbe.BLATT);
+        break;
+      case "setgame:schellwenz":
+        this.spiel = new FarbWenzController(0, KartenFarbe.SCHELL);
+        break;
+
+      case "setgame:eichelgeier":
+        this.spiel = new FarbGeierController(0, KartenFarbe.EICHEL);
+        break;
+      case "setgame:herzgeier":
+        this.spiel = new FarbGeierController(0, KartenFarbe.HERZ);
+        break;
+      case "setgame:blattgeier":
+        this.spiel = new FarbGeierController(0, KartenFarbe.BLATT);
+        break;
+      case "setgame:schellgeier":
+        this.spiel = new FarbGeierController(0, KartenFarbe.SCHELL);
+        break;
+
+      case "setgame:sauspiel":
+        this.spiel = new SauSpielController(0, KartenFarbe.EICHEL);
+        break;
+      default:
+        System.out.println("Ungültiges Spiel");
+    }
+  }
+
   public BackendServer getServer() {
     return this.server;
   }
