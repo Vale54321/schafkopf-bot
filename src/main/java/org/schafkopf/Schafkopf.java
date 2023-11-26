@@ -3,6 +3,7 @@ package org.schafkopf;
 import java.lang.constant.PackageDesc;
 import org.schafkopf.karte.Karte;
 import org.schafkopf.karte.KartenFarbe;
+import org.schafkopf.karte.KartenListe;
 import org.schafkopf.karte.KartenUtil;
 import org.schafkopf.player.BotPlayer;
 import org.schafkopf.player.LocalPlayer;
@@ -22,8 +23,9 @@ public class Schafkopf {
   /** The game controller. This is the class that implements the game logic. */
   private SpielController spiel = new SauSpielController(0, KartenFarbe.EICHEL);
 
+  KartenListe botHand = KartenUtil.zieheZufallsHand(8);
   private final Player[] player = {
-      new BotPlayer(KartenUtil.zieheZufallsHand(8)),
+      new BotPlayer(botHand),
       new LocalPlayer(this),
       new LocalPlayer(this),
       new LocalPlayer(this)
@@ -103,6 +105,12 @@ public class Schafkopf {
       gameState = true;
       System.out.println("Start Game");
       server.sendMessageToAllFrontendEndpoints("Start Game");
+      System.out.println(botHand.getJson());
+      try {
+        Thread.sleep(5000);
+      } catch (InterruptedException e) {
+        throw new RuntimeException(e);
+      }
       spielThread =
           new Thread(() -> new Spielablauf(this, spiel,  true));
 
