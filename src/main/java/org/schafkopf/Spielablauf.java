@@ -48,7 +48,8 @@ public class Spielablauf {
       Thread.sleep(5000);
       System.out.println("Stiche ende");
 
-      rauskommer = (rauskommer + stichSpieler) % 4;
+      //rauskommer = (rauskommer + stichSpieler) % 4;
+      rauskommer = 0;
 
       gespielteKarten.addKarten(tischKarten);
 
