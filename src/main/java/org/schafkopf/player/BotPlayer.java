@@ -24,10 +24,14 @@ public class BotPlayer extends Player {
   @Override
   public Karte play(SpielController spiel, KartenListe tischKarten) {
 
-    System.out.println("Eigene Karte legen");
-    return     eigeneKarten.getByIndex(spiel.welcheKarteSpielIch(1,
+    Karte cardIndex = eigeneKarten.getByIndex(spiel.welcheKarteSpielIch(1,
         eigeneKarten,
         eigeneKarten,
         tischKarten));
+
+    eigeneKarten.removeKarten(cardIndex);
+
+    System.out.println("Eigene Karte legen");
+    return cardIndex;
   }
 }
