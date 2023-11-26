@@ -20,7 +20,6 @@ public class LocalPlayer extends Player {
 
   @Override
   public Karte play(SpielController spiel, KartenListe tischKarten) {
-    System.out.println("Eigene Karte legen");
     return schafkopf.wartetAufKarte();
   }
 }

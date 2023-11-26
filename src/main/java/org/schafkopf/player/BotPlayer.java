@@ -5,6 +5,7 @@ import org.schafkopf.karte.KartenFarbe;
 import org.schafkopf.karte.KartenListe;
 import org.schafkopf.karte.KartenSymbol;
 import org.schafkopf.karte.KartenUtil;
+import org.schafkopf.spielcontroller.SauSpielController;
 import org.schafkopf.spielcontroller.SpielController;
 
 /**
@@ -22,10 +23,11 @@ public class BotPlayer extends Player {
 
   @Override
   public Karte play(SpielController spiel, KartenListe tischKarten) {
-    spiel.welcheKarteSpielIch(1,
+
+    System.out.println("Eigene Karte legen");
+    return     eigeneKarten.getByIndex(spiel.welcheKarteSpielIch(1,
         eigeneKarten,
         eigeneKarten,
-        tischKarten);
-    return new Karte(KartenFarbe.SCHELL, KartenSymbol.SEVEN);
+        tischKarten));
   }
 }
