@@ -43,5 +43,6 @@ public class BotPlayer extends Player {
     this.eigeneKarten.addKarten(cards);
     this.unbekannteKarten = KartenUtil.initializeSchafKopfCardDeck();
     this.unbekannteKarten.removeKarten(cards);
+    System.out.println("Eigene Karte fertig");
   }
 }
