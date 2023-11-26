@@ -26,6 +26,7 @@ public class FarbGeierController extends SoloController {
     this.trumpfKarten = new KartenListe(farbTrumpfKarten);
     this.farbKarten = new KartenListe(kartenList);
   }
+
   public int welcheKarteSpielIch(int meinePosition,
       KartenListe gespielteKarten, KartenListe meineHand, KartenListe tischKarten) {
     return 0;

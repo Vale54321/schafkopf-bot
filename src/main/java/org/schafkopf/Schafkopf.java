@@ -126,6 +126,9 @@ public class Schafkopf {
     spielThread.interrupt();
   }
 
+  /**
+   * Set GameType.
+   */
   public void setGame(String message) {
     System.out.println("Set Game: " + message);
     server.sendMessageToAllFrontendEndpoints("Set Game: " + message);
