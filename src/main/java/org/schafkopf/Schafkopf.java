@@ -108,8 +108,7 @@ public class Schafkopf {
       KartenListe botHand = KartenUtil.zieheZufallsHand(8);
 
       for (Player currentPlayer : player) {
-        if (currentPlayer instanceof BotPlayer) {
-          BotPlayer botPlayer = (BotPlayer) currentPlayer;
+        if (currentPlayer instanceof BotPlayer botPlayer) {
           // Perform actions specific to BotPlayer
           botPlayer.setCards(botHand); // Replace with the actual method you want to call
         }
