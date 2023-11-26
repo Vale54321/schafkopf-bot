@@ -34,6 +34,9 @@ public class BotPlayer extends Player {
     return cardIndex;
   }
 
+  /**
+   * Set the Cards of the Player.
+   */
   public void setCards(KartenListe cards) {
     this.eigeneKarten.clear();
     this.eigeneKarten.addKarten(cards);
