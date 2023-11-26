@@ -31,7 +31,7 @@ public class KartenListe {
       this.kartenListe.add(karte);
       return;
     }
-    throw new RuntimeException("Karte bereits vorhanden" + karte.getName());
+    throw new RuntimeException("Karte bereits vorhanden: " + karte.getName());
   }
 
   // methoden zum hinzufügen von karten
