@@ -105,7 +105,7 @@ public class Schafkopf {
       gameState = true;
       System.out.println("Start Game");
       server.sendMessageToAllFrontendEndpoints("Start Game");
-      System.out.println(botHand.getJson());
+      server.sendMessageToAllFrontendEndpoints(botHand.getJson());
       try {
         Thread.sleep(5000);
       } catch (InterruptedException e) {
