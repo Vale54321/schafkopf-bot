@@ -13,12 +13,11 @@ import org.schafkopf.spielcontroller.SpielController;
  */
 public class BotPlayer extends Player {
 
-  private final KartenListe eigeneKarten;
-  private final KartenListe unbekannteKarten = KartenUtil.initializeSchafKopfCardDeck();
+  private KartenListe eigeneKarten;
+  private KartenListe unbekannteKarten = KartenUtil.initializeSchafKopfCardDeck();
 
-  public BotPlayer(KartenListe hand) {
-    this.eigeneKarten = hand;
-    this.unbekannteKarten.removeKarten(this.eigeneKarten);
+  public BotPlayer() {
+    // TODO document why this constructor is empty
   }
 
   @Override
@@ -33,5 +32,12 @@ public class BotPlayer extends Player {
 
     System.out.println("Eigene Karte legen");
     return cardIndex;
+  }
+
+  public void setCards(KartenListe cards) {
+    this.eigeneKarten.clear();
+    this.eigeneKarten.addKarten(cards);
+    this.unbekannteKarten = KartenUtil.initializeSchafKopfCardDeck();
+    this.unbekannteKarten.removeKarten(cards);
   }
 }

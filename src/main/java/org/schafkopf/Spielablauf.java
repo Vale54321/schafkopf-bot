@@ -58,5 +58,6 @@ public class Spielablauf {
       gemachteStiche++;
     }
     schafkopf.getServer().sendMessageToAllFrontendEndpoints(gespielteKarten.getJson());
+    schafkopf.stopGame();
   }
 }

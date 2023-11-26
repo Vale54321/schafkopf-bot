@@ -23,9 +23,9 @@ public class Schafkopf {
   /** The game controller. This is the class that implements the game logic. */
   private SpielController spiel = new SauSpielController(0, KartenFarbe.EICHEL);
 
-  KartenListe botHand = KartenUtil.zieheZufallsHand(8);
+
   private final Player[] player = {
-      new BotPlayer(botHand),
+      new BotPlayer(),
       new LocalPlayer(this),
       new LocalPlayer(this),
       new LocalPlayer(this)
@@ -104,6 +104,17 @@ public class Schafkopf {
     } else {
       gameState = true;
       System.out.println("Start Game");
+
+      KartenListe botHand = KartenUtil.zieheZufallsHand(8);
+
+      for (Player currentPlayer : player) {
+        if (currentPlayer instanceof BotPlayer) {
+          BotPlayer botPlayer = (BotPlayer) currentPlayer;
+          // Perform actions specific to BotPlayer
+          botPlayer.setCards(botHand); // Replace with the actual method you want to call
+        }
+      }
+
       server.sendMessageToAllFrontendEndpoints("Start Game");
       server.sendMessageToAllFrontendEndpoints(botHand.getJson());
       try {
