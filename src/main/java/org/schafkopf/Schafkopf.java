@@ -142,7 +142,7 @@ public class Schafkopf {
       case "setgame:eichelsolo":
         this.spiel = new FarbSoloController(0, KartenFarbe.EICHEL);
         break;
-      case "setgame:shellsolo":
+      case "setgame:schellsolo":
         this.spiel = new FarbSoloController(0, KartenFarbe.SCHELL);
         break;
 
