@@ -37,9 +37,11 @@ public class Spielablauf {
     System.out.println("Starte Stiche");
     int rauskommer = 0;
     while (gemachteStiche < 8) {
+      schafkopf.getServer().sendMessageToAllFrontendEndpoints(gespielteKarten.getJson());
       System.out.println("Stich: " + gemachteStiche);
       for (int i = 0; i < 4; i++) {
         tischKarten.addKarten(players[(i + rauskommer) % 4].play(spiel, tischKarten));
+        schafkopf.getServer().sendMessageToAllFrontendEndpoints(tischKarten.getJson());
       }
       schafkopf.getServer().sendMessageToAllFrontendEndpoints(tischKarten.getJson());
       int stichSpieler = SpielController.welcheKarteSticht(tischKarten);
