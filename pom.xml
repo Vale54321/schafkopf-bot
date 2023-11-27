@@ -6,6 +6,16 @@
 
   <build>
     <finalName>schafkopf-backend-build</finalName>
+
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+        <includes>
+          <include>logback.xml</include>
+        </includes>
+      </resource>
+    </resources>
+
     <plugins>
       <plugin>
         <artifactId>maven-checkstyle-plugin</artifactId>
