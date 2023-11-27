@@ -105,8 +105,17 @@ public class Schafkopf {
       gameState = true;
       System.out.println("Start Game");
 
-      KartenListe botHand = KartenUtil.zieheZufallsHand(8);
+      //KartenListe botHand = KartenUtil.zieheZufallsHand(8);
+      KartenListe botHand = new KartenListe();
+      botHand.addKarten(KartenUtil.getKarteById("eichel_7"));
+      botHand.addKarten(KartenUtil.getKarteById("eichel_8"));
+      botHand.addKarten(KartenUtil.getKarteById("eichel_9"));
+      botHand.addKarten(KartenUtil.getKarteById("eichel_k"));
 
+      botHand.addKarten(KartenUtil.getKarteById("eichel_x"));
+      botHand.addKarten(KartenUtil.getKarteById("eichel_a"));
+      botHand.addKarten(KartenUtil.getKarteById("eichel_u"));
+      botHand.addKarten(KartenUtil.getKarteById("eichel_o"));
       for (Player currentPlayer : player) {
         if (currentPlayer instanceof BotPlayer botPlayer) {
           // Perform actions specific to BotPlayer
