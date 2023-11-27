@@ -85,8 +85,6 @@ public abstract class SpielController {
     sortiereKarten(kartenNew);
 
     int i = karten.indexOf(kartenNew.getLast());
-
-    System.out.println("karte sticht: " + i);
     return i;
   }
 

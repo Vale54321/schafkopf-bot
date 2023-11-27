@@ -17,16 +17,15 @@ public class Spielablauf {
   private final SpielController spiel;
 
   private final Player[] players;
-  private final boolean aktiverSpieler; // ob der bot Spieler ist oder nicht
+
   private final Schafkopf schafkopf;
 
   private int gemachteStiche;
 
-  Spielablauf(Schafkopf schafkopf, SpielController spiel, boolean aktiverSpieler) {
+  Spielablauf(Schafkopf schafkopf, SpielController spiel) {
     this.schafkopf = schafkopf;
     this.spiel = spiel;
     this.players = schafkopf.getPlayer();
-    this.aktiverSpieler = aktiverSpieler;
     gespielteKarten = new KartenListe();
     gemachteStiche = 0;
     try {
@@ -38,19 +37,22 @@ public class Spielablauf {
 
   /** Method to Handle flow of one Game. */
   public void einStich() throws InterruptedException {
-    System.out.println("Starte Stiche");
+    logger.info("Starte Stiche");
     int rauskommer = 0;
     while (gemachteStiche < 8) {
       schafkopf.getServer().sendMessageToAllFrontendEndpoints(gespielteKarten.getJson());
-      logger.info("Stich: " + gemachteStiche);
+      logger.info("Stich: {}", gemachteStiche);
       for (int i = 0; i < 4; i++) {
         tischKarten.addKarten(players[(i + rauskommer) % 4].play(spiel, tischKarten));
         schafkopf.getServer().sendMessageToAllFrontendEndpoints(tischKarten.getJson());
       }
       schafkopf.getServer().sendMessageToAllFrontendEndpoints(tischKarten.getJson());
       int stichSpieler = SpielController.welcheKarteSticht(tischKarten);
+
+      logger.warn("Karte sticht: {}", stichSpieler);
+
       Thread.sleep(2000);
-      System.out.println("Stiche ende");
+      logger.info("Stiche ende");
 
       //rauskommer = (rauskommer + stichSpieler) % 4;
       rauskommer = 0;

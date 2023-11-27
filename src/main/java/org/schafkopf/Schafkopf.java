@@ -122,7 +122,7 @@ public class Schafkopf {
         throw new RuntimeException(e);
       }
       spielThread =
-          new Thread(() -> new Spielablauf(this, spiel,  true));
+          new Thread(() -> new Spielablauf(this, spiel));
 
       spielThread.start();
     }
