@@ -102,6 +102,7 @@ public class KartenListe {
         return karte;
       }
     }
+    return null;
   }
 
   /**
@@ -114,6 +115,7 @@ public class KartenListe {
         return karte;
       }
     }
+    return null;
   }
 
   /**
