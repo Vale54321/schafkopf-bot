@@ -54,12 +54,13 @@ public class Spielablauf {
       schafkopf.getServer().sendMessageToAllFrontendEndpoints(tischKarten.getJson());
       int stichSpieler = SpielController.welcheKarteSticht(tischKarten);
 
-      logger.warn("Karte sticht: {}", stichSpieler);
+
 
       Thread.sleep(2000);
       logger.info("Stiche ende");
 
       rauskommer = (rauskommer + stichSpieler) % 4;
+      logger.warn("Karte sticht: {}", rauskommer);
       //rauskommer = 0;
 
       gespielteKarten.addKarten(tischKarten);
