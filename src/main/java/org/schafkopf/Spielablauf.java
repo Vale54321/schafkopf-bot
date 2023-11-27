@@ -43,6 +43,7 @@ public class Spielablauf {
       schafkopf.getServer().sendMessageToAllFrontendEndpoints(gespielteKarten.getJson());
       logger.info("Stich: {}", gemachteStiche);
       for (int i = 0; i < 4; i++) {
+        schafkopf.getServer().sendMessageToAllFrontendEndpoints(tischKarten.getJson());
         int nextPlayer = (i + rauskommer) % 4;
 
         logger.info("Spieler ist dran: {}", nextPlayer);
