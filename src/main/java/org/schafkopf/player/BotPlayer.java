@@ -23,7 +23,7 @@ public class BotPlayer extends Player {
   @Override
   public Karte play(SpielController spiel, KartenListe tischKarten) {
 
-    Karte cardIndex = eigeneKarten.getByIndex(spiel.welcheKarteSpielIch(1,
+    Karte cardIndex = eigeneKarten.getByIndex(spiel.welcheKarteSpielIch(0,
         eigeneKarten,
         eigeneKarten,
         tischKarten));
