@@ -11,7 +11,7 @@
       <resource>
         <directory>src/main/resources</directory>
         <includes>
-          <include>logback.xml</include>
+          <include>pi4j.properties</include>
         </includes>
       </resource>
     </resources>
