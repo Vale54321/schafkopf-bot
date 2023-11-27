@@ -7,15 +7,6 @@
   <build>
     <finalName>schafkopf-backend-build</finalName>
 
-    <resources>
-      <resource>
-        <directory>src/main/resources</directory>
-        <includes>
-          <include>pi4j.properties</include>
-        </includes>
-      </resource>
-    </resources>
-
     <plugins>
       <plugin>
         <artifactId>maven-checkstyle-plugin</artifactId>
@@ -90,11 +81,6 @@
       <artifactId>slf4j-simple</artifactId>
       <groupId>org.slf4j</groupId>
       <version>${slf4j.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>ch.qos.logback</groupId>
-      <artifactId>logback-classic</artifactId>
-      <version>1.2.9</version> <!-- Use the latest version -->
     </dependency>
     <!-- To write basic websockets against -->
     <dependency>
