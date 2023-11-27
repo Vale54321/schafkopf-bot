@@ -43,7 +43,11 @@ public class Spielablauf {
       schafkopf.getServer().sendMessageToAllFrontendEndpoints(gespielteKarten.getJson());
       logger.info("Stich: {}", gemachteStiche);
       for (int i = 0; i < 4; i++) {
-        tischKarten.addKarten(players[(i + rauskommer) % 4].play(spiel, tischKarten));
+        int nextPlayer = (i + rauskommer) % 4;
+
+        logger.info("Spieler ist dran: {}", nextPlayer);
+
+        tischKarten.addKarten(players[nextPlayer].play(spiel, tischKarten));
         schafkopf.getServer().sendMessageToAllFrontendEndpoints(tischKarten.getJson());
       }
       schafkopf.getServer().sendMessageToAllFrontendEndpoints(tischKarten.getJson());
