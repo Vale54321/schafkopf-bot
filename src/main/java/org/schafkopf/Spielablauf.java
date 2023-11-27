@@ -54,8 +54,8 @@ public class Spielablauf {
       Thread.sleep(2000);
       logger.info("Stiche ende");
 
-      //rauskommer = (rauskommer + stichSpieler) % 4;
-      rauskommer = 0;
+      rauskommer = (rauskommer + stichSpieler) % 4;
+      //rauskommer = 0;
 
       gespielteKarten.addKarten(tischKarten);
 
