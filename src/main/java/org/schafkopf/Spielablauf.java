@@ -3,9 +3,13 @@ package org.schafkopf;
 import org.schafkopf.karte.KartenListe;
 import org.schafkopf.player.Player;
 import org.schafkopf.spielcontroller.SpielController;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /** The main class that controlls the game flow. */
 public class Spielablauf {
+
+  private static final Logger logger = LoggerFactory.getLogger(Spielablauf.class);
   private final KartenListe gespielteKarten;
 
   private final KartenListe tischKarten = new KartenListe();
@@ -38,7 +42,7 @@ public class Spielablauf {
     int rauskommer = 0;
     while (gemachteStiche < 8) {
       schafkopf.getServer().sendMessageToAllFrontendEndpoints(gespielteKarten.getJson());
-      System.out.println("Stich: " + gemachteStiche);
+      logger.info("Stich: " + gemachteStiche);
       for (int i = 0; i < 4; i++) {
         tischKarten.addKarten(players[(i + rauskommer) % 4].play(spiel, tischKarten));
         schafkopf.getServer().sendMessageToAllFrontendEndpoints(tischKarten.getJson());
