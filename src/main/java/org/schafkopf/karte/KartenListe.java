@@ -58,9 +58,6 @@ public class KartenListe {
         }
       }
     }
-    if (result.getKartenListe().isEmpty()) {
-      throw new RuntimeException("Karte haben keine Überschneidung");
-    }
     this.kartenListe.removeAll(result.getKartenListe());
     return result;
   }
@@ -77,9 +74,6 @@ public class KartenListe {
         result.addKarten(karte);
       }
     }
-    if (result.getKartenListe().isEmpty()) {
-      throw new RuntimeException("Karte haben keine Überschneidung");
-    }
     this.kartenListe.removeAll(result.getKartenListe());
     return result;
   }
@@ -93,9 +87,6 @@ public class KartenListe {
       if (karte.getSymbol().equals(symbol)) {
         result.addKarten(karte);
       }
-    }
-    if (result.isEmpty()) {
-      throw new RuntimeException("Karte haben keine Überschneidung");
     }
     this.kartenListe.removeAll(result.getKartenListe());
     return result;
@@ -111,7 +102,6 @@ public class KartenListe {
         return karte;
       }
     }
-    throw new RuntimeException("Karte nicht gefunden");
   }
 
   /**
@@ -124,7 +114,6 @@ public class KartenListe {
         return karte;
       }
     }
-    throw new RuntimeException("Karte nicht gefunden");
   }
 
   /**
