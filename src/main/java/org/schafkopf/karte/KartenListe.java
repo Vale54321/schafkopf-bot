@@ -151,9 +151,6 @@ public class KartenListe {
         result.addKarten(karte);
       }
     }
-    if (result.getKartenListe().isEmpty()) {
-      throw new RuntimeException("Karte haben keine Überschneidung");
-    }
     return result;
   }
 
@@ -166,9 +163,6 @@ public class KartenListe {
       if (karte.getSymbol().equals(symbol)) {
         result.addKarten(karte);
       }
-    }
-    if (result.getKartenListe().isEmpty()) {
-      throw new RuntimeException("Karte haben keine Überschneidung");
     }
     return result;
   }
