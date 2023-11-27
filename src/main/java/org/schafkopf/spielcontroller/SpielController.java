@@ -84,6 +84,8 @@ public abstract class SpielController {
     KartenListe kartenNew = new KartenListe(karten);
     sortiereKarten(kartenNew);
 
+    System.out.println(karten.getJson());
+
     int i = karten.indexOf(kartenNew.getLast());
     return i;
   }
