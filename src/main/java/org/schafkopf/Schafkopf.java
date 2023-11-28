@@ -1,6 +1,5 @@
 package org.schafkopf;
 
-import java.lang.constant.PackageDesc;
 import org.schafkopf.karte.Karte;
 import org.schafkopf.karte.KartenFarbe;
 import org.schafkopf.karte.KartenListe;
@@ -23,12 +22,8 @@ public class Schafkopf {
   /** The game controller. This is the class that implements the game logic. */
   private SpielController spiel = new SauSpielController(0, KartenFarbe.EICHEL);
 
-
   private final Player[] player = {
-      new BotPlayer(),
-      new LocalPlayer(this),
-      new LocalPlayer(this),
-      new LocalPlayer(this)
+    new BotPlayer(), new LocalPlayer(this), new LocalPlayer(this), new LocalPlayer(this)
   };
 
   private boolean gameState = false;
@@ -48,30 +43,22 @@ public class Schafkopf {
     System.out.println("SchaffKopfGame erstellt");
   }
 
-  /**
-   * Sends all Trumpf Karten of the current GameType to the Frontend.
-   */
+  /** Sends all Trumpf Karten of the current GameType to the Frontend. */
   public void showTrumpf() {
     server.sendMessageToAllFrontendEndpoints(spiel.getTrumpfKarten().getJson());
   }
 
-  /**
-   * Sends all Farb Karten of the current GameType to the Frontend.
-   */
+  /** Sends all Farb Karten of the current GameType to the Frontend. */
   public void showFarbe() {
     server.sendMessageToAllFrontendEndpoints(spiel.getFarbKarten().getJson());
   }
 
-  /**
-   * Test to wait for one Card Input via NFC.
-   */
+  /** Test to wait for one Card Input via NFC. */
   public void testHand() {
     wartetAufKarte().getJson();
   }
 
-  /**
-   * Waits for a Card and returns a Karte Object.
-   */
+  /** Waits for a Card and returns a Karte Object. */
   public Karte wartetAufKarte() {
     String uid = null;
     System.out.println("Starte Warten auf Karte");
@@ -81,22 +68,19 @@ public class Schafkopf {
       throw new RuntimeException(e);
     }
 
-    String kartenId = KartenUtil.getIdOfUid(uid);
+    Karte karte = KartenUtil.getIdOfUid(uid);
 
-    if (kartenId == null) {
+    if (karte == null) {
       System.out.println("Ungültige Karte");
       return wartetAufKarte();
     }
-    Karte karte = KartenUtil.getKarteById(kartenId);
     server.sendMessageToAllFrontendEndpoints(karte.getJson());
     System.out.println("Karte gescannt: " + karte.getName());
     System.out.println("Beende Warten auf Karte");
-    return KartenUtil.getKarteById(kartenId);
+    return karte;
   }
 
-  /**
-   * Set GameState to "started" and start Game Thread.
-   */
+  /** Set GameState to "started" and start Game Thread. */
   public void startGame() {
     if (gameState) {
       System.out.println("Game already started!");
@@ -105,17 +89,17 @@ public class Schafkopf {
       gameState = true;
       System.out.println("Start Game");
 
-      //KartenListe botHand = KartenUtil.zieheZufallsHand(8);
+      // KartenListe botHand = KartenUtil.zieheZufallsHand(8);
       KartenListe botHand = new KartenListe();
-      botHand.addKarten(KartenUtil.getKarteById("eichel_7"));
-      botHand.addKarten(KartenUtil.getKarteById("eichel_8"));
-      botHand.addKarten(KartenUtil.getKarteById("eichel_9"));
-      botHand.addKarten(KartenUtil.getKarteById("eichel_k"));
+      botHand.addKarten(Karte.EICHEL_7);
+      botHand.addKarten(Karte.EICHEL_8);
+      botHand.addKarten(Karte.EICHEL_9);
+      botHand.addKarten(Karte.EICHEL_K);
 
-      botHand.addKarten(KartenUtil.getKarteById("eichel_x"));
-      botHand.addKarten(KartenUtil.getKarteById("eichel_a"));
-      botHand.addKarten(KartenUtil.getKarteById("eichel_u"));
-      botHand.addKarten(KartenUtil.getKarteById("eichel_o"));
+      botHand.addKarten(Karte.EICHEL_X);
+      botHand.addKarten(Karte.EICHEL_A);
+      botHand.addKarten(Karte.EICHEL_U);
+      botHand.addKarten(Karte.EICHEL_O);
       for (Player currentPlayer : player) {
         if (currentPlayer instanceof BotPlayer botPlayer) {
           // Perform actions specific to BotPlayer
@@ -130,16 +114,13 @@ public class Schafkopf {
       } catch (InterruptedException e) {
         throw new RuntimeException(e);
       }
-      spielThread =
-          new Thread(() -> new Spielablauf(this, spiel));
+      spielThread = new Thread(() -> new Spielablauf(this, spiel));
 
       spielThread.start();
     }
   }
 
-  /**
-   * Set GameState to "stopped" and interrupt Game Thread.
-   */
+  /** Set GameState to "stopped" and interrupt Game Thread. */
   public void stopGame() {
     if (!gameState) {
       System.out.println("no active Game!");
@@ -153,9 +134,7 @@ public class Schafkopf {
     spielThread.interrupt();
   }
 
-  /**
-   * Set GameType.
-   */
+  /** Set GameType. */
   public void setGame(String message) {
     System.out.println("Set Game: " + message);
     server.sendMessageToAllFrontendEndpoints("Set Game: " + message);
