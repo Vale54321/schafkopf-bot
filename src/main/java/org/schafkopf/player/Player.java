@@ -8,5 +8,5 @@ import org.schafkopf.spielcontroller.SpielController;
  * Class that represents one Player of the game.
  */
 public abstract class Player {
-  public abstract Karte play(SpielController spiel, KartenListe tischKarten);
+  public abstract Karte play(SpielController spiel, KartenListe tischKarten, KartenListe gespielteKarten);
 }

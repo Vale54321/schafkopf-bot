@@ -1,5 +1,7 @@
 package org.schafkopf;
 
+import org.schafkopf.GameState.GamePhase;
+import org.schafkopf.karte.Karte;
 import org.schafkopf.karte.KartenListe;
 import org.schafkopf.player.Player;
 import org.schafkopf.spielcontroller.SpielController;
@@ -40,29 +42,42 @@ public class Spielablauf {
     logger.info("Starte Stiche");
     int rauskommer = 0;
     while (gemachteStiche < 8) {
-      schafkopf.getServer().sendMessageToAllFrontendEndpoints(gespielteKarten.getJson());
+      schafkopf.sendGameState(new GameState(GamePhase.ROUND_START));
       logger.info("Stich: {}", gemachteStiche);
       for (int i = 0; i < 4; i++) {
-        schafkopf.getServer().sendMessageToAllFrontendEndpoints(tischKarten.getJson());
         int nextPlayer = (i + rauskommer) % 4;
 
-        logger.info("Spieler ist dran: {}", nextPlayer);
+        schafkopf.getServer().sendMessageToAllFrontendEndpoints(tischKarten.getJson());
 
-        tischKarten.addKarten(players[nextPlayer].play(spiel, tischKarten));
+        logger.info("Spieler ist dran: {}", nextPlayer);
+        schafkopf.sendGameState(new GameState(GamePhase.WAIT_FOR_CARD, nextPlayer));
+
+        Karte playedCard = players[nextPlayer].play(spiel, tischKarten, gespielteKarten);
+        tischKarten.addKarten(playedCard);
+
+        schafkopf.sendGameState(
+            new GameState(
+                GamePhase.PLAYER_CARD,
+                nextPlayer,
+                playedCard,
+                tischKarten.getByIndex(0).getFarbe(),
+                spiel.isTrumpf(tischKarten.getByIndex(0))));
         schafkopf.getServer().sendMessageToAllFrontendEndpoints(tischKarten.getJson());
       }
-      schafkopf.getServer().sendMessageToAllFrontendEndpoints(tischKarten.getJson());
       int stichSpieler = SpielController.welcheKarteSticht(tischKarten);
+      schafkopf
+          .getServer()
+          .sendMessageToAllFrontendEndpoints(tischKarten.getByIndex(stichSpieler).getJson());
 
-
-
-      Thread.sleep(2000);
       logger.info("Stiche ende");
 
       rauskommer = (rauskommer + stichSpieler) % 4;
       logger.warn("Karte sticht: {}", rauskommer);
-      //rauskommer = 0;
 
+      schafkopf.sendGameState(
+          new GameState(GamePhase.PLAYER_TRICK, rauskommer, tischKarten.getByIndex(stichSpieler)));
+      // rauskommer = 0;
+      Thread.sleep(3000);
       gespielteKarten.addKarten(tischKarten);
 
       tischKarten.clear();

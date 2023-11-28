@@ -1,5 +1,6 @@
 package org.schafkopf.spielcontroller;
 
+import org.schafkopf.karte.Karte;
 import org.schafkopf.karte.KartenFarbe;
 import org.schafkopf.karte.KartenListe;
 import org.schafkopf.karte.KartenSymbol;
@@ -26,6 +27,5 @@ public abstract class StandardController extends SpielController {
     this.farbKarten = new KartenListe(kartenList);
   }
 
-  public abstract int welcheKarteSpielIch(int meinePosition,
-      KartenListe gespielteKarten, KartenListe meineHand, KartenListe tischKarten);
+  public abstract Karte welcheKarteSpielIch( boolean istSpieler, KartenListe gespielteKarten, KartenListe meineHand, KartenListe tischKarten);
 }

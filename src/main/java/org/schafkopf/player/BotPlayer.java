@@ -1,16 +1,11 @@
 package org.schafkopf.player;
 
 import org.schafkopf.karte.Karte;
-import org.schafkopf.karte.KartenFarbe;
 import org.schafkopf.karte.KartenListe;
-import org.schafkopf.karte.KartenSymbol;
 import org.schafkopf.karte.KartenUtil;
-import org.schafkopf.spielcontroller.SauSpielController;
 import org.schafkopf.spielcontroller.SpielController;
 
-/**
- * Player that represents the Bot.
- */
+/** Player that represents the Bot. */
 public class BotPlayer extends Player {
 
   private KartenListe eigeneKarten;
@@ -21,22 +16,23 @@ public class BotPlayer extends Player {
   }
 
   @Override
-  public Karte play(SpielController spiel, KartenListe tischKarten) {
+  public Karte play(SpielController spiel, KartenListe tischKarten, KartenListe gespielteKarten) {
 
-    Karte cardIndex = eigeneKarten.getByIndex(spiel.welcheKarteSpielIch(0,
-        eigeneKarten,
-        eigeneKarten,
-        tischKarten));
+    try {
+      Thread.sleep(1000);
+    } catch (InterruptedException e) {
+      throw new RuntimeException(e);
+    }
 
-    eigeneKarten.removeKarten(cardIndex);
+    Karte card = spiel.welcheKarteSpielIch(true, gespielteKarten, eigeneKarten, tischKarten);
+
+    eigeneKarten.removeKarten(card);
 
     System.out.println("Eigene Karte legen");
-    return cardIndex;
+    return card;
   }
 
-  /**
-   * Set the Cards of the Player.
-   */
+  /** Set the Cards of the Player. */
   public void setCards(KartenListe cards) {
     System.out.println("Eigene Karte setzen");
     this.eigeneKarten = cards;

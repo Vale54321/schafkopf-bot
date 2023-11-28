@@ -1,5 +1,6 @@
 package org.schafkopf.spielcontroller;
 
+import org.schafkopf.karte.Karte;
 import org.schafkopf.karte.KartenListe;
 
 /**
@@ -11,8 +12,8 @@ public abstract class SoloController extends SpielController {
     super(activePlayer);
   }
   
-  public int welcheKarteSpielIch(
+  public Karte welcheKarteSpielIch(
       KartenListe gespielteKarten, KartenListe meineHand, KartenListe tischKarten) {
-    return 0;
+    return null;
   }
 }

@@ -121,7 +121,7 @@ public class KartenListe {
   /**
    * A Class that represents a list of Cards.
    */
-  private boolean containsKarte(Karte karte) {
+  public boolean containsKarte(Karte karte) {
     for (Karte karteInListe : this.kartenListe) {
       if (karteInListe.getId().equals(karte.getId())) {
         return true;
