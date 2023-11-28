@@ -4,9 +4,7 @@ import org.schafkopf.karte.KartenFarbe;
 import org.schafkopf.karte.KartenListe;
 import org.schafkopf.karte.KartenUtil;
 
-/**
- * Base Class of Game Controllers.
- */
+/** Base Class of Game Controllers. */
 public abstract class SpielController {
   protected static KartenListe trumpfKarten;
   protected static KartenListe farbKarten;
@@ -84,6 +82,8 @@ public abstract class SpielController {
     KartenListe kartenNew = new KartenListe(karten);
     sortiereKarten(kartenNew);
     KartenListe farbTischKarten = kartenNew.removeKarten(trumpfKarten);
+    System.out.println("trumpfKarten:");
+    System.out.println(trumpfKarten.getJson());
 
     if (!farbTischKarten.isEmpty()) {
       return karten.indexOf(kartenNew.getLast());
@@ -91,12 +91,18 @@ public abstract class SpielController {
       KartenFarbe firstColor = karten.getByIndex(0).getFarbe();
       KartenListe firstColorCards = kartenNew.removeKarten(firstColor);
 
+      System.out.println("firstcolor:");
+      System.out.println(firstColorCards.getJson());
+
       return karten.indexOf(firstColorCards.getLast());
     }
   }
 
-  public abstract int welcheKarteSpielIch(int meinePosition,
-      KartenListe gespielteKarten, KartenListe meineHand, KartenListe tischKarten);
+  public abstract int welcheKarteSpielIch(
+      int meinePosition,
+      KartenListe gespielteKarten,
+      KartenListe meineHand,
+      KartenListe tischKarten);
 
   public KartenListe getTrumpfKarten() {
     return trumpfKarten;
