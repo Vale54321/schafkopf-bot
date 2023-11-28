@@ -3,6 +3,7 @@ package org.schafkopf.karte;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
+/** enum to represent all cards in the game. */
 public enum Karte {
   EICHEL_7(KartenFarbe.EICHEL, KartenSymbol.SEVEN),
   EICHEL_8(KartenFarbe.EICHEL, KartenSymbol.EIGHT),
