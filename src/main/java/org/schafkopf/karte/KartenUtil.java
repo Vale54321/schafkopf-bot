@@ -44,7 +44,7 @@ public class KartenUtil {
    */
   public static Karte getIdOfUid(String uid) {
     return switch (uid) {
-      case "04A56BB4780000" -> Karte.EICHEL_7;
+      case "04E7A9C2126F80" -> Karte.EICHEL_7;
       case "04A46BB4780000" -> Karte.EICHEL_8;
       case "04A26BB4780000" -> Karte.EICHEL_9;
       case "04A16BB4780000" -> Karte.EICHEL_X;

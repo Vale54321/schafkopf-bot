@@ -16,6 +16,8 @@ import org.eclipse.jetty.servlet.FilterHolder;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlets.CrossOriginFilter;
 import org.eclipse.jetty.websocket.server.config.JettyWebSocketServletContainerInitializer;
+import org.schafkopf.kartenleser.KartenLeser;
+import org.schafkopf.kartenleser.WindowsKartenLeser;
 
 /** Main Class that represents the Backend Server. */
 public class BackendServer {
@@ -39,7 +41,7 @@ public class BackendServer {
     server.addConnector(connector);
 
     schafkopfGame = new Schafkopf(this);
-    nfcLeser = new KartenLeser(this);
+    nfcLeser = new WindowsKartenLeser(this);
 
     // Setup the basic application "context" for this application at "/"
     // This is also known as the handler tree (in jetty speak)
