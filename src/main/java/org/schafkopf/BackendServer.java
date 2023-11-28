@@ -150,10 +150,6 @@ public class BackendServer {
     schafkopfGame.showFarbe();
   }
 
-  public void testHand() {
-    schafkopfGame.testHand();
-  }
-
   public void setGame(String message) {
     schafkopfGame.setGame(message);
   }
@@ -175,9 +171,7 @@ public class BackendServer {
     nfcLatch.countDown();
   }
 
-  /**
-   * method to call to wait for NFC input.
-   */
+  /** method to call to wait for NFC input. */
   public String waitForCardScan() throws InterruptedException {
     this.readingMode = true;
     nfcLatch.await();

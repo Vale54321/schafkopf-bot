@@ -53,11 +53,6 @@ public class Schafkopf {
     server.sendMessageToAllFrontendEndpoints(spiel.getFarbKarten().getJson());
   }
 
-  /** Test to wait for one Card Input via NFC. */
-  public void testHand() {
-    wartetAufKarte().getJson();
-  }
-
   /** Waits for a Card and returns a Karte Object. */
   public Karte wartetAufKarte() {
     String uid = null;
