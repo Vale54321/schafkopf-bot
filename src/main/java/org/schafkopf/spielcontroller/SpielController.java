@@ -87,10 +87,12 @@ public abstract class SpielController {
 
     if (!farbTischKarten.isEmpty()) {
       return karten.indexOf(kartenNew.getLast());
-    }
-    System.out.println(karten.getJson());
+    } else {
+      KartenFarbe firstColor = karten.getByIndex(0).getFarbe();
+      KartenListe firstColorCards = kartenNew.removeKarten(firstColor);
 
-    return karten.indexOf(kartenNew.getLast());
+      return karten.indexOf(firstColorCards.getLast());
+    }
   }
 
   public abstract int welcheKarteSpielIch(int meinePosition,
