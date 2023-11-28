@@ -86,6 +86,8 @@ public abstract class SpielController {
     System.out.println(trumpfKarten.getJson());
 
     if (!farbTischKarten.isEmpty()) {
+      System.out.println("bestTrumpf:");
+      System.out.println(kartenNew.getLast().getJson());
       return karten.indexOf(kartenNew.getLast());
     } else {
       KartenFarbe firstColor = karten.getByIndex(0).getFarbe();
