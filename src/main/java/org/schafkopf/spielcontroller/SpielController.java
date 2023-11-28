@@ -83,11 +83,14 @@ public abstract class SpielController {
   public static int welcheKarteSticht(KartenListe karten) {
     KartenListe kartenNew = new KartenListe(karten);
     sortiereKarten(kartenNew);
+    KartenListe farbTischKarten = kartenNew.removeKarten(trumpfKarten);
 
+    if (!farbTischKarten.isEmpty()) {
+      return karten.indexOf(kartenNew.getLast());
+    }
     System.out.println(karten.getJson());
 
-    int i = karten.indexOf(kartenNew.getLast());
-    return i;
+    return karten.indexOf(kartenNew.getLast());
   }
 
   public abstract int welcheKarteSpielIch(int meinePosition,
