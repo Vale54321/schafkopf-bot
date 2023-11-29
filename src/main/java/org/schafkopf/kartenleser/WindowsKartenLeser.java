@@ -1,48 +1,60 @@
 package org.schafkopf.kartenleser;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.ServerSocket;
-import java.net.Socket;
+import com.fazecast.jSerialComm.SerialPort;
+import java.io.UnsupportedEncodingException;
 import org.schafkopf.BackendServer;
 
 public class WindowsKartenLeser extends KartenLeser {
 
+  private volatile boolean isRunning = true;
+
   public WindowsKartenLeser(BackendServer server) {
     super(server);
 
-    new Thread(
-            () -> {
-              this.run();
-            })
-        .start();
+    new Thread(this::run).start();
   }
 
-  public static void run() {
-    // Start a server socket for Python to connect
-    try (ServerSocket serverSocket = new ServerSocket(12345)) {
-      System.out.println("Java server is listening on port 12345...");
+  public void stop() {
+    isRunning = false;
+  }
 
-      while (true) {
-        try (Socket clientSocket = serverSocket.accept();
-            BufferedReader in =
-                new BufferedReader(new InputStreamReader(clientSocket.getInputStream()))) {
+  public void run() {
+    SerialPort[] ports = SerialPort.getCommPorts();
 
-          String receivedData = in.readLine();
-
-          // Call a method or perform an action based on the received data
-          handleReceivedData(receivedData);
-        }
-      }
-    } catch (IOException e) {
-      e.printStackTrace();
+    if (ports.length == 0) {
+      System.out.println("No serial ports found");
+      return;
     }
-  }
 
-  private static void handleReceivedData(String data) {
-    // Your method to handle the received data
-    System.out.println(data.toUpperCase());
-    server.nfcGelesen(data.toUpperCase());
+    SerialPort serialPort = ports[0]; // You may need to adjust this based on your setup
+    serialPort.setBaudRate(115200);
+
+    if (serialPort.openPort()) {
+      System.out.println("Serial port opened successfully");
+
+      try {
+        while (isRunning) {
+          if (serialPort.bytesAvailable() > 0) {
+            byte[] buffer = new byte[serialPort.bytesAvailable()];
+            int bytesRead = serialPort.readBytes(buffer, buffer.length);
+
+            String data = new String(buffer, 0, bytesRead, "UTF-8").trim();
+            System.out.println(data);
+          }
+
+          // Optional: Add a delay to avoid consuming too much CPU
+          Thread.sleep(100);
+        }
+      } catch (InterruptedException e) {
+        e.printStackTrace();
+      } catch (UnsupportedEncodingException e) {
+        throw new RuntimeException(e);
+      } finally {
+        serialPort.closePort();
+        System.out.println("Serial port closed");
+      }
+    } else {
+      System.out.println("Failed to open serial port");
+    }
   }
 }
