@@ -5,7 +5,7 @@ import java.io.UnsupportedEncodingException;
 import org.schafkopf.BackendServer;
 
 /** Class that represents the NFC Reader. */
-public class USBCardReader extends CardReader {
+public class UsbCardReader extends CardReader {
 
   private volatile boolean isRunning = true;
 
@@ -14,7 +14,7 @@ public class USBCardReader extends CardReader {
    *
    * @param server Backend Server to call methods on.
    */
-  public USBCardReader(BackendServer server) {
+  public UsbCardReader(BackendServer server) {
     super(server);
 
     new Thread(this::run).start();

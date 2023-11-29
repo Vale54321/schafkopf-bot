@@ -9,14 +9,14 @@ import mk.hsilomedus.pn532.Pn532SamThread.Pn532SamThreadListener;
 import org.schafkopf.BackendServer;
 
 /** Class that represents the NFC Reader. */
-public final class GPIOReader extends CardReader {
+public final class GpioReader extends CardReader {
 
   /**
    * Creates an Instance of the KartenLeser.
    *
    * @param server Backend Server to call methods on.
    */
-  public GPIOReader(BackendServer server) {
+  public GpioReader(BackendServer server) {
     super(server);
 
     new Thread(
