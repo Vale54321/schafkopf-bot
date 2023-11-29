@@ -1,11 +1,11 @@
-package org.schafkopf.kartenleser;
+package org.schafkopf.cardreader;
 
 import com.fazecast.jSerialComm.SerialPort;
 import java.io.UnsupportedEncodingException;
 import org.schafkopf.BackendServer;
 
 /** Class that represents the NFC Reader. */
-public class WindowsKartenLeser extends KartenLeser {
+public class USBCardReader extends CardReader {
 
   private volatile boolean isRunning = true;
 
@@ -14,7 +14,7 @@ public class WindowsKartenLeser extends KartenLeser {
    *
    * @param server Backend Server to call methods on.
    */
-  public WindowsKartenLeser(BackendServer server) {
+  public USBCardReader(BackendServer server) {
     super(server);
 
     new Thread(this::run).start();

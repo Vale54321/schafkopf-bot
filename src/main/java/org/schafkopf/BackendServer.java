@@ -16,16 +16,16 @@ import org.eclipse.jetty.servlet.FilterHolder;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlets.CrossOriginFilter;
 import org.eclipse.jetty.websocket.server.config.JettyWebSocketServletContainerInitializer;
-import org.schafkopf.kartenleser.KartenLeser;
-import org.schafkopf.kartenleser.RaspberryKartenLeser;
-import org.schafkopf.kartenleser.WindowsKartenLeser;
+import org.schafkopf.cardreader.CardReader;
+import org.schafkopf.cardreader.GPIOReader;
+import org.schafkopf.cardreader.USBCardReader;
 
 /** Main Class that represents the Backend Server. */
 public class BackendServer {
   private final Server server;
   private final ServerConnector connector;
   private final Schafkopf schafkopfGame;
-  private final KartenLeser nfcLeser;
+  private final CardReader nfcLeser;
   private final List<FrontendEndpoint> frontendEndpoints = new ArrayList<>();
   private CountDownLatch nfcLatch = new CountDownLatch(1);
   private Boolean readingMode = false;
@@ -46,12 +46,12 @@ public class BackendServer {
     String osName = System.getProperty("os.name").toLowerCase();
     if (osName.contains("win")) {
       // Windows
-      nfcLeser = new WindowsKartenLeser(this);
+      nfcLeser = new USBCardReader(this);
     } else if (osName.contains("nix") || osName.contains("nux") || osName.contains("mac")) {
       // Unix/Linux/Mac
       // You can add additional checks for specific Linux distributions or macOS versions if needed
       // For now, assuming Raspberry Pi is running Linux
-      nfcLeser = new RaspberryKartenLeser(this);
+      nfcLeser = new GPIOReader(this);
     } else {
       // Other OS
       throw new RuntimeException("Unsupported OS: " + osName);
