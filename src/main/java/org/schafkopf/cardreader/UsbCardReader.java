@@ -30,7 +30,7 @@ public class UsbCardReader extends CardReader {
     SerialPort selectedPort = null;
 
     for (SerialPort port : ports) {
-      if (port.getSystemPortName().equals("COM6")) {
+      if (port.getSystemPortName().equals("COM16")) {
         selectedPort = port;
         break;
       }
@@ -46,7 +46,7 @@ public class UsbCardReader extends CardReader {
       return;
     }
 
-    SerialPort serialPort = ports[0]; // You may need to adjust this based on your setup
+    SerialPort serialPort = selectedPort; // You may need to adjust this based on your setup
     serialPort.setBaudRate(115200);
 
     if (serialPort.openPort()) {
