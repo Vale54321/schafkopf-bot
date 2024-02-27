@@ -1,4 +1,4 @@
-package org.schafkopf;
+package org.schafkopf.cardreader;
 
 import com.pi4j.io.i2c.I2C;
 import java.io.IOException;
@@ -6,21 +6,18 @@ import mk.hsilomedus.pn532.Pn532ContextHelper;
 import mk.hsilomedus.pn532.Pn532I2c;
 import mk.hsilomedus.pn532.Pn532SamThread;
 import mk.hsilomedus.pn532.Pn532SamThread.Pn532SamThreadListener;
+import org.schafkopf.BackendServer;
 
-/**
- * Class that represents the NFC Reader.
- */
-public final class KartenLeser {
-
-  private static BackendServer server;
+/** Class that represents the NFC Reader. */
+public final class GpioReader extends CardReader {
 
   /**
    * Creates an Instance of the KartenLeser.
    *
    * @param server Backend Server to call methods on.
    */
-  public KartenLeser(BackendServer server) {
-    this.server = server;
+  public GpioReader(BackendServer server) {
+    super(server);
 
     new Thread(
             () -> {

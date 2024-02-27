@@ -73,6 +73,12 @@
   </build>
   <dependencies>
     <dependency>
+      <groupId>com.fazecast</groupId>
+      <artifactId>jSerialComm</artifactId>
+      <version>2.6.0</version> <!-- Check for the latest version on the official repository -->
+    </dependency>
+
+    <dependency>
       <artifactId>slf4j-api</artifactId>
       <groupId>org.slf4j</groupId>
       <version>${slf4j.version}</version>
