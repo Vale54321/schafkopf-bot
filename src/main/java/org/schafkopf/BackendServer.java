@@ -4,7 +4,6 @@ import com.google.gson.JsonObject;
 import io.github.cdimascio.dotenv.Dotenv;
 import jakarta.servlet.DispatcherType;
 import java.net.InetSocketAddress;
-import java.net.URI;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.EnumSet;
@@ -24,12 +23,15 @@ import org.schafkopf.cardreader.UsbCardReader;
 public class BackendServer {
   private final Server server;
   private final ServerConnector connector;
-  private final Schafkopf schafkopfGame;
-  private final CardReader nfcLeser;
-  private final List<FrontendEndpoint> frontendEndpoints = new ArrayList<>();
   private CountDownLatch nfcLatch = new CountDownLatch(1);
   private Boolean readingMode = false;
   private String uidString = "";
+
+  /** Important variables. */
+  public final Schafkopf schafkopfGame;
+
+  private final CardReader nfcLeser;
+  private final List<FrontendEndpoint> frontendEndpoints = new ArrayList<>();
 
   /** Creates an Instance of the Backend Server. */
   public BackendServer() {
@@ -42,7 +44,7 @@ public class BackendServer {
     server.addConnector(connector);
 
     schafkopfGame = new Schafkopf(this);
-    //    nfcLeser = new RaspberryKartenLeser(this);
+
     String osName = System.getProperty("os.name").toLowerCase();
     if (osName.contains("win")) {
       // Windows
@@ -100,23 +102,15 @@ public class BackendServer {
     context.addFilter(cors, "*", types);
   }
 
-  public void setPort(int port) {
+  private void setPort(int port) {
     connector.setPort(port);
   }
 
-  public void start() throws Exception {
+  private void start() throws Exception {
     server.start();
   }
 
-  public URI getUri() {
-    return server.getURI();
-  }
-
-  public void stop() throws Exception {
-    server.stop();
-  }
-
-  public void join() throws InterruptedException {
+  private void join() throws InterruptedException {
     server.join();
   }
 
@@ -150,24 +144,14 @@ public class BackendServer {
     }
   }
 
-  public void startSchafkopfGame() {
-    schafkopfGame.startGame();
-  }
-
-  public void stopSchafkopfGame() {
-    schafkopfGame.stopGame();
-  }
-
-  public void showTrumpf() {
-    schafkopfGame.showTrumpf();
-  }
-
-  public void showFarbe() {
-    schafkopfGame.showFarbe();
-  }
-
-  public void setGame(String message) {
-    schafkopfGame.setGame(message);
+  /** method to call to wait for NFC input. */
+  public String waitForCardScan() throws InterruptedException {
+    this.readingMode = true;
+    nfcLatch.await();
+    Thread.sleep(20);
+    this.readingMode = false;
+    nfcLatch = new CountDownLatch(1);
+    return this.uidString;
   }
 
   /**
@@ -185,15 +169,5 @@ public class BackendServer {
 
     this.uidString = uidString;
     nfcLatch.countDown();
-  }
-
-  /** method to call to wait for NFC input. */
-  public String waitForCardScan() throws InterruptedException {
-    this.readingMode = true;
-    nfcLatch.await();
-    Thread.sleep(20);
-    this.readingMode = false;
-    nfcLatch = new CountDownLatch(1);
-    return this.uidString;
   }
 }

@@ -16,7 +16,7 @@ public class GameState {
 
     GAME_START("Warten auf das Legen einer Karte"),
 
-    ROUND_START("Warten auf das Legen einer Karte"),
+    TRICK_START("Warten auf das Legen einer Karte"),
     WAIT_FOR_CARD("Warten auf das Legen einer Karte"),
     PLAYER_CARD("Warten auf das Legen einer Karte"),
     PLAYER_TRICK("Spieler sticht"),

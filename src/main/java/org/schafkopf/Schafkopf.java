@@ -30,10 +30,6 @@ public class Schafkopf {
   private GameState gameState = new GameState(GamePhase.GAME_STOP);
   private Thread spielThread;
 
-  public Player[] getPlayer() {
-    return player;
-  }
-
   /**
    * Constructor for the Schafkopf class.
    *
@@ -42,6 +38,10 @@ public class Schafkopf {
   Schafkopf(BackendServer server) {
     this.server = server;
     System.out.println("SchaffKopfGame erstellt");
+  }
+
+  public Player[] getPlayer() {
+    return player;
   }
 
   /** Sends all Trumpf Karten of the current GameType to the Frontend. */
@@ -82,7 +82,7 @@ public class Schafkopf {
       server.sendMessageToAllFrontendEndpoints("Game already started!");
     } else {
       gameState = new GameState(GamePhase.GAME_START);
-      sendGameState(gameState);
+      setAndSendGameState(gameState);
       System.out.println("Start Game");
 
       // KartenListe botHand = KartenUtil.zieheZufallsHand(8);
@@ -117,14 +117,10 @@ public class Schafkopf {
       server.sendMessageToAllFrontendEndpoints("no active Game!");
     } else {
       gameState = new GameState(GamePhase.GAME_STOP);
-      sendGameState(gameState);
+      setAndSendGameState(gameState);
     }
 
     spielThread.interrupt();
-  }
-
-  void sendGameState(GameState gameState) {
-    getServer().sendMessageToAllFrontendEndpoints(gameState.getJson());
   }
 
   /** Set GameType. */
@@ -186,8 +182,9 @@ public class Schafkopf {
     }
   }
 
-  public BackendServer getServer() {
-    return this.server;
+  public void setAndSendGameState(GameState gameState) {
+    this.gameState = gameState;
+    this.server.sendMessageToAllFrontendEndpoints(this.gameState.getJson());
   }
 
   public GameState getGameState() {
