@@ -6,7 +6,11 @@
 
   <build>
     <finalName>schafkopf-backend-build</finalName>
-
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+      </resource>
+    </resources>
     <plugins>
       <plugin>
         <artifactId>maven-checkstyle-plugin</artifactId>
