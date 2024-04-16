@@ -10,7 +10,7 @@ public class UsbCardReader extends CardReader {
 
   private volatile boolean isRunning = true;
   Dotenv dotenv = Dotenv.configure().directory("./").load();
-  private String PORT_NAME = dotenv.get("COM_PORT");
+  private final String comPort = dotenv.get("COM_PORT");
 
   /**
    * Creates an Instance of the KartenLeser.
@@ -33,14 +33,14 @@ public class UsbCardReader extends CardReader {
     SerialPort selectedPort = null;
 
     for (SerialPort port : ports) {
-      if (port.getSystemPortName().equals(this.PORT_NAME)) {
+      if (port.getSystemPortName().equals(this.comPort)) {
         selectedPort = port;
         break;
       }
     }
 
     if (selectedPort == null) {
-      System.out.println(this.PORT_NAME + " not found");
+      System.out.println(this.comPort + " not found");
       return;
     }
 
