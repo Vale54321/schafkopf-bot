@@ -36,18 +36,16 @@ jobs:
     - run: mkdir release && ls
 
     - name: Archive dist folder
-      run: cp Backend/target/schafkopf-backend-build-jar-with-dependencies.jar release/schafkopf-backend-build-jar-with-dependencies.jar && zip -r dist.zip release/*
+      run: cp Backend/target/schafkopf-backend-build-jar-with-dependencies.jar release/schafkopf-backend.jar && zip -r dist.zip release/*
     
-    - name: Get current Version Number
-      run: echo "version=$(node -p "require('./fcf-frontend/package.json').version")" >> $GITHUB_ENV
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1
       env:
         GITHUB_TOKEN: ${{ secrets.PAT }}
       with:
-        tag_name: ${{ env.version }}
-        release_name: Release ${{ env.version }}
+        tag_name: 0.0.1
+        release_name: Release 0.0.1
         body: "Test"
         draft: false
         prerelease: false
