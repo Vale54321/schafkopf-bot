@@ -5,12 +5,14 @@ import com.google.gson.JsonObject;
 import org.schafkopf.karte.Karte;
 import org.schafkopf.karte.KartenFarbe;
 
+/** GameState. */
 public class GameState {
 
   public GamePhase getGamePhase() {
     return this.gamePhase;
   }
 
+  /** GamePhase. */
   public enum GamePhase {
     CHOOSE_GAME("Spiel muss gewählt werden"),
 
@@ -51,6 +53,7 @@ public class GameState {
     this.currentPlayer = player;
   }
 
+  /** GameState. */
   public GameState(GamePhase phase, Integer player, Karte card, KartenFarbe color, boolean trumpf) {
     this.gamePhase = phase;
     this.currentPlayer = player;
@@ -59,12 +62,14 @@ public class GameState {
     this.trumpf = trumpf;
   }
 
+  /** GameState. */
   public GameState(GamePhase phase, Integer player, Karte card) {
     this.gamePhase = phase;
     this.currentPlayer = player;
     this.card = card;
   }
 
+  /** GameState. */
   public JsonObject getJson() {
     Gson gson = new Gson();
     JsonObject jsonObject = new JsonObject();

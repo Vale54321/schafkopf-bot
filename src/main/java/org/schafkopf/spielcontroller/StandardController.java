@@ -6,9 +6,7 @@ import org.schafkopf.karte.KartenListe;
 import org.schafkopf.karte.KartenSymbol;
 import org.schafkopf.karte.KartenUtil;
 
-/**
- * SpielController that has the standard Card Deck for Sauspiel, Bettel und Co.
- */
+/** SpielController that has the standard Card Deck for Sauspiel, Bettel und Co. */
 public abstract class StandardController extends SpielController {
 
   StandardController(int activePlayer) {
@@ -27,5 +25,9 @@ public abstract class StandardController extends SpielController {
     this.farbKarten = new KartenListe(kartenList);
   }
 
-  public abstract Karte welcheKarteSpielIch( boolean istSpieler, KartenListe gespielteKarten, KartenListe meineHand, KartenListe tischKarten);
+  public abstract Karte welcheKarteSpielIch(
+      boolean istSpieler,
+      KartenListe gespielteKarten,
+      KartenListe meineHand,
+      KartenListe tischKarten);
 }

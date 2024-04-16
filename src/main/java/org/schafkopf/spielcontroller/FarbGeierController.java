@@ -6,9 +6,7 @@ import org.schafkopf.karte.KartenListe;
 import org.schafkopf.karte.KartenSymbol;
 import org.schafkopf.karte.KartenUtil;
 
-/**
- * SpielController that implements Logic of a Farb Geier.
- */
+/** SpielController that implements Logic of a Farb Geier. */
 public class FarbGeierController extends SoloController {
   /**
    * Create instance of SpielController.
@@ -28,8 +26,11 @@ public class FarbGeierController extends SoloController {
     this.farbKarten = new KartenListe(kartenList);
   }
 
-  public Karte welcheKarteSpielIch(boolean istSpieler, KartenListe gespielteKarten, KartenListe meineHand, KartenListe tischKarten) {
+  public Karte welcheKarteSpielIch(
+      boolean istSpieler,
+      KartenListe gespielteKarten,
+      KartenListe meineHand,
+      KartenListe tischKarten) {
     return null;
   }
-
 }

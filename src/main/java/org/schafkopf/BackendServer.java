@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
+import javafx.application.Application;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.servlet.FilterHolder;
@@ -98,6 +99,11 @@ public class BackendServer {
 
     // Integrate simple HTTP server
     startHttpServer();
+    new Thread(this::launchJavaFx).start();
+  }
+
+  private void launchJavaFx() {
+    Application.launch(JavaFxApp.class);
   }
 
   private void startHttpServer() {
