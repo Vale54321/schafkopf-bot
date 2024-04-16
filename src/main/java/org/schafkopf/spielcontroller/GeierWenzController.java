@@ -1,6 +1,5 @@
 package org.schafkopf.spielcontroller;
 
-import java.util.List;
 import org.schafkopf.karte.Karte;
 import org.schafkopf.karte.KartenListe;
 
@@ -14,8 +13,8 @@ public class GeierWenzController extends SoloController {
   }
 
   @Override
-  public int welcheKarteSpielIch(int meinePosition, KartenListe gespielteKarten,
+  public Karte welcheKarteSpielIch(boolean istSpieler, KartenListe gespielteKarten,
       KartenListe meineHand, KartenListe tischKarten) {
-    return 0;
+    return null;
   }
 }

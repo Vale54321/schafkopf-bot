@@ -6,9 +6,7 @@ import org.schafkopf.karte.KartenListe;
 import org.schafkopf.karte.KartenSymbol;
 import org.schafkopf.karte.KartenUtil;
 
-/**
- * SpielController that implements Logic of a Farb Solo.
- */
+/** SpielController that implements Logic of a Farb Solo. */
 public class FarbSoloController extends SoloController {
   /**
    * Create instance of SpielController.
@@ -32,8 +30,11 @@ public class FarbSoloController extends SoloController {
     this.farbKarten = new KartenListe(kartenList);
   }
 
-  public int welcheKarteSpielIch(int meinePosition,
-      KartenListe gespielteKarten, KartenListe meineHand, KartenListe tischKarten) {
-    return 0;
+  public Karte welcheKarteSpielIch(
+      boolean istSpieler,
+      KartenListe gespielteKarten,
+      KartenListe meineHand,
+      KartenListe tischKarten) {
+    return null;
   }
 }

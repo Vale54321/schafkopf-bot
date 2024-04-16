@@ -19,7 +19,7 @@ public class LocalPlayer extends Player {
   }
 
   @Override
-  public Karte play(SpielController spiel, KartenListe tischKarten) {
+  public Karte play(SpielController spiel, KartenListe tischKarten, KartenListe gespielteKarten) {
     return schafkopf.wartetAufKarte();
   }
 }

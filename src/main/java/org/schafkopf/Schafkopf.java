@@ -1,5 +1,6 @@
 package org.schafkopf;
 
+import org.schafkopf.GameState.GamePhase;
 import org.schafkopf.karte.Karte;
 import org.schafkopf.karte.KartenFarbe;
 import org.schafkopf.karte.KartenListe;
@@ -26,12 +27,8 @@ public class Schafkopf {
     new BotPlayer(), new LocalPlayer(this), new LocalPlayer(this), new LocalPlayer(this)
   };
 
-  private boolean gameState = false;
+  private GameState gameState = new GameState(GamePhase.GAME_STOP);
   private Thread spielThread;
-
-  public Player[] getPlayer() {
-    return player;
-  }
 
   /**
    * Constructor for the Schafkopf class.
@@ -41,6 +38,10 @@ public class Schafkopf {
   Schafkopf(BackendServer server) {
     this.server = server;
     System.out.println("SchaffKopfGame erstellt");
+  }
+
+  public Player[] getPlayer() {
+    return player;
   }
 
   /** Sends all Trumpf Karten of the current GameType to the Frontend. */
@@ -69,7 +70,6 @@ public class Schafkopf {
       System.out.println("Ungültige Karte");
       return wartetAufKarte();
     }
-    server.sendMessageToAllFrontendEndpoints(karte.getJson());
     System.out.println("Karte gescannt: " + karte.getName());
     System.out.println("Beende Warten auf Karte");
     return karte;
@@ -77,22 +77,24 @@ public class Schafkopf {
 
   /** Set GameState to "started" and start Game Thread. */
   public void startGame() {
-    if (gameState) {
+    if (gameState.getGamePhase() != GamePhase.GAME_STOP) {
       System.out.println("Game already started!");
       server.sendMessageToAllFrontendEndpoints("Game already started!");
     } else {
-      gameState = true;
+      gameState = new GameState(GamePhase.GAME_START);
+      setAndSendGameState(gameState);
       System.out.println("Start Game");
 
       // KartenListe botHand = KartenUtil.zieheZufallsHand(8);
       KartenListe botHand = new KartenListe();
       botHand.addKarten(Karte.EICHEL_7);
-      botHand.addKarten(Karte.EICHEL_8);
-      botHand.addKarten(Karte.EICHEL_9);
-      botHand.addKarten(Karte.EICHEL_K);
+      botHand.addKarten(Karte.SCHELL_7);
+      botHand.addKarten(Karte.BLATT_7);
 
       botHand.addKarten(Karte.EICHEL_X);
-      botHand.addKarten(Karte.EICHEL_A);
+      botHand.addKarten(Karte.HERZ_X);
+      botHand.addKarten(Karte.HERZ_7);
+
       botHand.addKarten(Karte.EICHEL_U);
       botHand.addKarten(Karte.EICHEL_O);
       for (Player currentPlayer : player) {
@@ -102,13 +104,6 @@ public class Schafkopf {
         }
       }
 
-      server.sendMessageToAllFrontendEndpoints("Start Game");
-      server.sendMessageToAllFrontendEndpoints(botHand.getJson());
-      try {
-        Thread.sleep(5000);
-      } catch (InterruptedException e) {
-        throw new RuntimeException(e);
-      }
       spielThread = new Thread(() -> new Spielablauf(this, spiel));
 
       spielThread.start();
@@ -117,13 +112,12 @@ public class Schafkopf {
 
   /** Set GameState to "stopped" and interrupt Game Thread. */
   public void stopGame() {
-    if (!gameState) {
+    if (gameState.getGamePhase() == GamePhase.GAME_STOP) {
       System.out.println("no active Game!");
       server.sendMessageToAllFrontendEndpoints("no active Game!");
     } else {
-      gameState = false;
-      System.out.println("Stop Game");
-      server.sendMessageToAllFrontendEndpoints("Stop Game");
+      gameState = new GameState(GamePhase.GAME_STOP);
+      setAndSendGameState(gameState);
     }
 
     spielThread.interrupt();
@@ -188,7 +182,12 @@ public class Schafkopf {
     }
   }
 
-  public BackendServer getServer() {
-    return this.server;
+  public void setAndSendGameState(GameState gameState) {
+    this.gameState = gameState;
+    this.server.sendMessageToAllFrontendEndpoints(this.gameState.getJson());
+  }
+
+  public GameState getGameState() {
+    return this.gameState;
   }
 }

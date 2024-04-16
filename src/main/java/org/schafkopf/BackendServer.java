@@ -1,15 +1,22 @@
 package org.schafkopf;
 
 import com.google.gson.JsonObject;
+import com.sun.net.httpserver.HttpExchange;
+import com.sun.net.httpserver.HttpHandler;
+import com.sun.net.httpserver.HttpServer;
 import io.github.cdimascio.dotenv.Dotenv;
 import jakarta.servlet.DispatcherType;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.InetSocketAddress;
-import java.net.URI;
+import java.net.URL;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
+import javafx.application.Application;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.servlet.FilterHolder;
@@ -24,12 +31,15 @@ import org.schafkopf.cardreader.UsbCardReader;
 public class BackendServer {
   private final Server server;
   private final ServerConnector connector;
-  private final Schafkopf schafkopfGame;
-  private final CardReader nfcLeser;
-  private final List<FrontendEndpoint> frontendEndpoints = new ArrayList<>();
   private CountDownLatch nfcLatch = new CountDownLatch(1);
   private Boolean readingMode = false;
   private String uidString = "";
+
+  /** Important variables. */
+  public final Schafkopf schafkopfGame;
+
+  private final CardReader nfcLeser;
+  private final List<FrontendEndpoint> frontendEndpoints = new ArrayList<>();
 
   /** Creates an Instance of the Backend Server. */
   public BackendServer() {
@@ -42,7 +52,7 @@ public class BackendServer {
     server.addConnector(connector);
 
     schafkopfGame = new Schafkopf(this);
-    //    nfcLeser = new RaspberryKartenLeser(this);
+
     String osName = System.getProperty("os.name").toLowerCase();
     if (osName.contains("win")) {
       // Windows
@@ -66,6 +76,16 @@ public class BackendServer {
     // Configure CORS settings
     configureCors(context);
 
+    URL webContentUrl = getClass().getClassLoader().getResource("web-content");
+    if (webContentUrl == null) {
+      throw new RuntimeException("Unable to find 'web-content' directory");
+    }
+
+    String webContentPath = webContentUrl.toExternalForm();
+    context.setResourceBase(webContentPath);
+
+    System.out.println("Web Content Path: " + webContentPath);
+
     // Configure specific websocket behavior
     JettyWebSocketServletContainerInitializer.configure(
         context,
@@ -76,6 +96,70 @@ public class BackendServer {
           // Add websockets
           wsContainer.addMapping("/schafkopf-events/*", new FrontendEndpointCreator(this));
         });
+
+    // Integrate simple HTTP server
+    startHttpServer();
+    new Thread(this::launchJavaFx).start();
+  }
+
+  private void launchJavaFx() {
+    Application.launch(JavaFxApp.class);
+  }
+
+  private void startHttpServer() {
+    try {
+      HttpServer httpServer = HttpServer.create(new InetSocketAddress(8081), 0);
+      httpServer.createContext("/", new MyHandler());
+      httpServer.setExecutor(null);
+      httpServer.start();
+      System.out.println("HTTP Server started on port 8081");
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
+
+  static class MyHandler implements HttpHandler {
+    @Override
+    public void handle(HttpExchange t) throws IOException {
+      String path = t.getRequestURI().getPath();
+      if ("/".equals(path)) {
+        path = "/index.html"; // default to index.html
+      }
+
+      try {
+        InputStream fileStream =
+            getClass().getClassLoader().getResourceAsStream("web-content" + path);
+        if (fileStream != null) {
+          byte[] data = fileStream.readAllBytes();
+          // Set the appropriate MIME type for JavaScript files
+          String mimeType = getMimeType(path);
+          t.getResponseHeaders().set("Content-Type", mimeType);
+          t.sendResponseHeaders(200, data.length);
+
+          try (OutputStream os = t.getResponseBody()) {
+            os.write(data);
+          }
+        } else {
+          // File not found
+          t.sendResponseHeaders(404, -1);
+        }
+      } catch (IOException e) {
+        e.printStackTrace();
+        t.sendResponseHeaders(500, -1);
+      }
+    }
+
+    private String getMimeType(String path) {
+      if (path.endsWith(".js")) {
+        return "application/javascript";
+      } else if (path.endsWith(".html")) {
+        return "text/html";
+      } else if (path.endsWith(".css")) {
+        return "text/css";
+      }
+      // Add more MIME types as needed
+      return "application/octet-stream";
+    }
   }
 
   /** The main entrypoint of the Application. */
@@ -100,23 +184,15 @@ public class BackendServer {
     context.addFilter(cors, "*", types);
   }
 
-  public void setPort(int port) {
+  private void setPort(int port) {
     connector.setPort(port);
   }
 
-  public void start() throws Exception {
+  private void start() throws Exception {
     server.start();
   }
 
-  public URI getUri() {
-    return server.getURI();
-  }
-
-  public void stop() throws Exception {
-    server.stop();
-  }
-
-  public void join() throws InterruptedException {
+  private void join() throws InterruptedException {
     server.join();
   }
 
@@ -150,24 +226,14 @@ public class BackendServer {
     }
   }
 
-  public void startSchafkopfGame() {
-    schafkopfGame.startGame();
-  }
-
-  public void stopSchafkopfGame() {
-    schafkopfGame.stopGame();
-  }
-
-  public void showTrumpf() {
-    schafkopfGame.showTrumpf();
-  }
-
-  public void showFarbe() {
-    schafkopfGame.showFarbe();
-  }
-
-  public void setGame(String message) {
-    schafkopfGame.setGame(message);
+  /** method to call to wait for NFC input. */
+  public String waitForCardScan() throws InterruptedException {
+    this.readingMode = true;
+    nfcLatch.await();
+    Thread.sleep(20);
+    this.readingMode = false;
+    nfcLatch = new CountDownLatch(1);
+    return this.uidString;
   }
 
   /**
@@ -185,15 +251,5 @@ public class BackendServer {
 
     this.uidString = uidString;
     nfcLatch.countDown();
-  }
-
-  /** method to call to wait for NFC input. */
-  public String waitForCardScan() throws InterruptedException {
-    this.readingMode = true;
-    nfcLatch.await();
-    Thread.sleep(20);
-    this.readingMode = false;
-    nfcLatch = new CountDownLatch(1);
-    return this.uidString;
   }
 }

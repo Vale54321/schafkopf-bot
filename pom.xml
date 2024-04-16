@@ -6,7 +6,11 @@
 
   <build>
     <finalName>schafkopf-backend-build</finalName>
-
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+      </resource>
+    </resources>
     <plugins>
       <plugin>
         <artifactId>maven-checkstyle-plugin</artifactId>
@@ -146,6 +150,16 @@
       <artifactId>pn532-sdk</artifactId>
       <groupId>pn532</groupId>
       <version>1.0.2</version>
+    </dependency>
+    <dependency>
+      <groupId>org.openjfx</groupId>
+      <artifactId>javafx-controls</artifactId>
+      <version>17</version>
+    </dependency>
+    <dependency>
+      <groupId>org.openjfx</groupId>
+      <artifactId>javafx-web</artifactId>
+      <version>17</version>
     </dependency>
   </dependencies>
   <groupId>org.example</groupId>

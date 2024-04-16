@@ -30,23 +30,23 @@ public class FrontendEndpoint extends WebSocketAdapter {
     System.out.println("Received TEXT message:" + message);
 
     if (message.contains("startsimulation")) {
-      backendServer.startSchafkopfGame();
+      backendServer.schafkopfGame.startGame();
     }
 
     if (message.contains("stopsimulation")) {
-      backendServer.stopSchafkopfGame();
+      backendServer.schafkopfGame.stopGame();
     }
 
     if (message.contains("showtrumpf")) {
-      backendServer.showTrumpf();
+      backendServer.schafkopfGame.showTrumpf();
     }
 
     if (message.contains("showfarben")) {
-      backendServer.showFarbe();
+      backendServer.schafkopfGame.showFarbe();
     }
 
     if (message.contains("setgame")) {
-      backendServer.setGame(message);
+      backendServer.schafkopfGame.setGame(message);
     }
   }
 

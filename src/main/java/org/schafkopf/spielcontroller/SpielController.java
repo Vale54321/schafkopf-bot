@@ -1,5 +1,6 @@
 package org.schafkopf.spielcontroller;
 
+import org.schafkopf.karte.Karte;
 import org.schafkopf.karte.KartenFarbe;
 import org.schafkopf.karte.KartenListe;
 import org.schafkopf.karte.KartenUtil;
@@ -19,40 +20,52 @@ public abstract class SpielController {
    * Create instance of SpielController.
    *
    * @param meineHand Cards one Player holds.
-   * @param farbe color the Player has to play.
+   * @param ersteKarte color the Player has to play.
    * @param mode Mode the player chooses a Card if multiple are available.
    */
-  public static int farbeZugeben(KartenListe meineHand, KartenFarbe farbe, int mode) {
-    KartenListe farbKarten = meineHand.getKarten(farbe);
-    farbKarten.removeKarten(trumpfKarten);
-    if (farbKarten.size() == 1) {
-      return meineHand.indexOf(farbKarten.getByIndex(0));
+  public static Karte farbeZugeben(KartenListe meineHand, Karte ersteKarte, int mode) {
+    KartenListe hand = new KartenListe(meineHand);
+    sortiereKarten(hand);
+
+    boolean trumpfGespielt = trumpfKarten.containsKarte(ersteKarte);
+
+    KartenListe handTrumpfKarten = hand.removeKarten(trumpfKarten);
+    KartenListe handfarbKarten;
+
+    if (trumpfGespielt) {
+      handfarbKarten = handTrumpfKarten;
+    } else {
+      handfarbKarten = hand.getKarten(ersteKarte.getFarbe());
     }
-    if (farbKarten.size() > 1) {
+
+    if (handfarbKarten.size() == 1) {
+      return handfarbKarten.getByIndex(0);
+    } else if (handfarbKarten.size() > 1) {
+      return switch (mode) {
+        case 0 -> // Abspatzen
+        handfarbKarten.getByIndex(0);
+        case 1, 2 -> // Stechen // Schmieren
+        handfarbKarten.getLast();
+        default -> null;
+      };
+    }
+    if (handfarbKarten.isEmpty()) {
       switch (mode) {
-        case 0:
-          return 0;
-        case 1:
-          return meineHand.indexOf(farbKarten.getLast());
-        case 2:
-          return meineHand.indexOf(farbKarten.getLast());
+        case 0: // Abspatzen
+          return hand.getByIndex(0);
+        case 1: // Schmieren
+          return hand.getLast();
+        case 2: // Stechen
+          if (!handTrumpfKarten.isEmpty()) {
+            return handTrumpfKarten.getLast(); // trumpf reinspielen
+          } else {
+            return hand.getByIndex(0); // wenn kein Trumpf und farblos, abschpatzen
+          }
         default:
-          return 0;
+          return null;
       }
     }
-    if (farbKarten.isEmpty()) {
-      switch (mode) {
-        case 0:
-          return 0;
-        case 1:
-          return 0;
-        case 2:
-          return meineHand.size() - 1;
-        default:
-          return 0;
-      }
-    }
-    return 0;
+    return null;
   }
 
   /**
@@ -100,14 +113,18 @@ public abstract class SpielController {
     }
   }
 
-  public abstract int welcheKarteSpielIch(
-      int meinePosition,
+  public abstract Karte welcheKarteSpielIch(
+      boolean istSpieler,
       KartenListe gespielteKarten,
       KartenListe meineHand,
       KartenListe tischKarten);
 
   public KartenListe getTrumpfKarten() {
     return trumpfKarten;
+  }
+
+  public boolean isTrumpf(Karte card) {
+    return trumpfKarten.containsKarte(card);
   }
 
   public KartenListe getFarbKarten() {
