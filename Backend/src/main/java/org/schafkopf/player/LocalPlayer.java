@@ -2,9 +2,7 @@ package org.schafkopf.player;
 
 import org.schafkopf.Schafkopf;
 import org.schafkopf.karte.Karte;
-import org.schafkopf.karte.KartenFarbe;
 import org.schafkopf.karte.KartenListe;
-import org.schafkopf.karte.KartenSymbol;
 import org.schafkopf.spielcontroller.SpielController;
 
 /**
