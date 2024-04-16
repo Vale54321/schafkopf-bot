@@ -37,6 +37,8 @@ jobs:
       run: mvn -B package --file pom.xml
       working-directory: Backend
 
+    - run: mkdir release && ll
+
     - name: Archive dist folder
       run: cp Backend/target/schafkopf-backend-build-jar-with-dependencies.jar release/schafkopf-backend-build-jar-with-dependencies.jar && zip -r dist.zip release/*
     
