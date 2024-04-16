@@ -38,7 +38,7 @@ jobs:
       working-directory: Backend
 
     - name: Archive dist folder
-      run: cp Backend/target/schafkopf-backend-build-jar-with-dependencies.jar release && zip -r dist.zip release/*
+      run: cp Backend/target/schafkopf-backend-build-jar-with-dependencies.jar release/schafkopf-backend-build-jar-with-dependencies.jar && zip -r dist.zip release/*
     
     - name: Get current Version Number
       run: echo "version=$(node -p "require('./fcf-frontend/package.json').version")" >> $GITHUB_ENV
