@@ -8,7 +8,7 @@ on:
 jobs:
   build:
     name: Build Backend
-    runs-on: ubuntu-latest
+    runs-on: slef-hosted
 
     steps:
     - uses: actions/checkout@v4
@@ -19,6 +19,11 @@ jobs:
         java-version: '21'
         distribution: 'temurin'
         architecture: x64
+    
+    - name: Set up Maven
+      uses: stCarolas/setup-maven@v5
+      with:
+        maven-version: 3.8.2
         
     - name: Run the Maven verify phase
       run: mvn --batch-mode --update-snapshots verify
