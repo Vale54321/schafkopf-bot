@@ -7,16 +7,16 @@ enum KartenFarbe {
     TRUMPF = "TRUMPF",
 }
 
-enum KartenSymbol {
-    SEVEN = "7",
-    EIGHT = "8",
-    NINE = "9",
-    TEN = "X",
-    UNTER = "U",
-    OBER = "O",
-    KOENIG = "K",
-    ASS = "A",
-}
+// enum KartenSymbol {
+//     SEVEN = "7",
+//     EIGHT = "8",
+//     NINE = "9",
+//     TEN = "X",
+//     UNTER = "U",
+//     OBER = "O",
+//     KOENIG = "K",
+//     ASS = "A",
+// }
 
 export enum Card {
     EICHEL_7 = 'EICHEL_7',
@@ -75,6 +75,7 @@ export enum GamePhase {
 export interface CardArray {
     cards: Card[];
 }
+
 export interface CardObject {
     card: Card;
 }
@@ -91,7 +92,7 @@ export interface GameState {
 
 
 export interface GameStateJson {
-    gamestate : GameState
+    gamestate: GameState
 }
 
 // Define a union type for all possible message types
