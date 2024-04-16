@@ -8,7 +8,7 @@ on:
 jobs:
   build:
     name: Build Backend
-    runs-on: slef-hosted
+    runs-on: self-hosted
 
     steps:
     - uses: actions/checkout@v4
