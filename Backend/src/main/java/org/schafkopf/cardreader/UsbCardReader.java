@@ -1,6 +1,7 @@
 package org.schafkopf.cardreader;
 
 import com.fazecast.jSerialComm.SerialPort;
+import io.github.cdimascio.dotenv.Dotenv;
 import java.io.UnsupportedEncodingException;
 import org.schafkopf.BackendServer;
 
@@ -8,6 +9,8 @@ import org.schafkopf.BackendServer;
 public class UsbCardReader extends CardReader {
 
   private volatile boolean isRunning = true;
+  Dotenv dotenv = Dotenv.configure().directory("./").load();
+  private String PORT_NAME = dotenv.get("COM_PORT");
 
   /**
    * Creates an Instance of the KartenLeser.
@@ -30,14 +33,14 @@ public class UsbCardReader extends CardReader {
     SerialPort selectedPort = null;
 
     for (SerialPort port : ports) {
-      if (port.getSystemPortName().equals("COM13")) {
+      if (port.getSystemPortName().equals(this.PORT_NAME)) {
         selectedPort = port;
         break;
       }
     }
 
     if (selectedPort == null) {
-      System.out.println("COM6 not found");
+      System.out.println(this.PORT_NAME + " not found");
       return;
     }
 
