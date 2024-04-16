@@ -36,7 +36,7 @@ jobs:
     - run: mkdir release && ls
 
     - name: Archive dist folder
-      run: cp Backend/target/schafkopf-backend-build-jar-with-dependencies.jar release/schafkopf-bot.jar && zip -r dist.zip . release/*
+      run: cp Backend/target/schafkopf-backend-build-jar-with-dependencies.jar release/schafkopf-bot.jar && zip -r dist.zip release/schafkopf-bot.jar
     
     - name: Release
       uses: softprops/action-gh-release@v2
