@@ -8,7 +8,7 @@ on:
 jobs:
   build:
     name: Build Backend
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v4
@@ -19,6 +19,7 @@ jobs:
         java-version: '21'
         distribution: 'temurin'
         architecture: x64
+        
     - name: Run the Maven verify phase
       run: mvn --batch-mode --update-snapshots verify
         
