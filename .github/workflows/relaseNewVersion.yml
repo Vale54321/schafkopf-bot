@@ -4,13 +4,11 @@ permissions:
   contents: write
   
 on:
-  pull_request:
-    branches:    ["release/*", "master"]
-    #types:
-    #  - closed
-  create:
+  push:
     branches:
-      - 'release/*'
+      - 'master'
+    tags:
+      - "v*.*.*"
   workflow_dispatch:
 
 jobs:
