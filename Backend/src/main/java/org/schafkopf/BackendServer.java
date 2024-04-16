@@ -24,7 +24,6 @@ import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlets.CrossOriginFilter;
 import org.eclipse.jetty.websocket.server.config.JettyWebSocketServletContainerInitializer;
 import org.schafkopf.cardreader.CardReader;
-import org.schafkopf.cardreader.GpioReader;
 import org.schafkopf.cardreader.UsbCardReader;
 
 /** Main Class that represents the Backend Server. */
@@ -53,19 +52,8 @@ public class BackendServer {
 
     schafkopfGame = new Schafkopf(this);
 
-    String osName = System.getProperty("os.name").toLowerCase();
-    if (osName.contains("win")) {
-      // Windows
-      nfcLeser = new UsbCardReader(this);
-    } else if (osName.contains("nix") || osName.contains("nux") || osName.contains("mac")) {
-      // Unix/Linux/Mac
-      // You can add additional checks for specific Linux distributions or macOS versions if needed
-      // For now, assuming Raspberry Pi is running Linux
-      nfcLeser = new GpioReader(this);
-    } else {
-      // Other OS
-      throw new RuntimeException("Unsupported OS: " + osName);
-    }
+
+    nfcLeser = new UsbCardReader(this);
 
     // Setup the basic application "context" for this application at "/"
     // This is also known as the handler tree (in jetty speak)

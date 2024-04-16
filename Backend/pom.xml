@@ -2,7 +2,21 @@
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xmlns="http://maven.apache.org/POM/4.0.0"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
   <artifactId>schafkopf-backend-java</artifactId>
+  <groupId>org.example</groupId>
+  <modelVersion>4.0.0</modelVersion>
+  <version>1.0-SNAPSHOT</version>
+
+  <properties>
+    <maven-compiler.version>3.5.1</maven-compiler.version>
+    <maven.compiler.source>21</maven.compiler.source>
+    <maven.compiler.target>21</maven.compiler.target>
+    <pi4j.version>2.4.0</pi4j.version>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <slf4j.version>1.7.32</slf4j.version>
+  </properties>
+
 
   <build>
     <finalName>schafkopf-backend-build</finalName>
@@ -12,6 +26,20 @@
       </resource>
     </resources>
     <plugins>
+      <!-- Maven Clean Plugin -->
+      <plugin>
+        <artifactId>maven-clean-plugin</artifactId>
+        <version>3.1.0</version>
+        <executions>
+          <execution>
+            <id>clean-initial</id>
+            <phase>pre-clean</phase>
+            <goals>
+              <goal>clean</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
       <plugin>
         <artifactId>maven-checkstyle-plugin</artifactId>
         <executions>
@@ -43,7 +71,6 @@
         </configuration>
         <version>3.3.0</version>
       </plugin>
-
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
         <configuration>
@@ -54,24 +81,49 @@
         <version>3.11.0</version>
       </plugin>
 
+<!--      <plugin>-->
+<!--        <artifactId>maven-shade-plugin</artifactId>-->
+<!--        <configuration>-->
+<!--          <transformers>-->
+<!--            <transformer-->
+<!--              implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>-->
+<!--          </transformers>-->
+<!--        </configuration>-->
+<!--        <executions>-->
+<!--          <execution>-->
+<!--            <goals>-->
+<!--              <goal>shade</goal>-->
+<!--            </goals>-->
+<!--            <phase>package</phase>-->
+<!--          </execution>-->
+<!--        </executions>-->
+<!--        <groupId>org.apache.maven.plugins</groupId>-->
+<!--        <version>3.5.1</version>-->
+<!--      </plugin>-->
+
+      <!-- Maven Assembly Plugin -->
       <plugin>
-        <artifactId>maven-shade-plugin</artifactId>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <version>3.3.0</version>
         <configuration>
-          <transformers>
-            <transformer
-              implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
-          </transformers>
+          <descriptorRefs>
+            <descriptorRef>jar-with-dependencies</descriptorRef>
+          </descriptorRefs>
+          <archive>
+            <manifest>
+              <mainClass>org.schafkopf.BackendServer</mainClass>
+            </manifest>
+          </archive>
         </configuration>
         <executions>
           <execution>
-            <goals>
-              <goal>shade</goal>
-            </goals>
+            <id>make-assembly</id>
             <phase>package</phase>
+            <goals>
+              <goal>single</goal>
+            </goals>
           </execution>
         </executions>
-        <groupId>org.apache.maven.plugins</groupId>
-        <version>3.5.1</version>
       </plugin>
     </plugins>
   </build>
@@ -102,12 +154,12 @@
     <dependency>
       <artifactId>websocket-jetty-server</artifactId>
       <groupId>org.eclipse.jetty.websocket</groupId>
-      <version>11.0.15</version>
+      <version>11.0.20</version>
     </dependency>
     <dependency>
       <artifactId>jetty-servlets</artifactId>
       <groupId>org.eclipse.jetty</groupId>
-      <version>11.0.15</version>
+      <version>11.0.19</version>
     </dependency>
     <!-- To run websockets client -->
     <dependency>
@@ -125,32 +177,6 @@
       <groupId>io.github.cdimascio</groupId>
       <version>3.0.0</version>
     </dependency>
-
-    <!-- include Pi4J Core -->
-    <dependency>
-      <artifactId>pi4j-core</artifactId>
-      <groupId>com.pi4j</groupId>
-      <version>${pi4j.version}</version> <!-- Use the latest version available -->
-    </dependency>
-
-    <!-- include Pi4J Plugins (Platforms and I/O Providers) -->
-    <dependency>
-      <artifactId>pi4j-plugin-raspberrypi</artifactId>
-      <groupId>com.pi4j</groupId>
-      <version>${pi4j.version}</version>
-    </dependency>
-    <dependency>
-      <artifactId>pi4j-plugin-pigpio</artifactId>
-      <groupId>com.pi4j</groupId>
-      <version>${pi4j.version}</version>
-    </dependency>
-
-
-    <dependency>
-      <artifactId>pn532-sdk</artifactId>
-      <groupId>pn532</groupId>
-      <version>1.0.2</version>
-    </dependency>
     <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-controls</artifactId>
@@ -162,26 +188,4 @@
       <version>17</version>
     </dependency>
   </dependencies>
-  <groupId>org.example</groupId>
-
-  <modelVersion>4.0.0</modelVersion>
-  <properties>
-    <maven-compiler.version>3.5.1</maven-compiler.version>
-    <maven.compiler.source>21</maven.compiler.source>
-    <maven.compiler.target>21</maven.compiler.target>
-    <!-- DEPENDENCIES VERSIONS -->
-    <pi4j.version>2.4.0</pi4j.version>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <slf4j.version>1.7.32</slf4j.version>
-
-  </properties>
-  <repositories>
-    <repository>
-      <id>in-project</id>
-      <name>In Project Repo</name>
-      <url>file://${project.basedir}/lib</url>
-    </repository>
-  </repositories>
-
-  <version>1.0-SNAPSHOT</version>
 </project>
