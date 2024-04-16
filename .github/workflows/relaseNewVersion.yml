@@ -36,7 +36,7 @@ jobs:
     - run: mkdir release && ls
 
     - name: Archive dist folder
-      run: cp Backend/target/schafkopf-backend-build-jar-with-dependencies.jar release/schafkopf-backend.jar && zip -r dist.zip release/*
+      run: cp Backend/target/schafkopf-backend-build-jar-with-dependencies.jar release/schafkopf-bot.jar && zip -r dist.zip . release/*
     
     - name: Create Release
       id: create_release
