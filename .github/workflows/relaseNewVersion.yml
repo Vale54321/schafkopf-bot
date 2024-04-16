@@ -29,15 +29,11 @@ jobs:
       with:
         maven-version: 3.8.2
         
-    - name: Run the Maven verify phase
-      run: mvn --batch-mode --update-snapshots verify
-      working-directory: Backend
-        
     - name: Build with Maven
       run: mvn -B package --file pom.xml
       working-directory: Backend
 
-    - run: mkdir release && ll
+    - run: mkdir release && ls
 
     - name: Archive dist folder
       run: cp Backend/target/schafkopf-backend-build-jar-with-dependencies.jar release/schafkopf-backend-build-jar-with-dependencies.jar && zip -r dist.zip release/*
