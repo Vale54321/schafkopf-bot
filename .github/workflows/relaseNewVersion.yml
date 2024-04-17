@@ -52,12 +52,12 @@ jobs:
 
     - name: Archive dist folder
     #  run: mv Backend/target/schafkopf-backend-build-jar-with-dependencies.jar schafkopf-bot.jar && zip -r dist.zip schafkopf-bot.jar
-      run: mv Backend/target/schafkopf-backend-build-jar-with-dependencies.jar schafkopf-bot.jar
+      run: mv Backend/schafkopf-client/target/schafkopf-client-build-jar-with-dependencies.jar schafkopf-bot-client_${{ github.ref_name }}.jar
     
     - name: Release
       uses: softprops/action-gh-release@v2
       if: startsWith(github.ref, 'refs/tags/')
       with:
-        files: schafkopf-bot.jar
+        files: schafkopf-bot-client_${{ github.ref_name }}.jar
         token: ${{ secrets.PAT }}
 
