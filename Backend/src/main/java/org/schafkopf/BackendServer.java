@@ -4,26 +4,26 @@ import com.google.gson.JsonObject;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
-import io.github.cdimascio.dotenv.Dotenv;
 import jakarta.servlet.DispatcherType;
+import java.awt.Desktop;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
-import javafx.application.Application;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.servlet.FilterHolder;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlets.CrossOriginFilter;
 import org.eclipse.jetty.websocket.server.config.JettyWebSocketServletContainerInitializer;
-import org.schafkopf.cardreader.CardReader;
 import org.schafkopf.cardreader.UsbCardReader;
 
 /** Main Class that represents the Backend Server. */
@@ -37,14 +37,12 @@ public class BackendServer {
   /** Important variables. */
   public final Schafkopf schafkopfGame;
 
-  private final CardReader nfcLeser;
   private final List<FrontendEndpoint> frontendEndpoints = new ArrayList<>();
 
   /** Creates an Instance of the Backend Server. */
-  public BackendServer() {
-    Dotenv dotenv = Dotenv.configure().directory("./").load();
+  public BackendServer() throws URISyntaxException, IOException {
     server = new Server();
-    InetSocketAddress address = new InetSocketAddress(dotenv.get("VITE_APP_WEBSOCKET_IP"), 8080);
+    InetSocketAddress address = new InetSocketAddress("localhost", 8080);
     connector = new ServerConnector(server);
     connector.setHost(address.getHostName());
     connector.setPort(address.getPort());
@@ -52,8 +50,7 @@ public class BackendServer {
 
     schafkopfGame = new Schafkopf(this);
 
-
-    nfcLeser = new UsbCardReader(this);
+    new UsbCardReader(this);
 
     // Setup the basic application "context" for this application at "/"
     // This is also known as the handler tree (in jetty speak)
@@ -87,11 +84,8 @@ public class BackendServer {
 
     // Integrate simple HTTP server
     startHttpServer();
-    new Thread(this::launchJavaFx).start();
-  }
-
-  private void launchJavaFx() {
-    Application.launch(JavaFxApp.class);
+    URI uri = new URI("http://localhost:8081"); // Replace with your target URL
+    Desktop.getDesktop().browse(uri);
   }
 
   private void startHttpServer() {
