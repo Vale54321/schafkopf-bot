@@ -1,6 +1,6 @@
 package org.schafkopf.spielcontroller;
 
-import org.schafkopf.karte.*;
+import org.schafkopf.karte.Karte;
 import org.schafkopf.karte.KartenFarbe;
 import org.schafkopf.karte.KartenListe;
 import org.schafkopf.karte.KartenSymbol;
