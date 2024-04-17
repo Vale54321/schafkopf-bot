@@ -8,6 +8,7 @@
   <modules>
     <module>schafkopf-client</module>
     <module>schafkopf-server</module>
+    <module>schafkopf-shared</module>
   </modules>
   <groupId>org.schafkopf</groupId>
   <modelVersion>4.0.0</modelVersion>
@@ -82,29 +83,6 @@
       </plugin>
 
       <!-- Maven Assembly Plugin -->
-      <plugin>
-        <artifactId>maven-assembly-plugin</artifactId>
-        <version>3.3.0</version>
-        <configuration>
-          <descriptorRefs>
-            <descriptorRef>jar-with-dependencies</descriptorRef>
-          </descriptorRefs>
-          <archive>
-            <manifest>
-              <mainClass>org.schafkopf.BackendServer</mainClass>
-            </manifest>
-          </archive>
-        </configuration>
-        <executions>
-          <execution>
-            <id>make-assembly</id>
-            <phase>package</phase>
-            <goals>
-              <goal>single</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
     </plugins>
   </build>
   <dependencies>
