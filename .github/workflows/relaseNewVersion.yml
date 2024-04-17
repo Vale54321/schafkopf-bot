@@ -33,9 +33,6 @@ jobs:
     - name: Build Frontend
       run: npm run build
       working-directory: Frontend
-
-    - name: Copy built Frontend
-      run: rm -r Backend/src/main/resources/web-content/ && mv Frontend/dist Backend/src/main/resources/web-content
     
     - name: Set up JDK 21
       uses: actions/setup-java@v4

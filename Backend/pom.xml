@@ -4,7 +4,13 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
   <artifactId>schafkopf-backend-java</artifactId>
-  <groupId>org.example</groupId>
+  <packaging>pom</packaging>
+  <modules>
+    <module>schafkopf-client</module>
+    <module>schafkopf-server</module>
+    <module>schafkopf-shared</module>
+  </modules>
+  <groupId>org.schafkopf</groupId>
   <modelVersion>4.0.0</modelVersion>
   <version>1.0-SNAPSHOT</version>
 
@@ -20,11 +26,6 @@
 
   <build>
     <finalName>schafkopf-backend-build</finalName>
-    <resources>
-      <resource>
-        <directory>src/main/resources</directory>
-      </resource>
-    </resources>
     <plugins>
       <!-- Maven Clean Plugin -->
       <plugin>
@@ -82,29 +83,6 @@
       </plugin>
 
       <!-- Maven Assembly Plugin -->
-      <plugin>
-        <artifactId>maven-assembly-plugin</artifactId>
-        <version>3.3.0</version>
-        <configuration>
-          <descriptorRefs>
-            <descriptorRef>jar-with-dependencies</descriptorRef>
-          </descriptorRefs>
-          <archive>
-            <manifest>
-              <mainClass>org.schafkopf.BackendServer</mainClass>
-            </manifest>
-          </archive>
-        </configuration>
-        <executions>
-          <execution>
-            <id>make-assembly</id>
-            <phase>package</phase>
-            <goals>
-              <goal>single</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
     </plugins>
   </build>
   <dependencies>
@@ -156,16 +134,6 @@
       <artifactId>dotenv-java</artifactId>
       <groupId>io.github.cdimascio</groupId>
       <version>3.0.0</version>
-    </dependency>
-    <dependency>
-      <groupId>org.openjfx</groupId>
-      <artifactId>javafx-controls</artifactId>
-      <version>22</version>
-    </dependency>
-    <dependency>
-      <groupId>org.openjfx</groupId>
-      <artifactId>javafx-web</artifactId>
-      <version>22</version>
     </dependency>
   </dependencies>
 </project>

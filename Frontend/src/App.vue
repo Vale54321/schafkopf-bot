@@ -134,20 +134,20 @@ onMounted(() => {
       <div class="flex gap-2 place-content-center">
         <button @click="setGame('setgame:sauspiel')">Sauspiel</button>
 
-        <button @click="setGame('setgame:herzsolo')">herzsolo</button>
-        <button @click="setGame('setgame:eichelsolo')">eichelsolo</button>
-        <button @click="setGame('setgame:blattsolo')">blattsolo</button>
-        <button @click="setGame('setgame:schellsolo')">schellsolo</button>
+        <!--        <button @click="setGame('setgame:herzsolo')">herzsolo</button>-->
+        <!--        <button @click="setGame('setgame:eichelsolo')">eichelsolo</button>-->
+        <!--        <button @click="setGame('setgame:blattsolo')">blattsolo</button>-->
+        <!--        <button @click="setGame('setgame:schellsolo')">schellsolo</button>-->
 
-        <button @click="setGame('setgame:eichelwenz')">eichelwenz</button>
-        <button @click="setGame('setgame:blattwenz')">blattwenz</button>
-        <button @click="setGame('setgame:herzwenz')">herzwenz</button>
-        <button @click="setGame('setgame:schellwenz')">schellwenz</button>
+        <!--        <button @click="setGame('setgame:eichelwenz')">eichelwenz</button>-->
+        <!--        <button @click="setGame('setgame:blattwenz')">blattwenz</button>-->
+        <!--        <button @click="setGame('setgame:herzwenz')">herzwenz</button>-->
+        <!--        <button @click="setGame('setgame:schellwenz')">schellwenz</button>-->
 
-        <button @click="setGame('setgame:eichelgeier')">eichelgeier</button>
-        <button @click="setGame('setgame:blattgeier')">blattgeier</button>
-        <button @click="setGame('setgame:herzgeier')">herzgeier</button>
-        <button @click="setGame('setgame:schellgeier')">schellgeier</button>
+        <!--        <button @click="setGame('setgame:eichelgeier')">eichelgeier</button>-->
+        <!--        <button @click="setGame('setgame:blattgeier')">blattgeier</button>-->
+        <!--        <button @click="setGame('setgame:herzgeier')">herzgeier</button>-->
+        <!--        <button @click="setGame('setgame:schellgeier')">schellgeier</button>-->
 
         <button @click="setGame('setgame:geier')">Geier</button>
         <button @click="setGame('setgame:wenz')">Wenz</button>
