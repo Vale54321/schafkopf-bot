@@ -6,16 +6,16 @@ const props = defineProps<{
   card: Card;
 }>();
 
-const imgSrc = ref('/assets/card_back.png')
+const imgSrc = ref('/assets/card_back.jpg')
 
 const focus = ref(false);
 
 onBeforeMount(() => {
-  imgSrc.value = "/assets/" + props.card.toString().toLowerCase() + ".png"
+  imgSrc.value = "/assets/" + props.card.toString().toLowerCase() + ".jpg"
 })
 
 watch(() => props.card, (newCard) => {
-  imgSrc.value = `/assets/${newCard.toString().toLowerCase()}.png`;
+  imgSrc.value = `/assets/${newCard.toString().toLowerCase()}.jpg`;
 });
 </script>
 <template>
