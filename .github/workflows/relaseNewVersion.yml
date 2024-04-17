@@ -53,8 +53,9 @@ jobs:
       run: mvn -B package --file pom.xml
       working-directory: Backend
 
-   # - name: Archive dist folder
+    - name: Archive dist folder
     #  run: mv Backend/target/schafkopf-backend-build-jar-with-dependencies.jar schafkopf-bot.jar && zip -r dist.zip schafkopf-bot.jar
+      run: mv Backend/target/schafkopf-backend-build-jar-with-dependencies.jar schafkopf-bot.jar
     
     - name: Release
       uses: softprops/action-gh-release@v2
