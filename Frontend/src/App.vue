@@ -21,6 +21,12 @@ function startSimulation(): void {
 
 }
 
+function startDedicated(): void {
+  sendMessageToServer("startdedicated");
+
+}
+
+
 function stopSimulation(): void {
   sendMessageToServer("stopsimulation");
 }
@@ -131,32 +137,33 @@ onMounted(() => {
     <div v-for="message in messageFromServer" :key="message">{{ message }}</div>
 
     <div v-if="showGameSelect">
+      <!--      <div class="flex gap-2 place-content-center">-->
+      <!--        <button @click="setGame('setgame:sauspiel')">Sauspiel</button>-->
+
+      <!--        <button @click="setGame('setgame:herzsolo')">herzsolo</button>-->
+      <!--        <button @click="setGame('setgame:eichelsolo')">eichelsolo</button>-->
+      <!--        <button @click="setGame('setgame:blattsolo')">blattsolo</button>-->
+      <!--        <button @click="setGame('setgame:schellsolo')">schellsolo</button>-->
+
+      <!--        <button @click="setGame('setgame:eichelwenz')">eichelwenz</button>-->
+      <!--        <button @click="setGame('setgame:blattwenz')">blattwenz</button>-->
+      <!--        <button @click="setGame('setgame:herzwenz')">herzwenz</button>-->
+      <!--        <button @click="setGame('setgame:schellwenz')">schellwenz</button>-->
+
+      <!--        <button @click="setGame('setgame:eichelgeier')">eichelgeier</button>-->
+      <!--        <button @click="setGame('setgame:blattgeier')">blattgeier</button>-->
+      <!--        <button @click="setGame('setgame:herzgeier')">herzgeier</button>-->
+      <!--        <button @click="setGame('setgame:schellgeier')">schellgeier</button>-->
+
+      <!--        <button @click="setGame('setgame:geier')">Geier</button>-->
+      <!--        <button @click="setGame('setgame:wenz')">Wenz</button>-->
+      <!--      </div>-->
+      <!--      <div class="flex gap-2 place-content-center">-->
+      <!--        <button @click="showFarben">Zeige alle Farben</button>-->
+      <!--        <button @click="showTrumpf">Zeige alle Trumpfkarten</button>-->
+      <!--      </div>-->
       <div class="flex gap-2 place-content-center">
-        <button @click="setGame('setgame:sauspiel')">Sauspiel</button>
-
-        <!--        <button @click="setGame('setgame:herzsolo')">herzsolo</button>-->
-        <!--        <button @click="setGame('setgame:eichelsolo')">eichelsolo</button>-->
-        <!--        <button @click="setGame('setgame:blattsolo')">blattsolo</button>-->
-        <!--        <button @click="setGame('setgame:schellsolo')">schellsolo</button>-->
-
-        <!--        <button @click="setGame('setgame:eichelwenz')">eichelwenz</button>-->
-        <!--        <button @click="setGame('setgame:blattwenz')">blattwenz</button>-->
-        <!--        <button @click="setGame('setgame:herzwenz')">herzwenz</button>-->
-        <!--        <button @click="setGame('setgame:schellwenz')">schellwenz</button>-->
-
-        <!--        <button @click="setGame('setgame:eichelgeier')">eichelgeier</button>-->
-        <!--        <button @click="setGame('setgame:blattgeier')">blattgeier</button>-->
-        <!--        <button @click="setGame('setgame:herzgeier')">herzgeier</button>-->
-        <!--        <button @click="setGame('setgame:schellgeier')">schellgeier</button>-->
-
-        <button @click="setGame('setgame:geier')">Geier</button>
-        <button @click="setGame('setgame:wenz')">Wenz</button>
-      </div>
-      <div class="flex gap-2 place-content-center">
-        <button @click="showFarben">Zeige alle Farben</button>
-        <button @click="showTrumpf">Zeige alle Trumpfkarten</button>
-      </div>
-      <div class="flex gap-2 place-content-center">
+        <button class="v-button" @click="startDedicated">Dedicated Starten</button>
         <button class="v-button" @click="startSimulation">Starten</button>
         <button class="v-button" @click="stopSimulation">Stoppen</button>
       </div>
