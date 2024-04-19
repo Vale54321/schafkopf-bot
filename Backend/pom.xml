@@ -66,7 +66,7 @@
         <configuration>
           <archive>
             <manifest>
-              <mainClass>org.schafkopf.BackendServer</mainClass>
+              <mainClass>org.schafkopf.DedicatedServer</mainClass>
             </manifest>
           </archive>
         </configuration>

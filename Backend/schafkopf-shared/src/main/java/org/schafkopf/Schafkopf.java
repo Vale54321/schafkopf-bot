@@ -6,7 +6,6 @@ import org.schafkopf.karte.KartenFarbe;
 import org.schafkopf.karte.KartenListe;
 import org.schafkopf.karte.KartenUtil;
 import org.schafkopf.player.BotPlayer;
-import org.schafkopf.player.LocalPlayer;
 import org.schafkopf.player.Player;
 import org.schafkopf.spielcontroller.FarbGeierController;
 import org.schafkopf.spielcontroller.FarbSoloController;
@@ -18,14 +17,12 @@ import org.schafkopf.spielcontroller.WenzController;
 
 /** The main class representing the Schafkopf game. */
 public class Schafkopf {
-  private final BackendServer server;
+  private final MessageSender messageSender;
 
   /** The game controller. This is the class that implements the game logic. */
   private SpielController spiel = new SauSpielController(0, KartenFarbe.EICHEL);
 
-  private final Player[] player = {
-    new BotPlayer(), new LocalPlayer(this), new LocalPlayer(this), new LocalPlayer(this)
-  };
+  private final Player[] player;
 
   private GameState gameState = new GameState(GamePhase.GAME_STOP);
   private Thread spielThread;
@@ -33,10 +30,11 @@ public class Schafkopf {
   /**
    * Constructor for the Schafkopf class.
    *
-   * @param server The backend server associated with the game.
+   * @param messageSender MessageSender
    */
-  Schafkopf(BackendServer server) {
-    this.server = server;
+  public Schafkopf(Player[] player, MessageSender messageSender) {
+    this.player = player;
+    this.messageSender = messageSender;
     System.out.println("SchaffKopfGame erstellt");
   }
 
@@ -44,62 +42,26 @@ public class Schafkopf {
     return player;
   }
 
-  /** Sends all Trumpf Karten of the current GameType to the Frontend. */
-  public void showTrumpf() {
-    server.sendMessageToAllFrontendEndpoints(spiel.getTrumpfKarten().getJson());
-  }
-
-  /** Sends all Farb Karten of the current GameType to the Frontend. */
-  public void showFarbe() {
-    server.sendMessageToAllFrontendEndpoints(spiel.getFarbKarten().getJson());
-  }
-
-  /** Waits for a Card and returns a Karte Object. */
-  public Karte wartetAufKarte() {
-    String uid = null;
-    System.out.println("Starte Warten auf Karte");
-    try {
-      uid = server.waitForCardScan();
-    } catch (InterruptedException e) {
-      throw new RuntimeException(e);
-    }
-
-    Karte karte = KartenUtil.getIdOfUid(uid);
-
-    if (karte == null) {
-      System.out.println("Ungültige Karte");
-      return wartetAufKarte();
-    }
-    System.out.println("Karte gescannt: " + karte.getName());
-    System.out.println("Beende Warten auf Karte");
-    return karte;
-  }
-
   /** Set GameState to "started" and start Game Thread. */
   public void startGame() {
     if (gameState.getGamePhase() != GamePhase.GAME_STOP) {
       System.out.println("Game already started!");
-      server.sendMessageToAllFrontendEndpoints("Game already started!");
+      messageSender.sendMessage("Game already started!");
     } else {
       gameState = new GameState(GamePhase.GAME_START);
       setAndSendGameState(gameState);
       System.out.println("Start Game");
 
-      // KartenListe botHand = KartenUtil.zieheZufallsHand(8);
-      KartenListe botHand = new KartenListe();
-      botHand.addKarten(Karte.EICHEL_7);
-      botHand.addKarten(Karte.SCHELL_7);
-      botHand.addKarten(Karte.BLATT_7);
-
-      botHand.addKarten(Karte.EICHEL_X);
-      botHand.addKarten(Karte.HERZ_X);
-      botHand.addKarten(Karte.HERZ_7);
-
-      botHand.addKarten(Karte.EICHEL_U);
-      botHand.addKarten(Karte.EICHEL_O);
+      KartenListe austeilen = KartenUtil.initializeSchafKopfCardDeck();
       for (Player currentPlayer : player) {
         if (currentPlayer instanceof BotPlayer botPlayer) {
-          // Perform actions specific to BotPlayer
+          KartenListe botHand = new KartenListe();
+          for (int i = 7; i >= 0; i--) {
+            System.out.println("Austeilen: " + austeilen.size());
+            System.out.println("Bot Hand: " + i);
+            botHand.addKarten(austeilen.removeKarten(austeilen.getByIndex(i)));
+          }
+          System.out.println("Bot Hand: " + botHand.getJson().toString());
           botPlayer.setCards(botHand); // Replace with the actual method you want to call
         }
       }
@@ -114,7 +76,7 @@ public class Schafkopf {
   public void stopGame() {
     if (gameState.getGamePhase() == GamePhase.GAME_STOP) {
       System.out.println("no active Game!");
-      server.sendMessageToAllFrontendEndpoints("no active Game!");
+      messageSender.sendMessage("no active Game!");
     } else {
       gameState = new GameState(GamePhase.GAME_STOP);
       setAndSendGameState(gameState);
@@ -126,7 +88,7 @@ public class Schafkopf {
   /** Set GameType. */
   public void setGame(String message) {
     System.out.println("Set Game: " + message);
-    server.sendMessageToAllFrontendEndpoints("Set Game: " + message);
+    messageSender.sendMessage("Set Game: " + message);
     switch (message) {
       case "setgame:herzsolo":
         this.spiel = new FarbSoloController(0, KartenFarbe.HERZ);
@@ -184,7 +146,7 @@ public class Schafkopf {
 
   public void setAndSendGameState(GameState gameState) {
     this.gameState = gameState;
-    this.server.sendMessageToAllFrontendEndpoints(this.gameState.getJson());
+    this.messageSender.sendMessage(this.gameState.getJson().toString());
   }
 
   public GameState getGameState() {

@@ -1,6 +1,5 @@
 package org.schafkopf;
 
-import com.google.gson.JsonObject;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
@@ -25,9 +24,12 @@ import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlets.CrossOriginFilter;
 import org.eclipse.jetty.websocket.server.config.JettyWebSocketServletContainerInitializer;
 import org.schafkopf.cardreader.UsbCardReader;
+import org.schafkopf.player.BotPlayer;
+import org.schafkopf.player.LocalPlayer;
+import org.schafkopf.player.Player;
 
 /** Main Class that represents the Backend Server. */
-public class BackendServer {
+public class BackendServer implements MessageSender {
   private final Server server;
   private final ServerConnector connector;
   private CountDownLatch nfcLatch = new CountDownLatch(1);
@@ -39,6 +41,8 @@ public class BackendServer {
 
   private final List<FrontendEndpoint> frontendEndpoints = new ArrayList<>();
 
+  private DedicatedServerConnection dedicatedServerConnection;
+
   /** Creates an Instance of the Backend Server. */
   public BackendServer() throws URISyntaxException, IOException {
     server = new Server();
@@ -48,7 +52,9 @@ public class BackendServer {
     connector.setPort(address.getPort());
     server.addConnector(connector);
 
-    schafkopfGame = new Schafkopf(this);
+    schafkopfGame = new Schafkopf(new Player[]{new BotPlayer(), new LocalPlayer(this),
+        new LocalPlayer(this),
+        new LocalPlayer(this)}, this);
 
     new UsbCardReader(this);
 
@@ -86,6 +92,13 @@ public class BackendServer {
     startHttpServer();
     URI uri = new URI("http://localhost:8081"); // Replace with your target URL
     Desktop.getDesktop().browse(uri);
+
+    startDedicatedServerConnectionThread();
+  }
+
+  private void startDedicatedServerConnectionThread() {
+    dedicatedServerConnection = new DedicatedServerConnection(this);
+    dedicatedServerConnection.connect();
   }
 
   private void startHttpServer() {
@@ -147,7 +160,6 @@ public class BackendServer {
   /** The main entrypoint of the Application. */
   public static void main(String[] args) throws Exception {
     BackendServer server = new BackendServer();
-    server.setPort(8080);
     server.start();
     server.join();
   }
@@ -164,10 +176,6 @@ public class BackendServer {
     // Add filter mappings
     EnumSet<DispatcherType> types = EnumSet.of(DispatcherType.REQUEST);
     context.addFilter(cors, "*", types);
-  }
-
-  private void setPort(int port) {
-    connector.setPort(port);
   }
 
   private void start() throws Exception {
@@ -191,20 +199,9 @@ public class BackendServer {
    *
    * @param message Message to send (String).
    */
-  public void sendMessageToAllFrontendEndpoints(String message) {
+  private void sendMessageToAllFrontendEndpoints(String message) {
     for (FrontendEndpoint endpoint : frontendEndpoints) {
       endpoint.sendMessage(message);
-    }
-  }
-
-  /**
-   * Sends Message to all Frontend Instances.
-   *
-   * @param message Message to send (JsonObject).
-   */
-  public void sendMessageToAllFrontendEndpoints(JsonObject message) {
-    for (FrontendEndpoint endpoint : frontendEndpoints) {
-      endpoint.sendMessage(message.toString());
     }
   }
 
@@ -233,5 +230,14 @@ public class BackendServer {
 
     this.uidString = uidString;
     nfcLatch.countDown();
+  }
+
+  public void startDedicatedServerGame() {
+    dedicatedServerConnection.start();
+  }
+
+  @Override
+  public void sendMessage(String message) {
+    sendMessageToAllFrontendEndpoints(message);
   }
 }

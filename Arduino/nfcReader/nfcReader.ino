@@ -17,6 +17,9 @@ void setup(void) {
   }
 
   nfc.SAMConfig();
+
+  // Send a marker string to identify the device
+  Serial.println("Adafruit PN532 NFC Marker");
 }
 
 void loop(void) {
