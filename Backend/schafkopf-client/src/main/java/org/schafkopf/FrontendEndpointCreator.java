@@ -9,8 +9,10 @@ import org.eclipse.jetty.websocket.server.JettyWebSocketCreator;
  */
 public class FrontendEndpointCreator implements JettyWebSocketCreator {
   private BackendServer backendServer;
+  private final MessageListener messageListener;
 
-  public FrontendEndpointCreator(BackendServer backendServer) {
+  public FrontendEndpointCreator(BackendServer backendServer, MessageListener messageListener) {
+    this.messageListener = messageListener;
     this.backendServer = backendServer;
   }
 
@@ -18,6 +20,6 @@ public class FrontendEndpointCreator implements JettyWebSocketCreator {
   public Object createWebSocket(
       JettyServerUpgradeRequest jettyServerUpgradeRequest,
       JettyServerUpgradeResponse jettyServerUpgradeResponse) {
-    return new FrontendEndpoint(this.backendServer);
+    return new FrontendEndpoint(this.backendServer, messageListener);
   }
 }

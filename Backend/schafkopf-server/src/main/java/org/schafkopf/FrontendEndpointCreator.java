@@ -8,6 +8,7 @@ import org.eclipse.jetty.websocket.server.JettyWebSocketCreator;
  * Creater to make new Instances of the FrontendConnection.
  */
 public class FrontendEndpointCreator implements JettyWebSocketCreator {
+
   private DedicatedServer dedicatedServer;
 
   public FrontendEndpointCreator(DedicatedServer dedicatedServer) {
@@ -18,6 +19,6 @@ public class FrontendEndpointCreator implements JettyWebSocketCreator {
   public Object createWebSocket(
       JettyServerUpgradeRequest jettyServerUpgradeRequest,
       JettyServerUpgradeResponse jettyServerUpgradeResponse) {
-    return new ClientConnection(this.dedicatedServer);
+    return new SchafkopfClientConnection(this.dedicatedServer);
   }
 }

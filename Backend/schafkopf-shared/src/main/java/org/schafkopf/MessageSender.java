@@ -1,6 +1,11 @@
 package org.schafkopf;
 
-/** The main entrypoint of the Application. */
+import org.schafkopf.SchafkopfMessage.SchafkopfBaseMessage;
+
+/**
+ * The main entrypoint of the Application.
+ */
 public interface MessageSender {
-  void sendMessage(String message);
+
+  void sendMessage(SchafkopfBaseMessage message);
 }

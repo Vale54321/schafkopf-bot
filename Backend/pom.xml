@@ -135,5 +135,12 @@
       <groupId>io.github.cdimascio</groupId>
       <version>3.0.0</version>
     </dependency>
+    <!-- Jackson for JSON serialization/deserialization -->
+    <dependency>
+      <groupId>org.json</groupId>
+      <artifactId>json</artifactId>
+      <version>20240303</version>
+    </dependency>
+
   </dependencies>
 </project>

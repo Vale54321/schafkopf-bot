@@ -41,7 +41,7 @@
           </descriptorRefs>
           <archive>
             <manifest>
-              <mainClass>org.schafkopf.BackendServer</mainClass>
+              <mainClass>org.schafkopf.SchafkopfClient</mainClass>
             </manifest>
           </archive>
         </configuration>

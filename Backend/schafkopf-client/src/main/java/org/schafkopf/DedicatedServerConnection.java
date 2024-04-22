@@ -1,5 +1,6 @@
 package org.schafkopf;
 
+import com.google.gson.JsonObject;
 import java.net.URI;
 import java.util.concurrent.CountDownLatch;
 import org.eclipse.jetty.websocket.api.Session;
@@ -10,30 +11,48 @@ import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
 import org.eclipse.jetty.websocket.api.annotations.WebSocket;
 import org.eclipse.jetty.websocket.client.ClientUpgradeRequest;
 import org.eclipse.jetty.websocket.client.WebSocketClient;
+import org.schafkopf.SchafkopfMessage.SchafkopfBaseMessage;
+import org.schafkopf.SchafkopfMessage.SchafkopfMessageOrigin;
+import org.schafkopf.SchafkopfMessage.SchafkopfMessageType;
 
-/** Main Class that represents the Backend Server. */
+/**
+ * Main Class that represents the Backend Server.
+ */
 @WebSocket
-public class DedicatedServerConnection {
+public class DedicatedServerConnection implements MessageSender {
 
-  private final MessageSender messageSender;
+  private final MessageListener messageListener;
   private final CountDownLatch closeLatch;
+  private final CountDownLatch connectionLatch;
   private static Session session;
 
-  public DedicatedServerConnection(MessageSender messageSender) {
-    this.messageSender = messageSender;
+  /**
+   * Class that represents one Frontend Connection.
+   */
+  public DedicatedServerConnection(MessageListener messageListener) {
+    this.messageListener = messageListener;
     this.closeLatch = new CountDownLatch(1);
+    this.connectionLatch = new CountDownLatch(1);
+    connect("ws://10.6.9.57:8085/");
+    try {
+      connectionLatch.await(); // Wait until the connection is established
+    } catch (InterruptedException e) {
+      System.err.println("Error waiting for connection: " + e.getMessage());
+    }
   }
 
+  /**
+   * Class that represents one Frontend Connection.
+   */
   @OnWebSocketConnect
   public void onConnect(Session session) {
     this.session = session;
-    System.out.println("Connected to server.");
+    connectionLatch.countDown();
   }
 
   @OnWebSocketMessage
   public void onMessage(String message) {
-    messageSender.sendMessage(message);
-    System.out.println("Received message from server: " + message);
+    messageListener.receiveMessage(message);
   }
 
   @OnWebSocketClose
@@ -47,10 +66,14 @@ public class DedicatedServerConnection {
     System.err.println("Error occurred: " + cause.getMessage());
   }
 
-  /** Main Class that represents the Backend Server. */
-  public static void sendMessage(String message) {
+  /**
+   * Main Class that represents the Backend Server.
+   */
+  @Override
+  public void sendMessage(SchafkopfBaseMessage message) {
     try {
-      session.getRemote().sendString(message);
+      session.getRemote().sendString(
+          new SchafkopfMessage(SchafkopfMessageOrigin.BACKEND, message).getMessageAsString());
       System.out.println("Sent message to server: " + message);
     } catch (Exception e) {
       System.err.println("Error sending message: " + e.getMessage());
@@ -61,15 +84,15 @@ public class DedicatedServerConnection {
     closeLatch.await();
   }
 
-  /** Main Class that represents the Backend Server. */
-  public void connect() {
+  /**
+   * Main Class that represents the Backend Server.
+   */
+  public void connect(String serverUri) {
     Thread connectionThread = new Thread(() -> {
       try {
-        String serverUri = "ws://localhost:8085/";
         WebSocketClient client = new WebSocketClient();
         try {
           client.start();
-          //DedicatedServerConnection socketClient = new DedicatedServerConnection();
           HeartbeatSender heartbeatSender = new HeartbeatSender(this);
           heartbeatSender.start(); // Start sending heartbeat messages
           URI uri = new URI(serverUri);
@@ -95,7 +118,20 @@ public class DedicatedServerConnection {
     start();
   }
 
-  public static void start() {
-    sendMessage("START_GAME");
+  /**
+   * Class that represents one Frontend Connection.
+   */
+  public void start() {
+    JsonObject messageObject = new JsonObject();
+
+    messageObject.addProperty("message_type", "START_GAME");
+    sendMessage(new SchafkopfBaseMessage(SchafkopfMessageType.START_GAME));
+  }
+
+  public void join() {
+    JsonObject messageObject = new JsonObject();
+
+    messageObject.addProperty("message_type", "JOIN_GAME");
+    sendMessage(new SchafkopfBaseMessage(SchafkopfMessageType.JOIN_GAME));
   }
 }

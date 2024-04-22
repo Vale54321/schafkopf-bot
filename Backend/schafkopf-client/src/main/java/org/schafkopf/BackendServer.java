@@ -1,62 +1,43 @@
 package org.schafkopf;
 
-import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpHandler;
-import com.sun.net.httpserver.HttpServer;
 import jakarta.servlet.DispatcherType;
 import java.awt.Desktop;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.InetSocketAddress;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
-import java.util.concurrent.CountDownLatch;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
+import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.FilterHolder;
 import org.eclipse.jetty.servlet.ServletContextHandler;
+import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.servlets.CrossOriginFilter;
 import org.eclipse.jetty.websocket.server.config.JettyWebSocketServletContainerInitializer;
-import org.schafkopf.cardreader.UsbCardReader;
-import org.schafkopf.player.BotPlayer;
-import org.schafkopf.player.LocalPlayer;
-import org.schafkopf.player.Player;
+import org.schafkopf.SchafkopfMessage.SchafkopfBaseMessage;
 
-/** Main Class that represents the Backend Server. */
+/**
+ * Main Class that represents the Backend Server.
+ */
 public class BackendServer implements MessageSender {
-  private final Server server;
-  private final ServerConnector connector;
-  private CountDownLatch nfcLatch = new CountDownLatch(1);
-  private Boolean readingMode = false;
-  private String uidString = "";
 
-  /** Important variables. */
-  public final Schafkopf schafkopfGame;
+  private final Server server;
 
   private final List<FrontendEndpoint> frontendEndpoints = new ArrayList<>();
 
-  private DedicatedServerConnection dedicatedServerConnection;
-
-  /** Creates an Instance of the Backend Server. */
-  public BackendServer() throws URISyntaxException, IOException {
+  /**
+   * Creates an Instance of the Backend Server.
+   */
+  public BackendServer(String hostName, int port, boolean openFrontend,
+      MessageListener messageListener) throws Exception {
     server = new Server();
-    InetSocketAddress address = new InetSocketAddress("localhost", 8080);
-    connector = new ServerConnector(server);
-    connector.setHost(address.getHostName());
-    connector.setPort(address.getPort());
+
+    ServerConnector connector = new ServerConnector(server);
+    connector.setHost(hostName);
+    connector.setPort(port);
     server.addConnector(connector);
-
-    schafkopfGame = new Schafkopf(new Player[]{new BotPlayer(), new LocalPlayer(this),
-        new LocalPlayer(this),
-        new LocalPlayer(this)}, this);
-
-    new UsbCardReader(this);
 
     // Setup the basic application "context" for this application at "/"
     // This is also known as the handler tree (in jetty speak)
@@ -71,11 +52,9 @@ public class BackendServer implements MessageSender {
     if (webContentUrl == null) {
       throw new RuntimeException("Unable to find 'web-content' directory");
     }
-
     String webContentPath = webContentUrl.toExternalForm();
     context.setResourceBase(webContentPath);
-
-    System.out.println("Web Content Path: " + webContentPath);
+    context.addServlet(new ServletHolder("frontend", DefaultServlet.class), "/");
 
     // Configure specific websocket behavior
     JettyWebSocketServletContainerInitializer.configure(
@@ -85,83 +64,25 @@ public class BackendServer implements MessageSender {
           wsContainer.setMaxTextMessageSize(65535);
           wsContainer.setIdleTimeout(Duration.ofDays(300000));
           // Add websockets
-          wsContainer.addMapping("/schafkopf-events/*", new FrontendEndpointCreator(this));
+          wsContainer.addMapping("/schafkopf-events/*",
+              new FrontendEndpointCreator(this, messageListener));
         });
 
-    // Integrate simple HTTP server
-    startHttpServer();
-    URI uri = new URI("http://localhost:8081"); // Replace with your target URL
-    Desktop.getDesktop().browse(uri);
-
-    startDedicatedServerConnectionThread();
-  }
-
-  private void startDedicatedServerConnectionThread() {
-    dedicatedServerConnection = new DedicatedServerConnection(this);
-    dedicatedServerConnection.connect();
-  }
-
-  private void startHttpServer() {
-    try {
-      HttpServer httpServer = HttpServer.create(new InetSocketAddress(8081), 0);
-      httpServer.createContext("/", new MyHandler());
-      httpServer.setExecutor(null);
-      httpServer.start();
-      System.out.println("HTTP Server started on port 8081");
-    } catch (IOException e) {
-      e.printStackTrace();
+    if (openFrontend) {
+      URI uri = new URI("http://" + hostName + ":" + port); // Replace with your target URL
+      Desktop.getDesktop().browse(uri);
     }
-  }
 
-  static class MyHandler implements HttpHandler {
-    @Override
-    public void handle(HttpExchange t) throws IOException {
-      String path = t.getRequestURI().getPath();
-      if ("/".equals(path)) {
-        path = "/index.html"; // default to index.html
-      }
-
+    // Start the server in a separate thread
+    Thread serverThread = new Thread(() -> {
       try {
-        InputStream fileStream =
-            getClass().getClassLoader().getResourceAsStream("web-content" + path);
-        if (fileStream != null) {
-          byte[] data = fileStream.readAllBytes();
-          // Set the appropriate MIME type for JavaScript files
-          String mimeType = getMimeType(path);
-          t.getResponseHeaders().set("Content-Type", mimeType);
-          t.sendResponseHeaders(200, data.length);
-
-          try (OutputStream os = t.getResponseBody()) {
-            os.write(data);
-          }
-        } else {
-          // File not found
-          t.sendResponseHeaders(404, -1);
-        }
-      } catch (IOException e) {
+        server.start();
+        server.join(); // Wait for server to finish execution
+      } catch (Exception e) {
         e.printStackTrace();
-        t.sendResponseHeaders(500, -1);
       }
-    }
-
-    private String getMimeType(String path) {
-      if (path.endsWith(".js")) {
-        return "application/javascript";
-      } else if (path.endsWith(".html")) {
-        return "text/html";
-      } else if (path.endsWith(".css")) {
-        return "text/css";
-      }
-      // Add more MIME types as needed
-      return "application/octet-stream";
-    }
-  }
-
-  /** The main entrypoint of the Application. */
-  public static void main(String[] args) throws Exception {
-    BackendServer server = new BackendServer();
-    server.start();
-    server.join();
+    });
+    serverThread.start();
   }
 
   private void configureCors(ServletContextHandler context) {
@@ -205,39 +126,14 @@ public class BackendServer implements MessageSender {
     }
   }
 
-  /** method to call to wait for NFC input. */
-  public String waitForCardScan() throws InterruptedException {
-    this.readingMode = true;
-    nfcLatch.await();
-    Thread.sleep(20);
-    this.readingMode = false;
-    nfcLatch = new CountDownLatch(1);
-    return this.uidString;
-  }
-
-  /**
-   * checks uid of scanned card and do nothing if Server is not in reading mode.
-   *
-   * @param uidString uid to check.
-   */
-  public void nfcGelesen(String uidString) {
-    if (this.uidString.equals(uidString)) {
-      return;
-    }
-    if (!this.readingMode) {
-      return;
-    }
-
-    this.uidString = uidString;
-    nfcLatch.countDown();
-  }
-
-  public void startDedicatedServerGame() {
-    dedicatedServerConnection.start();
-  }
-
   @Override
-  public void sendMessage(String message) {
+  public void sendMessage(SchafkopfBaseMessage message) {
+    sendMessageToAllFrontendEndpoints(
+        message.getBaseMessage().toString());
+  }
+
+
+  public void sendMessageTest(String message) {
     sendMessageToAllFrontendEndpoints(message);
   }
 }

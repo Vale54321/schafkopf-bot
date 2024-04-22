@@ -71,6 +71,13 @@ export enum GamePhase {
     PLAYER_TRICK = "PLAYER_TRICK"
 }
 
+export enum MessageType {
+    PLAYER_CARD = "PLAYER_CARD",
+    START_DEDICATED_GAME = "START_DEDICATED_GAME",
+    JOIN_GAME = "JOIN_GAME",
+    REQUEST_SERVER_CONNECTION = "REQUEST_SERVER_CONNECTION",
+}
+
 // Define the interface for an array of cards
 export interface CardArray {
     cards: Card[];
@@ -92,8 +99,13 @@ export interface GameState {
 
 
 export interface GameStateJson {
-    gamestate: GameState
+    gamestate: GameState,
+}
+
+export interface EmptyMessage {
+    message_type: string;
+    content: GameStateJson | CardArray | CardObject;
 }
 
 // Define a union type for all possible message types
-export type BackendMessage = CardObject | CardArray | GameStateJson;
+export type BackendMessage = EmptyMessage
