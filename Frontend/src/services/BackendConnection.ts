@@ -1,21 +1,13 @@
 import {MessageType} from "../BackendMessage.ts";
 
-interface JsonMessage {
-    origin: string;
-    message: any; // Adjust 'any' type as per your expected message structure
-}
-
 export class BackendConnection {
 
 
     private readonly webSocket: WebSocket;
     private messageListeners: ((message: string) => void)[] = [];
-    private backendUri: string;
 
 
     constructor(backendUri: string) {
-        this.backendUri = backendUri;
-
         this.webSocket = new WebSocket(backendUri);
 
         // Registering event listener for message reception
