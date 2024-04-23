@@ -48,13 +48,15 @@ public class BackendServer implements MessageSender {
     // Configure CORS settings
     configureCors(context);
 
-    URL webContentUrl = getClass().getClassLoader().getResource("web-content");
-    if (webContentUrl == null) {
-      throw new RuntimeException("Unable to find 'web-content' directory");
+    if (openFrontend) {
+      URL webContentUrl = getClass().getClassLoader().getResource("web-content");
+      if (webContentUrl == null) {
+        throw new RuntimeException("Unable to find 'web-content' directory");
+      }
+      String webContentPath = webContentUrl.toExternalForm();
+      context.setResourceBase(webContentPath);
+      context.addServlet(new ServletHolder("frontend", DefaultServlet.class), "/");
     }
-    String webContentPath = webContentUrl.toExternalForm();
-    context.setResourceBase(webContentPath);
-    context.addServlet(new ServletHolder("frontend", DefaultServlet.class), "/");
 
     // Configure specific websocket behavior
     JettyWebSocketServletContainerInitializer.configure(

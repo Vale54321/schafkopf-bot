@@ -5,7 +5,9 @@ import org.schafkopf.karte.KartenListe;
 import org.schafkopf.karte.KartenUtil;
 import org.schafkopf.spielcontroller.SpielController;
 
-/** Player that represents the Bot. */
+/**
+ * Player that represents the Bot.
+ */
 public class BotPlayer extends Player {
 
   private KartenListe eigeneKarten;
@@ -32,9 +34,12 @@ public class BotPlayer extends Player {
     return card;
   }
 
-  /** Set the Cards of the Player. */
+  /**
+   * Set the Cards of the Player.
+   */
   public void setCards(KartenListe cards) {
     System.out.println("Eigene Karte setzen");
+    cards.sort();
     this.eigeneKarten = cards;
     this.unbekannteKarten = KartenUtil.initializeSchafKopfCardDeck();
     this.unbekannteKarten.removeKarten(eigeneKarten);

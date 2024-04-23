@@ -29,12 +29,6 @@ function joinGame(): void {
 }
 
 function sendCard(cardInput: Card): void {
-  const index = botCards.value!.findIndex(card => card === cardInput);
-
-  // If card exists in the array, remove it
-  if (index !== -1) {
-    botCards.value!.splice(index, 1);
-  }
   backendConnection.sendMessage(MessageType.PLAYER_CARD, {card: cardInput});
 }
 

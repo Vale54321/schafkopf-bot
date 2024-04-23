@@ -6,7 +6,7 @@ import {BackendMessage, MessageType} from "../BackendMessage.ts";
 
 const backendConnection = scg("BackendConnection");
 
-const serverAddress = ref("http://10.6.9.57:8085/")
+const serverAddress = ref("10.6.9.57:8085")
 const isConnected = ref<boolean>(false);
 const isPingInProgress = ref<boolean>(false);
 const secondsRemaining = ref<number>(10);
@@ -30,7 +30,7 @@ async function checkConnection(): Promise<void> {
   }
   try {
     // Try to fetch a resource from the internet
-    await fetch(serverAddress.value + "health", {mode: "no-cors"})
+    await fetch("http://" + serverAddress.value + "/health", {mode: "no-cors"})
     // If successful, set isConnected to true
     isConnected.value = true;
   } catch (error) {
