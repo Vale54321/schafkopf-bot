@@ -98,13 +98,9 @@ export interface GameState {
 }
 
 
-export interface GameStateJson {
-    gamestate: GameState,
-}
-
 export interface EmptyMessage {
     message_type: string;
-    content: GameStateJson | CardArray | CardObject;
+    content: GameState | CardArray | CardObject;
 }
 
 // Define a union type for all possible message types
