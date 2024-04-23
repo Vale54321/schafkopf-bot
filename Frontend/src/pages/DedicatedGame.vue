@@ -29,11 +29,11 @@ function joinGame(): void {
 }
 
 function sendCard(cardInput: Card): void {
-  const index = botCards.value.findIndex(card => card === cardInput);
+  const index = botCards.value!.findIndex(card => card === cardInput);
 
   // If card exists in the array, remove it
   if (index !== -1) {
-    botCards.value.splice(index, 1);
+    botCards.value!.splice(index, 1);
   }
   backendConnection.sendMessage(MessageType.PLAYER_CARD, {card: cardInput});
 }
@@ -90,11 +90,11 @@ onMounted(() => {
   const messageListener = (message: string) => {
     const message1: BackendMessage = JSON.parse(message);
     console.log(message1)
-    if (message1.message_type === "GAME_STATE") {
+    if (message1.message_type === "GAME_STATE" && "gamestate" in message1.content) {
       console.log(message1.content)
-      showGameState(message1.content)
+      showGameState(message1.content.gamestate)
     }
-    if (message1.message_type === "ONLINE_PLAYER_HAND") {
+    if (message1.message_type === "ONLINE_PLAYER_HAND" && "cards" in message1.content) {
       botCards.value = message1.content.cards;
       console.log(message1.content.cards)
     }
