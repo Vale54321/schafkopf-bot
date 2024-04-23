@@ -6,6 +6,7 @@ import {BackendMessage, MessageType} from "../BackendMessage.ts";
 
 const backendConnection = scg("BackendConnection");
 
+const serverAddress = ref("http://10.6.9.57:8085/")
 const isConnected = ref<boolean>(false);
 const isPingInProgress = ref<boolean>(false);
 const secondsRemaining = ref<number>(10);
@@ -29,7 +30,7 @@ async function checkConnection(): Promise<void> {
   }
   try {
     // Try to fetch a resource from the internet
-    await fetch("http://10.6.9.57:8085/health", {mode: "no-cors"})
+    await fetch(serverAddress.value + "health", {mode: "no-cors"})
     // If successful, set isConnected to true
     isConnected.value = true;
   } catch (error) {
@@ -51,7 +52,7 @@ async function checkConnection(): Promise<void> {
 }
 
 async function openOnlineGameList() {
-  backendConnection.sendMessage(MessageType.REQUEST_SERVER_CONNECTION);
+  backendConnection.sendMessage(MessageType.REQUEST_SERVER_CONNECTION, {serverAddress: serverAddress.value});
 
   // Create a Promise<void> that resolves when the success message is received
   const successMessageReceived = new Promise<void>((resolve) => {
@@ -148,6 +149,10 @@ async function openOnlineGameList() {
         </div>
 
         <button :disabled="!isConnected" class="btn btn-primary" @click="openOnlineGameList()">Spielen</button>
+        <div class="divider"></div>
+        <input
+            v-model="serverAddress"
+            type="text" placeholder="Serveradresse" class="input input-bordered w-full max-w-xs"/>
       </div>
 
       <div class="flex flex-col gap-6 bg-base-200 rounded-box p-8">
@@ -172,6 +177,7 @@ async function openOnlineGameList() {
 
         <a class="btn btn-primary">Spielen</a>
       </div>
+
     </div>
   </div>
 </template>
