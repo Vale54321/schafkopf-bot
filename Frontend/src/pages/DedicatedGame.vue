@@ -90,9 +90,9 @@ onMounted(() => {
   const messageListener = (message: string) => {
     const message1: BackendMessage = JSON.parse(message);
     console.log(message1)
-    if (message1.message_type === "GAME_STATE" && "gamestate" in message1.content) {
+    if (message1.message_type === "GAME_STATE" && "gamePhase" in message1.content) {
       console.log(message1.content)
-      showGameState(message1.content.gamestate)
+      showGameState(message1.content)
     }
     if (message1.message_type === "ONLINE_PLAYER_HAND" && "cards" in message1.content) {
       botCards.value = message1.content.cards;
