@@ -3,12 +3,14 @@ package org.schafkopf.karte;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
  * A Class that represents a list of Cards.
  */
 public class KartenListe {
+
   private List<Karte> kartenListe;
 
   public KartenListe() {
@@ -21,6 +23,10 @@ public class KartenListe {
 
   public List<Karte> getKartenListe() {
     return this.kartenListe;
+  }
+
+  public void shuffle() {
+    Collections.shuffle(this.kartenListe);
   }
 
   /**
@@ -156,6 +162,24 @@ public class KartenListe {
       }
     }
     return result;
+  }
+
+  /**
+   * Class that represents one Frontend Connection.
+   */
+  public Karte getKarten(KartenSymbol symbol, KartenFarbe farbe) {
+    KartenListe result = new KartenListe();
+    for (Karte karte : this.kartenListe) {
+      if (karte.getSymbol().equals(symbol)) {
+        result.addKarten(karte);
+      }
+    }
+    for (Karte karte : result.kartenListe) {
+      if (karte.getFarbe().equals(farbe)) {
+        result.addKarten(karte);
+      }
+    }
+    return result.getByIndex(0);
   }
 
   /**

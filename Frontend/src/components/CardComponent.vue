@@ -21,7 +21,7 @@ watch(() => props.card, (newCard) => {
 <template>
   <div
       :class="{'!scale-105 !z-10 !top-1/2 !left-1/2' : focus}" class="card transition  overflow-hidden"
-      @click="focus=!focus">
+  >
     <img class="h-full rounded-[1rem] mx-auto" :src="imgSrc" alt="card">
   </div>
 </template>

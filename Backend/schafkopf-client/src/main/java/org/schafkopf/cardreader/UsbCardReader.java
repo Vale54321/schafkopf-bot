@@ -16,10 +16,8 @@ public class UsbCardReader extends CardReader {
   /**
    * Creates an Instance of the KartenLeser.
    *
-   * @param server Backend Server to call methods on.
    */
-  public UsbCardReader(BackendServer server) {
-    super(server);
+  public UsbCardReader() {
     new Thread(this::run).start();
   }
 
@@ -80,7 +78,7 @@ public class UsbCardReader extends CardReader {
             String data = new String(buffer, 0, bytesRead, "UTF-8").trim();
 
             // Process the received data
-            server.nfcGelesen(data);
+            this.nfcGelesen(data);
           }
 
           // Optional: Add a delay to avoid consuming too much CPU

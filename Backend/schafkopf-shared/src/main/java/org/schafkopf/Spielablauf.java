@@ -8,7 +8,9 @@ import org.schafkopf.spielcontroller.SpielController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/** The main class that controlls the game flow. */
+/**
+ * The main class that controlls the game flow.
+ */
 public class Spielablauf {
 
   private static final Logger logger = LoggerFactory.getLogger(Spielablauf.class);
@@ -22,7 +24,7 @@ public class Spielablauf {
 
   private final Schafkopf schafkopf;
 
-  Spielablauf(Schafkopf schafkopf, SpielController spiel) {
+  Spielablauf(Schafkopf schafkopf, SpielController spiel) throws InterruptedException {
     this.schafkopf = schafkopf;
     this.spiel = spiel;
     this.players = schafkopf.getPlayer();
@@ -30,7 +32,7 @@ public class Spielablauf {
     playRound();
   }
 
-  private void playRound() {
+  private void playRound() throws InterruptedException {
     int startingPlayer = 0;
 
     logger.info("Starte Stiche");
@@ -41,7 +43,7 @@ public class Spielablauf {
     schafkopf.stopGame();
   }
 
-  private int playTrick(int startingPlayer) {
+  private int playTrick(int startingPlayer) throws InterruptedException {
     schafkopf.setAndSendGameState(new GameState(GamePhase.TRICK_START));
 
     for (int i = 0; i < 4; i++) {

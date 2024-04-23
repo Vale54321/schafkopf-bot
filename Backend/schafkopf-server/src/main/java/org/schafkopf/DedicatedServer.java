@@ -1,7 +1,11 @@
 package org.schafkopf;
 
 import jakarta.servlet.DispatcherType;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
+import java.net.SocketException;
+import java.net.UnknownHostException;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.EnumSet;
@@ -13,27 +17,50 @@ import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlets.CrossOriginFilter;
 import org.eclipse.jetty.websocket.server.config.JettyWebSocketServletContainerInitializer;
 
-/** Main Class that represents the Backend Server. */
+/**
+ * Main Class that represents the Backend Server.
+ */
 public class DedicatedServer {
+
   private final Server server;
   private final ServerConnector connector;
 
-  private final List<ClientConnection> clientConnections = new ArrayList<>();
+  private final List<SchafkopfClientConnection> clientConnections = new ArrayList<>();
 
   private final List<GameSession> gameSessions = new ArrayList<>();
 
-  /** Creates an Instance of the Backend Server. */
+  private GameSession currentGameSession;
+
+  /**
+   * Creates an Instance of the Backend Server.
+   */
   public DedicatedServer() {
     server = new Server();
-    InetSocketAddress address = new InetSocketAddress("localhost", 8085);
+    InetAddress address;
+
+    try (final DatagramSocket socket = new DatagramSocket()) {
+      socket.connect(InetAddress.getByName("8.8.8.8"), 10002);
+      address = socket.getLocalAddress();
+    } catch (UnknownHostException e) {
+      throw new RuntimeException(e);
+    } catch (SocketException e) {
+      throw new RuntimeException(e);
+    }
+
+    InetSocketAddress socketAddress = new InetSocketAddress(address.getHostAddress(), 8085);
+    System.out.println(
+        "Server started at: " + socketAddress.getAddress() + ":" + socketAddress.getPort());
     connector = new ServerConnector(server);
-    connector.setHost(address.getHostName());
-    connector.setPort(address.getPort());
+    connector.setHost(socketAddress.getHostName());
+    connector.setPort(socketAddress.getPort());
     server.addConnector(connector);
 
     // Setup the basic application "context" for this application at "/"
     // This is also known as the handler tree (in jetty speak)
     ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
+
+    // Add the health check servlet to the servlet context
+    context.addServlet(HealthCheckServlet.class, "/health");
     context.setContextPath("/");
     server.setHandler(context);
     // Configure CORS settings
@@ -48,9 +75,13 @@ public class DedicatedServer {
           // Add websockets
           wsContainer.addMapping("/*", new FrontendEndpointCreator(this));
         });
+
+    currentGameSession = new GameSession();
   }
 
-  /** The main entrypoint of the Application. */
+  /**
+   * The main entrypoint of the Application.
+   */
   public static void main(String[] args) throws Exception {
     DedicatedServer server = new DedicatedServer();
     server.start();
@@ -79,16 +110,23 @@ public class DedicatedServer {
     server.join();
   }
 
-  public void addFrontendEndpoint(ClientConnection endpoint) {
+  public void addFrontendEndpoint(SchafkopfClientConnection endpoint) {
     clientConnections.add(endpoint);
   }
 
-  public void removeFrontendEndpoint(ClientConnection endpoint) {
+  public void removeFrontendEndpoint(SchafkopfClientConnection endpoint) {
     clientConnections.remove(endpoint);
   }
 
-
   public void addGameSession(GameSession gameSession) {
     gameSessions.add(gameSession);
+  }
+
+  public List<GameSession> getGameSessions() {
+    return gameSessions;
+  }
+
+  public GameSession getCurrentGameSession() {
+    return currentGameSession;
   }
 }

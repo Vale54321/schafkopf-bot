@@ -5,14 +5,18 @@ import com.google.gson.JsonObject;
 import org.schafkopf.karte.Karte;
 import org.schafkopf.karte.KartenFarbe;
 
-/** GameState. */
+/**
+ * GameState.
+ */
 public class GameState {
 
   public GamePhase getGamePhase() {
     return this.gamePhase;
   }
 
-  /** GamePhase. */
+  /**
+   * GamePhase.
+   */
   public enum GamePhase {
     CHOOSE_GAME("Spiel muss gewählt werden"),
 
@@ -53,7 +57,9 @@ public class GameState {
     this.currentPlayer = player;
   }
 
-  /** GameState. */
+  /**
+   * GameState.
+   */
   public GameState(GamePhase phase, Integer player, Karte card, KartenFarbe color, boolean trumpf) {
     this.gamePhase = phase;
     this.currentPlayer = player;
@@ -62,19 +68,34 @@ public class GameState {
     this.trumpf = trumpf;
   }
 
-  /** GameState. */
+  /**
+   * GameState.
+   */
   public GameState(GamePhase phase, Integer player, Karte card) {
     this.gamePhase = phase;
     this.currentPlayer = player;
     this.card = card;
   }
 
-  /** GameState. */
+  /**
+   * GameState.
+   */
   public JsonObject getJson() {
     Gson gson = new Gson();
-    JsonObject jsonObject = new JsonObject();
-    jsonObject.add("gamestate", gson.toJsonTree(this));
+    JsonObject gameStateObject = new JsonObject();
 
-    return jsonObject;
+    if (this.currentPlayer != null) {
+      gameStateObject.addProperty("currentPlayer", this.currentPlayer);
+    }
+    if (this.card != null) {
+      gameStateObject.add("card", gson.toJsonTree(this.card));
+    }
+    gameStateObject.addProperty("gamePhase", this.gamePhase.name());
+    gameStateObject.addProperty("trumpf", this.trumpf);
+    if (this.color != null) {
+      gameStateObject.addProperty("color", this.color.name());
+    }
+
+    return gameStateObject;
   }
 }

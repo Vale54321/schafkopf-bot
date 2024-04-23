@@ -5,16 +5,27 @@ import java.util.concurrent.CountDownLatch;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.WebSocketAdapter;
 
-/** Class that represents one Frontend Connection. */
+/**
+ * Class that represents one Frontend Connection.
+ */
 public class FrontendEndpoint extends WebSocketAdapter {
+
   private final CountDownLatch closureLatch = new CountDownLatch(1);
   private BackendServer backendServer;
+  private final MessageListener messageListener;
 
-  public FrontendEndpoint(BackendServer backendServer) {
+  /**
+   * Class that represents one Frontend Connection.
+   */
+  public FrontendEndpoint(BackendServer backendServer, MessageListener messageListener) {
+    this.messageListener = messageListener;
     this.backendServer = backendServer;
     System.out.println("new FrontendEndpoint");
   }
 
+  /**
+   * Class that represents one Frontend Connection.
+   */
   @Override
   public void onWebSocketConnect(Session session) {
     super.onWebSocketConnect(session);
@@ -27,20 +38,9 @@ public class FrontendEndpoint extends WebSocketAdapter {
   @Override
   public void onWebSocketText(String message) {
     super.onWebSocketText(message);
-    System.out.println("Received TEXT message:" + message);
-
-    if (message.contains("startsimulation")) {
-      backendServer.schafkopfGame.startGame();
+    if (messageListener != null) {
+      messageListener.receiveMessage(message); // Notify the listener
     }
-
-    if (message.contains("stopsimulation")) {
-      backendServer.schafkopfGame.stopGame();
-    }
-
-    if (message.contains("startdedicated")) {
-      backendServer.startDedicatedServerGame();
-    }
-
   }
 
   @Override
@@ -59,7 +59,9 @@ public class FrontendEndpoint extends WebSocketAdapter {
     cause.printStackTrace(System.err);
   }
 
-  /** send a Message to the connected FrontEnd. */
+  /**
+   * send a Message to the connected FrontEnd.
+   */
   public void sendMessage(String message) {
     try {
       getRemote().sendString(message);

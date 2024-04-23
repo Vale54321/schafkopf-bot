@@ -1,6 +1,7 @@
 package org.schafkopf.player;
 
 import org.schafkopf.BackendServer;
+import org.schafkopf.cardreader.CardReader;
 import org.schafkopf.karte.Karte;
 import org.schafkopf.karte.KartenListe;
 import org.schafkopf.karte.KartenUtil;
@@ -11,10 +12,10 @@ import org.schafkopf.spielcontroller.SpielController;
  */
 public class LocalPlayer extends Player {
 
-  private final BackendServer server;
+  private final CardReader cardReader;
 
-  public LocalPlayer(BackendServer server) {
-    this.server = server;
+  public LocalPlayer(CardReader cardReader) {
+    this.cardReader = cardReader;
   }
 
   @Override
@@ -27,7 +28,7 @@ public class LocalPlayer extends Player {
     String uid = null;
     System.out.println("Starte Warten auf Karte");
     try {
-      uid = server.waitForCardScan();
+      uid = cardReader.waitForCardScan();
     } catch (InterruptedException e) {
       throw new RuntimeException(e);
     }
