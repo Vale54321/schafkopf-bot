@@ -1,7 +1,7 @@
 package org.schafkopf.karte;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
+import com.google.gson.JsonElement;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -23,6 +23,19 @@ public class KartenListe {
 
   public List<Karte> getKartenListe() {
     return this.kartenListe;
+  }
+
+  /**
+   * A Class that represents a list of Cards.
+   */
+  public void sort() {
+    KartenListe completeDeck = KartenUtil.initializeSchafKopfCardDeck();
+    completeDeck.removeKarten(this);
+
+    KartenListe completeDeck2 = KartenUtil.initializeSchafKopfCardDeck();
+    completeDeck2.removeKarten(completeDeck);
+
+    this.kartenListe = completeDeck2.getKartenListe();
   }
 
   public void shuffle() {
@@ -185,12 +198,10 @@ public class KartenListe {
   /**
    * A Class that represents a list of Cards.
    */
-  public JsonObject getJson() {
+  public JsonElement getJson() {
     Gson gson = new Gson();
-    JsonObject jsonObject = new JsonObject();
-    jsonObject.add("cards", gson.toJsonTree(this.kartenListe));
 
-    return jsonObject;
+    return gson.toJsonTree(this.kartenListe);
   }
 
   public boolean isEmpty() {

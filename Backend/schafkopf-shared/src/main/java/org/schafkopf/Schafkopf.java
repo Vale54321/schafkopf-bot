@@ -1,12 +1,9 @@
 package org.schafkopf;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import org.schafkopf.GameState.GamePhase;
 import org.schafkopf.SchafkopfException.NotEnoughPlayersException;
 import org.schafkopf.SchafkopfMessage.SchafkopfBaseMessage;
 import org.schafkopf.SchafkopfMessage.SchafkopfMessageType;
-import org.schafkopf.karte.Karte;
 import org.schafkopf.karte.KartenFarbe;
 import org.schafkopf.karte.KartenListe;
 import org.schafkopf.karte.KartenUtil;
@@ -79,23 +76,15 @@ public class Schafkopf {
       }
 
       for (Player currentPlayer : player) {
-        if (currentPlayer instanceof OnlinePlayer) {
-          Karte[] karten = new Karte[8];
+        if (currentPlayer instanceof OnlinePlayer onlinePlayer) {
+          KartenListe karten = new KartenListe();
           for (int i = 7; i >= 0; i--) {
-            karten[i] = austeilen.removeKarten(austeilen.getByIndex(i));
+            karten.addKarten(austeilen.removeKarten(austeilen.getByIndex(i)));
           }
-          Gson gson = new Gson();
-          JsonObject messageObject = new JsonObject();
-          messageObject.add("cards", gson.toJsonTree(karten));
-
-          messageSender.sendMessage(
-              new SchafkopfBaseMessage(SchafkopfMessageType.ONLINE_PLAYER_HAND, messageObject));
+          onlinePlayer.setAndSendPlayerCards(karten);
         }
       }
 
-      //      spielThread = new Thread(() -> new Spielablauf(this, spiel));
-      //
-      //      spielThread.start();
       new Spielablauf(this, spiel);
     }
   }
