@@ -1,8 +1,10 @@
 package org.schafkopf;
 
 import jakarta.servlet.DispatcherType;
+import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
+import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.time.Duration;
 import java.util.ArrayList;
@@ -35,11 +37,16 @@ public class DedicatedServer {
   public DedicatedServer() {
     server = new Server();
     InetAddress address;
-    try {
-      address = InetAddress.getLocalHost();
+
+    try (final DatagramSocket socket = new DatagramSocket()) {
+      socket.connect(InetAddress.getByName("8.8.8.8"), 10002);
+      address = socket.getLocalAddress();
     } catch (UnknownHostException e) {
       throw new RuntimeException(e);
+    } catch (SocketException e) {
+      throw new RuntimeException(e);
     }
+
     InetSocketAddress socketAddress = new InetSocketAddress(address.getHostAddress(), 8085);
     System.out.println(
         "Server started at: " + socketAddress.getAddress() + ":" + socketAddress.getPort());

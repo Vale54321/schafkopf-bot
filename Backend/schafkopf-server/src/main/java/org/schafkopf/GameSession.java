@@ -18,6 +18,8 @@ public class GameSession implements MessageSender {
 
   private List<SchafkopfClientConnection> clients;
 
+  private Thread spielThread;
+
   /**
    * The main entrypoint of the Application.
    */
@@ -26,6 +28,9 @@ public class GameSession implements MessageSender {
     clients = new ArrayList<>();
   }
 
+  /**
+   * Class that represents one Frontend Connection.
+   */
   public void addPlayer(SchafkopfClientConnection client) {
     if (this.player.size() >= 4) {
       throw new RuntimeException("Game is full");
@@ -35,7 +40,7 @@ public class GameSession implements MessageSender {
 
     OnlinePlayer onlinePlayer = new OnlinePlayer(client);
 
-    this.player.add(new OnlinePlayer(client));
+    this.player.add(onlinePlayer);
 
     client.setOnlinePlayer(onlinePlayer);
   }
@@ -53,8 +58,22 @@ public class GameSession implements MessageSender {
       }
     }
     System.out.println("Starting game with, now: " + this.player.size() + " players");
-    schafkopf = new Schafkopf(this.player.toArray(new Player[0]), this);
-    schafkopf.startGame();
+
+    spielThread = new Thread(() -> {
+      try {
+        schafkopf = new Schafkopf(this.player.toArray(new Player[0]), this);
+        schafkopf.startGame();
+      } catch (NotEnoughPlayersException e) {
+        throw new RuntimeException(e);
+      } catch (InterruptedException e) {
+        throw new RuntimeException(e);
+      }
+    });
+
+    spielThread.start();
+
+    //    schafkopf = new Schafkopf(this.player.toArray(new Player[0]), this);
+
   }
 
   @Override

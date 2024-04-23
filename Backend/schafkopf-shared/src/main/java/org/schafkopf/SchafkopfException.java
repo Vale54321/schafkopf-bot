@@ -1,11 +1,17 @@
 package org.schafkopf;
 
+/**
+ * Class that represents one Frontend Connection.
+ */
 public class SchafkopfException extends Exception {
 
   private SchafkopfException(String message) {
     super(message);
   }
-  
+
+  /**
+   * Class that represents one Frontend Connection.
+   */
   public static class NotEnoughPlayersException extends SchafkopfException {
 
     public NotEnoughPlayersException() {
@@ -15,7 +21,9 @@ public class SchafkopfException extends Exception {
     // You can also include additional constructors or methods if needed
   }
 
-  // Specific exception class for invalid move
+  /**
+   * Class that represents one Frontend Connection.
+   */
   public class InvalidMoveException extends SchafkopfException {
 
     // Constructor with a message

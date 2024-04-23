@@ -14,25 +14,24 @@ import org.schafkopf.spielcontroller.SpielController;
  */
 public class OnlinePlayer extends Player {
 
-  private final BlockingQueue<Karte> cardQueue = new LinkedBlockingQueue<>();
   private final MessageSender messageSender;
+  private final BlockingQueue<Karte> receivedCardQueue = new LinkedBlockingQueue<>();
 
   public OnlinePlayer(MessageSender messageSender) {
     this.messageSender = messageSender;
   }
 
   @Override
-  public Karte play(SpielController spiel, KartenListe tischKarten, KartenListe gespielteKarten) {
+  public Karte play(SpielController spiel, KartenListe tischKarten, KartenListe gespielteKarten)
+      throws InterruptedException {
     Karte spielKarte = null;
-    try {
-      System.out.println("Waiting for card in play method...");
-      messageSender.sendMessage(
-          new SchafkopfBaseMessage(SchafkopfMessageType.GET_CARD_ONLINE_PLAYER));
-      spielKarte = cardQueue.take();
-      System.out.println("Card received in play method: " + spielKarte);
-    } catch (InterruptedException e) {
-      e.printStackTrace();
-    }
+
+    // Send the message to request the card from the frontend
+    messageSender.sendMessage(
+        new SchafkopfBaseMessage(SchafkopfMessageType.GET_CARD_ONLINE_PLAYER));
+
+    spielKarte = receivedCardQueue.take();
+
     System.out.println("Karte gespielt: " + spielKarte);
     return spielKarte;
   }
@@ -40,10 +39,8 @@ public class OnlinePlayer extends Player {
   /**
    * Class that represents one Frontend Connection.
    */
-  public void receiveMessage(String message) {
-    System.out.println("Received Card before Queue: " + message);
-    Karte receivedCard = Karte.valueOf(message);
-    cardQueue.offer(receivedCard);
-    System.out.println("Received Card after Queue: " + message);
+  public void receiveCard(Karte receivedCard) {
+    System.out.println("Received Card before Queue: " + receivedCard.getName());
+    receivedCardQueue.add(receivedCard);
   }
 }

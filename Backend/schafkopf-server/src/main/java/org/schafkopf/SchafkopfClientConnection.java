@@ -10,6 +10,7 @@ import org.schafkopf.SchafkopfException.NotEnoughPlayersException;
 import org.schafkopf.SchafkopfMessage.SchafkopfBaseMessage;
 import org.schafkopf.SchafkopfMessage.SchafkopfMessageOrigin;
 import org.schafkopf.SchafkopfMessage.SchafkopfMessageType;
+import org.schafkopf.karte.Karte;
 import org.schafkopf.player.OnlinePlayer;
 
 /**
@@ -82,7 +83,7 @@ public class SchafkopfClientConnection extends WebSocketAdapter implements Messa
 
       } else if (SchafkopfMessageType.PLAYER_CARD.toString().equals(messageType)) {
 
-        onlinePlayer.receiveMessage(content.get("card").getAsString());
+        onlinePlayer.receiveCard(Karte.valueOf(content.get("card").getAsString()));
 
       } else if ("list_online_games".equals(messageType)) {
         System.out.println(

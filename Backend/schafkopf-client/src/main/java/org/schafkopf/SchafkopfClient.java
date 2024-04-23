@@ -19,7 +19,7 @@ public class SchafkopfClient implements MessageListener {
    */
   public SchafkopfClient() throws Exception {
 
-    this.backendServer = new BackendServer("localhost", 8080, false, this);
+    this.backendServer = new BackendServer("localhost", 8080, true, this);
 
     System.out.println("Client started.");
   }
@@ -39,7 +39,9 @@ public class SchafkopfClient implements MessageListener {
       JsonObject content = message.getAsJsonObject("content");
       String messageType = message.get("message_type").getAsString();
       if (SchafkopfMessageType.REQUEST_SERVER_CONNECTION.toString().equals(messageType)) {
-        dedicatedServerConnection = new DedicatedServerConnection(this);
+        dedicatedServerConnection = new DedicatedServerConnection(
+            content.get("serverAddress").getAsString(),
+            this);
       } else if ("JOIN_GAME".equals(messageType)) {
         dedicatedServerConnection.join();
       } else if ("START_DEDICATED_GAME".equals(messageType)) {

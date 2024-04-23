@@ -2,6 +2,7 @@ package org.schafkopf;
 
 import com.google.gson.JsonObject;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.concurrent.CountDownLatch;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketClose;
@@ -29,11 +30,21 @@ public class DedicatedServerConnection implements MessageSender {
   /**
    * Class that represents one Frontend Connection.
    */
-  public DedicatedServerConnection(MessageListener messageListener) {
+  public DedicatedServerConnection(String address, MessageListener messageListener) {
+    URI uri = null;
+    try {
+      uri = new URI(address);
+    } catch (URISyntaxException e) {
+      throw new RuntimeException(e);
+    }
+
     this.messageListener = messageListener;
     this.closeLatch = new CountDownLatch(1);
     this.connectionLatch = new CountDownLatch(1);
-    connect("ws://10.6.9.57:8085/");
+
+    String host = uri.getHost();
+    int port = uri.getPort();
+    connect("ws://" + host + ":" + port);
     try {
       connectionLatch.await(); // Wait until the connection is established
     } catch (InterruptedException e) {
@@ -128,6 +139,9 @@ public class DedicatedServerConnection implements MessageSender {
     sendMessage(new SchafkopfBaseMessage(SchafkopfMessageType.START_GAME));
   }
 
+  /**
+   * Class that represents one Frontend Connection.
+   */
   public void join() {
     JsonObject messageObject = new JsonObject();
 

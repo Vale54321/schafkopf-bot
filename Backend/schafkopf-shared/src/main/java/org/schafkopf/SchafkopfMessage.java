@@ -2,8 +2,14 @@ package org.schafkopf;
 
 import com.google.gson.JsonObject;
 
+/**
+ * Class that represents one Frontend Connection.
+ */
 public class SchafkopfMessage {
 
+  /**
+   * Class that represents one Frontend Connection.
+   */
   public static class SchafkopfBaseMessage {
 
     private JsonObject message;
@@ -31,6 +37,9 @@ public class SchafkopfMessage {
     this.message = buildWrapperMessage(origin, baseMessage.getBaseMessage());
   }
 
+  /**
+   * Class that represents one Frontend Connection.
+   */
   public SchafkopfMessage(SchafkopfMessageOrigin origin, SchafkopfMessageType messageType) {
 
     JsonObject messageContentObject = new JsonObject();
@@ -39,6 +48,9 @@ public class SchafkopfMessage {
     this.message = buildWrapperMessage(origin, messageContentObject);
   }
 
+  /**
+   * Class that represents one Frontend Connection.
+   */
   private SchafkopfMessage(SchafkopfMessageOrigin origin, SchafkopfMessageType messageType,
       JsonObject messageContent) {
 
@@ -48,6 +60,9 @@ public class SchafkopfMessage {
     this.message = buildWrapperMessage(origin, messageContentObject);
   }
 
+  /**
+   * Class that represents one Frontend Connection.
+   */
   public SchafkopfMessage(SchafkopfMessageOrigin origin, SchafkopfMessageType messageType,
       String messageContent) {
 
@@ -98,6 +113,9 @@ public class SchafkopfMessage {
     return message.toString();
   }
 
+  /**
+   * Class that represents one Frontend Connection.
+   */
   public enum SchafkopfMessageType {
     UNKNOWN_ERROR,
     HEARTBEAT_SYN,
@@ -112,6 +130,9 @@ public class SchafkopfMessage {
     PLAYER_CARD
   }
 
+  /**
+   * Class that represents one Frontend Connection.
+   */
   public enum SchafkopfMessageOrigin {
     FRONTEND,
     BACKEND,

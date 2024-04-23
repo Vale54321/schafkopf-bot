@@ -56,7 +56,7 @@ public class Schafkopf {
   /**
    * Set GameState to "started" and start Game Thread.
    */
-  public void startGame() {
+  public void startGame() throws InterruptedException {
     if (gameState.getGamePhase() != GamePhase.GAME_STOP) {
       System.out.println("Game already started!");
       messageSender.sendMessage(new SchafkopfBaseMessage(SchafkopfMessageType.UNKNOWN_ERROR));
@@ -93,9 +93,10 @@ public class Schafkopf {
         }
       }
 
-      spielThread = new Thread(() -> new Spielablauf(this, spiel));
-
-      spielThread.start();
+      //      spielThread = new Thread(() -> new Spielablauf(this, spiel));
+      //
+      //      spielThread.start();
+      new Spielablauf(this, spiel);
     }
   }
 
@@ -115,65 +116,8 @@ public class Schafkopf {
   }
 
   /**
-   * Set GameType.
+   * Class that represents one Frontend Connection.
    */
-//  public void setGame(String message) {
-//    System.out.println("Set Game: " + message);
-//    messageSender.sendMessage("Set Game: " + message);
-//    switch (message) {
-//      case "setgame:herzsolo":
-//        this.spiel = new FarbSoloController(0, KartenFarbe.HERZ);
-//        break;
-//      case "setgame:blattsolo":
-//        this.spiel = new FarbSoloController(0, KartenFarbe.BLATT);
-//        break;
-//      case "setgame:eichelsolo":
-//        this.spiel = new FarbSoloController(0, KartenFarbe.EICHEL);
-//        break;
-//      case "setgame:schellsolo":
-//        this.spiel = new FarbSoloController(0, KartenFarbe.SCHELL);
-//        break;
-//
-//      case "setgame:wenz":
-//        this.spiel = new WenzController(0);
-//        break;
-//      case "setgame:geier":
-//        this.spiel = new GeierController(0);
-//        break;
-//
-//      case "setgame:eichelwenz":
-//        this.spiel = new FarbWenzController(0, KartenFarbe.EICHEL);
-//        break;
-//      case "setgame:herzwenz":
-//        this.spiel = new FarbWenzController(0, KartenFarbe.HERZ);
-//        break;
-//      case "setgame:blattwenz":
-//        this.spiel = new FarbWenzController(0, KartenFarbe.BLATT);
-//        break;
-//      case "setgame:schellwenz":
-//        this.spiel = new FarbWenzController(0, KartenFarbe.SCHELL);
-//        break;
-//
-//      case "setgame:eichelgeier":
-//        this.spiel = new FarbGeierController(0, KartenFarbe.EICHEL);
-//        break;
-//      case "setgame:herzgeier":
-//        this.spiel = new FarbGeierController(0, KartenFarbe.HERZ);
-//        break;
-//      case "setgame:blattgeier":
-//        this.spiel = new FarbGeierController(0, KartenFarbe.BLATT);
-//        break;
-//      case "setgame:schellgeier":
-//        this.spiel = new FarbGeierController(0, KartenFarbe.SCHELL);
-//        break;
-//
-//      case "setgame:sauspiel":
-//        this.spiel = new SauSpielController(0, KartenFarbe.EICHEL);
-//        break;
-//      default:
-//        System.out.println("Ungültiges Spiel");
-//    }
-//  }
   public void setAndSendGameState(GameState gameState) {
     this.gameState = gameState;
     this.messageSender.sendMessage(
