@@ -20,7 +20,8 @@ public class OnlinePlayer extends Player {
 
   private KartenListe karten = new KartenListe();
 
-  public OnlinePlayer(MessageSender messageSender) {
+  public OnlinePlayer(MessageSender messageSender, String name) {
+    super(name);
     this.messageSender = messageSender;
   }
 

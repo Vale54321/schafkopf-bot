@@ -49,8 +49,9 @@ public class Spielablauf {
     for (int i = 0; i < 4; i++) {
       int currentPlayer = (i + startingPlayer) % 4;
 
-      logger.info("Spieler ist dran: {}", currentPlayer);
-      schafkopf.setAndSendGameState(new GameState(GamePhase.WAIT_FOR_CARD, currentPlayer));
+      logger.info("Spieler ist dran: {}", players[currentPlayer].getName());
+      schafkopf.setAndSendGameState(
+          new GameState(GamePhase.WAIT_FOR_CARD, players[currentPlayer].getName()));
 
       Karte playedCard = players[currentPlayer].play(spiel, tischKarten, gespielteKarten);
       tischKarten.addKarten(playedCard);
@@ -58,7 +59,7 @@ public class Spielablauf {
       schafkopf.setAndSendGameState(
           new GameState(
               GamePhase.PLAYER_CARD,
-              currentPlayer,
+              players[currentPlayer].getName(),
               playedCard,
               tischKarten.getByIndex(0).getFarbe(),
               spiel.isTrumpf(tischKarten.getByIndex(0))));
@@ -72,7 +73,8 @@ public class Spielablauf {
 
     schafkopf.setAndSendGameState(
         new GameState(
-            GamePhase.PLAYER_TRICK, winningPlayerIndex, tischKarten.getByIndex(stichSpieler)));
+            GamePhase.PLAYER_TRICK, players[winningPlayerIndex].getName(),
+            tischKarten.getByIndex(stichSpieler)));
 
     try {
       Thread.sleep(3000);

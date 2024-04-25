@@ -41,7 +41,7 @@ public class GameState {
   }
 
   private GamePhase gamePhase;
-  private Integer currentPlayer; // Using Integer to allow for null
+  private String currentPlayer; // Using Integer to allow for null
   private Karte card;
   private KartenFarbe color;
   private boolean trumpf;
@@ -52,7 +52,7 @@ public class GameState {
     this.gamePhase = phase;
   }
 
-  public GameState(GamePhase phase, Integer player) {
+  public GameState(GamePhase phase, String player) {
     this.gamePhase = phase;
     this.currentPlayer = player;
   }
@@ -60,7 +60,7 @@ public class GameState {
   /**
    * GameState.
    */
-  public GameState(GamePhase phase, Integer player, Karte card, KartenFarbe color, boolean trumpf) {
+  public GameState(GamePhase phase, String player, Karte card, KartenFarbe color, boolean trumpf) {
     this.gamePhase = phase;
     this.currentPlayer = player;
     this.card = card;
@@ -71,7 +71,7 @@ public class GameState {
   /**
    * GameState.
    */
-  public GameState(GamePhase phase, Integer player, Karte card) {
+  public GameState(GamePhase phase, String player, Karte card) {
     this.gamePhase = phase;
     this.currentPlayer = player;
     this.card = card;

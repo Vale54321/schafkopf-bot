@@ -1,5 +1,6 @@
 package org.schafkopf;
 
+import com.google.gson.JsonArray;
 import jakarta.servlet.DispatcherType;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
@@ -16,6 +17,7 @@ import org.eclipse.jetty.servlet.FilterHolder;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlets.CrossOriginFilter;
 import org.eclipse.jetty.websocket.server.config.JettyWebSocketServletContainerInitializer;
+import org.schafkopf.SchafkopfException.NoGameSessionException;
 
 /**
  * Main Class that represents the Backend Server.
@@ -28,8 +30,6 @@ public class DedicatedServer {
   private final List<SchafkopfClientConnection> clientConnections = new ArrayList<>();
 
   private final List<GameSession> gameSessions = new ArrayList<>();
-
-  private GameSession currentGameSession;
 
   /**
    * Creates an Instance of the Backend Server.
@@ -73,10 +73,8 @@ public class DedicatedServer {
           wsContainer.setMaxTextMessageSize(65535);
           wsContainer.setIdleTimeout(Duration.ofDays(300000));
           // Add websockets
-          wsContainer.addMapping("/*", new FrontendEndpointCreator(this));
+          wsContainer.addMapping("/*", new SchafkopfClientConnectionCreator(this));
         });
-
-    currentGameSession = new GameSession();
   }
 
   /**
@@ -126,7 +124,44 @@ public class DedicatedServer {
     return gameSessions;
   }
 
-  public GameSession getCurrentGameSession() {
-    return currentGameSession;
+  /**
+   * The main entrypoint of the Application.
+   */
+  public JsonArray getGameSessionsAsJson() throws NoGameSessionException {
+    if (gameSessions.isEmpty()) {
+      throw new NoGameSessionException();
+    }
+
+    JsonArray gameSessionsJson = new JsonArray();
+    for (GameSession gameSession : gameSessions) {
+      gameSessionsJson.add(gameSession.getJson());
+    }
+    return gameSessionsJson;
+  }
+
+  /**
+   * The main entrypoint of the Application.
+   */
+  public GameSession getCurrentGameSession() throws NoGameSessionException {
+    if (gameSessions.isEmpty()) {
+      throw new NoGameSessionException();
+    }
+    return gameSessions.get(gameSessions.size() - 1);
+  }
+
+  /**
+   * The main entrypoint of the Application.
+   */
+  public GameSession getGameSessionByName(String gameId) throws NoGameSessionException {
+    for (GameSession gameSession : gameSessions) {
+      if (gameSession.getServerName().equals(gameId)) {
+        return gameSession;
+      }
+    }
+    throw new NoGameSessionException();
+  }
+
+  public void removeGameSession(GameSession gameSession) {
+    gameSessions.remove(gameSession);
   }
 }

@@ -6,12 +6,12 @@ import {BackendMessage, MessageType} from "../BackendMessage.ts";
 
 const backendConnection = scg("BackendConnection");
 
-const serverAddress = ref("10.6.9.57:8085")
+const serverAddress = ref("dyn.heiserer.de:8085")
 const isConnected = ref<boolean>(false);
 const isPingInProgress = ref<boolean>(false);
 const secondsRemaining = ref<number>(10);
 
-const checkInterval: number = 10;
+const checkInterval: number = 5;
 const router = useRouter();
 
 onBeforeMount(async () => {
@@ -58,8 +58,7 @@ async function openOnlineGameList() {
   const successMessageReceived = new Promise<void>((resolve) => {
     const messageListener = (message: string) => {
       const message1: BackendMessage = JSON.parse(message);
-      console.log(message)
-      if (message1.message_type === "SERVER_CONNECTION_SUCCESSFUL") {
+      if (message1.message_type === MessageType.SERVER_CONNECTION_SUCCESSFUL) {
         // Resolve the Promise when the success message is received
         resolve();
       }
@@ -105,7 +104,7 @@ async function openOnlineGameList() {
           </div>
         </div>
 
-        <a class="btn btn-primary">Spielen</a>
+        <button disabled class="btn btn-primary">Bald verfügbar</button>
       </div>
 
       <div class="flex flex-col gap-6 bg-base-200 rounded-box p-8">
@@ -175,7 +174,7 @@ async function openOnlineGameList() {
           </div>
         </div>
 
-        <a class="btn btn-primary">Spielen</a>
+        <button disabled class="btn btn-primary">Bald verfügbar</button>
       </div>
 
     </div>

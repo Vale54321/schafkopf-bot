@@ -3,43 +3,41 @@ import {onMounted, ref} from 'vue';
 
 import {scg} from 'ioc-service-container';
 import CardComp from '../components/CardComponent.vue';
-import {BackendMessage, Card, GamePhase, GameState, MessageType} from "../BackendMessage";
+import {BackendMessage, Card, GamePhase, GameSession, GameState, MessageType} from "../BackendMessage";
+import {useRouter} from "vue-router";
 
 const backendConnection = scg("BackendConnection");
 
 
 const messageFromServer = ref<string[]>([]);
 
-const gameStateText = ref<string>("Schafkopf");
+const gameStateText = ref<string>("Spiel startet...");
 const gameInfoText = ref<string>("");
+const router = useRouter();
 
 const socket = ref<WebSocket | null>();
 const tableCards = ref<Card[]>([]);
 const botCards = ref<Card[]>();
 const trickCard = ref<Card>();
+const gameState = ref<GameState>();
 
-const showGameSelect = ref(true);
 
-function startDedicated(): void {
-  backendConnection.sendMessage(MessageType.START_DEDICATED_GAME,);
-}
-
-function joinGame(): void {
-  backendConnection.sendMessage(MessageType.JOIN_GAME,);
-}
+const gameSession = ref<GameSession>({
+  serverName: "",
+  playerCount: 0,
+  players: []
+});
 
 function sendCard(cardInput: Card): void {
   backendConnection.sendMessage(MessageType.PLAYER_CARD, {card: cardInput});
 }
 
-function showGameState(gamestate: GameState) {
+async function showGameState(gamestate: GameState) {
 
 
   switch (gamestate.gamePhase) {
     case GamePhase.GAME_START:
       gameStateText.value = "Spiel startet";
-      showGameSelect.value = false;
-      // botCards.value = 0;
       break;
     case GamePhase.TRICK_START:
       gameStateText.value = "Runde startet";
@@ -48,13 +46,12 @@ function showGameState(gamestate: GameState) {
       gameInfoText.value = "";
       break;
     case GamePhase.WAIT_FOR_CARD:
-      gameStateText.value = "Spieler " + gamestate.currentPlayer + " muss eine Karte legen.";
+      gameState.value = gamestate;
+      gameStateText.value = gamestate.currentPlayer + " muss eine Karte legen.";
       break;
     case GamePhase.PLAYER_CARD:
-      gameStateText.value = "Spieler " + gamestate.currentPlayer + " hat eine Karte gespielt.";
-      if (gamestate.currentPlayer === 0) {
-        // botCards.value.pop();
-      }
+      gameStateText.value = gamestate.currentPlayer + " hat eine Karte gespielt.";
+
       if (gamestate.trumpf) {
         gameInfoText.value = "TRUMPF";
       } else {
@@ -65,11 +62,11 @@ function showGameState(gamestate: GameState) {
 
       break;
     case GamePhase.PLAYER_TRICK:
-      gameStateText.value = "Spieler " + gamestate.currentPlayer + " sticht.";
+      gameStateText.value = gamestate.currentPlayer + " sticht.";
       trickCard.value = gamestate.card
       break;
     case GamePhase.GAME_STOP:
-      showGameSelect.value = true;
+      await router.push("/gamesession");
       break;
     default:
       gameStateText.value = "Fehler";
@@ -83,32 +80,44 @@ onMounted(() => {
 
   const messageListener = (message: string) => {
     const message1: BackendMessage = JSON.parse(message);
-    console.log(message1)
-    if (message1.message_type === "GAME_STATE" && "gamePhase" in message1.content) {
+    if (message1.message_type === MessageType.GET_ONLINE_GAME) {
+      gameSession.value = message1.content.game;
+      console.log(message1.content)
+    }
+    if (message1.message_type === MessageType.GAME_STATE) {
       console.log(message1.content)
       showGameState(message1.content)
     }
-    if (message1.message_type === "ONLINE_PLAYER_HAND" && "cards" in message1.content) {
+    if (message1.message_type === MessageType.ONLINE_PLAYER_HAND) {
       botCards.value = message1.content.cards;
       console.log(message1.content.cards)
     }
   };
 
   backendConnection.addMessageListener(messageListener);
+
+  backendConnection.sendMessage(MessageType.GAME_START_READY);
+  backendConnection.sendMessage(MessageType.GET_ONLINE_GAME);
 });
 </script>
 <template>
   <div>
     <div v-for="message in messageFromServer" :key="message">{{ message }}</div>
-
-    <div v-if="showGameSelect">
+    <div>
       <div class="flex gap-2 place-content-center">
-        <button class="v-button" @click="startDedicated">Starten</button>
-        <button class="v-button" @click="joinGame">Join</button>
-      </div>
-    </div>
-    <div v-else>
-      <div class="flex gap-2 place-content-center">
+        <div class="text-sm breadcrumbs">
+          <ul>
+            <li v-for="player in gameSession.players">
+            <span
+                :class="{'text-primary': gameState!.currentPlayer === player.playerName}"
+                class="inline-flex gap-2 items-center">
+              <i v-if="!player.isBot" class="bi bi-person"></i>
+              <i v-else class="bi bi-robot"></i>
+              <p>{{ player.playerName }}</p>
+            </span>
+            </li>
+          </ul>
+        </div>
       </div>
       <h1 class=" top-52 text-white font-bold text-6xl absolute text-center w-full">{{ gameInfoText }}</h1>
       <h1 class=" top-64 text-white font-bold text-6xl absolute text-center w-full">{{ gameStateText }}</h1>

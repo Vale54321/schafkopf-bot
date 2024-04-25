@@ -74,34 +74,104 @@ export enum GamePhase {
 export enum MessageType {
     PLAYER_CARD = "PLAYER_CARD",
     START_DEDICATED_GAME = "START_DEDICATED_GAME",
-    JOIN_GAME = "JOIN_GAME",
+    JOIN_ONLINE_GAME = "JOIN_ONLINE_GAME",
+    LEAVE_ONLINE_GAME = "LEAVE_ONLINE_GAME",
     REQUEST_SERVER_CONNECTION = "REQUEST_SERVER_CONNECTION",
+    CREATE_ONLINE_GAME = "CREATE_ONLINE_GAME",
+    LIST_ONLINE_GAMES = "LIST_ONLINE_GAMES",
+    UNKNOWN_ERROR = "UNKNOWN_ERROR",
+    INFO_MESSAGE = "INFO_MESSAGE",
+    GET_ONLINE_GAME = "GET_ONLINE_GAME",
+    SET_STATUS_READY = "SET_STATUS_READY",
+    GAME_STATE = "GAME_STATE",
+    ONLINE_PLAYER_HAND = "ONLINE_PLAYER_HAND",
+    SERVER_CONNECTION_SUCCESSFUL = "SERVER_CONNECTION_SUCCESSFUL",
+    SET_PLAYER_NAME = "SET_PLAYER_NAME",
+    GAME_START_READY = "GAME_START_READY",
 }
 
 // Define the interface for an array of cards
-export interface CardArray {
-    cards: Card[];
+export interface CardArrayMessage {
+    message_type: MessageType.ONLINE_PLAYER_HAND;
+    content: { cards: Card[] };
 }
 
-export interface CardObject {
-    card: Card;
+export interface CardMessage {
+    message_type: MessageType.PLAYER_CARD;
+    content: { card: Card };
 }
-
 
 // Define the interface for the game state
 export interface GameState {
     gamePhase: GamePhase;
-    currentPlayer?: number;
+    currentPlayer?: string;
     card?: Card;
     color?: KartenFarbe;
     trumpf?: boolean;
 }
 
+export interface GameSession {
+    serverName: string;
+    playerCount: number;
+    players: OnlinePlayer[];
+}
+
+export interface OnlinePlayer {
+    playerName: string;
+    isReady: boolean;
+    isBot?: boolean;
+}
+
+export interface GameStateMessage {
+    message_type: MessageType.GAME_STATE;
+    content: GameState;
+}
+
+export interface GameListMessage {
+    message_type: MessageType.LIST_ONLINE_GAMES;
+    content: { games: GameSession[] };
+}
+
+export interface GameInfoMessage {
+    message_type: MessageType.GET_ONLINE_GAME;
+    content: { game: GameSession };
+}
+
+export interface JoinGameMessage {
+    message_type: MessageType.JOIN_ONLINE_GAME;
+    content: { serverName: string };
+}
+
+export interface ErrorMessage {
+    message_type: MessageType.UNKNOWN_ERROR;
+    content: { error: string };
+}
+
+export interface InfoMessage {
+    message_type: MessageType.INFO_MESSAGE;
+    content: { message: string };
+}
 
 export interface EmptyMessage {
-    message_type: string;
-    content: GameState | CardArray | CardObject;
+    message_type: MessageType.SERVER_CONNECTION_SUCCESSFUL | MessageType.GAME_START_READY | MessageType.REQUEST_SERVER_CONNECTION;
+}
+
+export interface SetPlayerNameMessage {
+    message_type: MessageType.SET_PLAYER_NAME;
+    content: { playerName: string }
 }
 
 // Define a union type for all possible message types
-export type BackendMessage = EmptyMessage
+export type BackendMessage =
+    GameListMessage
+    | JoinGameMessage
+    | ErrorMessage
+    | InfoMessage
+    | GameInfoMessage | GameStateMessage | CardArrayMessage | CardMessage | EmptyMessage | SetPlayerNameMessage;
+
+export enum MessageBoardType {
+    ERROR = "alert-error",
+    WARNING = "alert-warning",
+    INFO = "alert-info",
+    SUCCESS = "alert-success"
+}

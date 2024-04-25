@@ -7,6 +7,7 @@ import {setupService} from "./services/DependencyInjection.ts";
 const routes = [
     {path: '/', component: () => import('./pages/MainMenu.vue'),},
     {path: '/online', component: () => import('./pages/OnlineGameList.vue'),},
+    {path: '/gamesession', component: () => import('./pages/GameSession.vue'),},
     {path: '/localgame', component: () => import('./pages/LocalGame.vue'),},
     {path: '/dedicatedgame', component: () => import('./pages/DedicatedGame.vue'),},
 ]
@@ -16,8 +17,7 @@ const router = createRouter({
     routes,
 })
 
-const websocketIp = import.meta.env.VITE_APP_WEBSOCKET_IP;
-setupService("ws://" + websocketIp + ":8080/schafkopf-events/");
+setupService("ws://localhost:8080/schafkopf-events/");
 
 const app = createApp(App)
 app.use(router)
