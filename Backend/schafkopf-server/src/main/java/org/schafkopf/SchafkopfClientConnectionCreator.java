@@ -7,11 +7,11 @@ import org.eclipse.jetty.websocket.server.JettyWebSocketCreator;
 /**
  * Creater to make new Instances of the FrontendConnection.
  */
-public class FrontendEndpointCreator implements JettyWebSocketCreator {
+public class SchafkopfClientConnectionCreator implements JettyWebSocketCreator {
 
   private DedicatedServer dedicatedServer;
 
-  public FrontendEndpointCreator(DedicatedServer dedicatedServer) {
+  public SchafkopfClientConnectionCreator(DedicatedServer dedicatedServer) {
     this.dedicatedServer = dedicatedServer;
   }
 

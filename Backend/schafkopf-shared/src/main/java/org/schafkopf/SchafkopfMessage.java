@@ -13,22 +13,27 @@ public class SchafkopfMessage {
   public static class SchafkopfBaseMessage {
 
     private JsonObject message;
+    private SchafkopfMessageType messageType;
 
     public SchafkopfBaseMessage(SchafkopfMessageType messageType, String content) {
+      this.messageType = messageType;
       this.message = buildBaseMessage(messageType, content);
     }
 
     public SchafkopfBaseMessage(SchafkopfMessageType messageType, JsonObject content) {
+      this.messageType = messageType;
       this.message = buildBaseMessage(messageType, content);
     }
 
     public SchafkopfBaseMessage(SchafkopfMessageType messageType) {
+      this.messageType = messageType;
       this.message = buildBaseMessage(messageType);
     }
 
     public JsonObject getBaseMessage() {
       return message;
     }
+
   }
 
   JsonObject message;
@@ -118,6 +123,8 @@ public class SchafkopfMessage {
    */
   public enum SchafkopfMessageType {
     UNKNOWN_ERROR,
+
+    INFO_MESSAGE,
     HEARTBEAT_SYN,
     HEARTBEAT_ACK,
     GET_CARD_ONLINE_PLAYER,
@@ -125,9 +132,17 @@ public class SchafkopfMessage {
     GAME_STATE,
     SERVER_CONNECTION_SUCCESSFUL,
     REQUEST_SERVER_CONNECTION,
-    START_GAME,
-    JOIN_GAME,
-    PLAYER_CARD
+    JOIN_ONLINE_GAME,
+    START_DEDICATED_GAME,
+    PLAYER_CARD,
+    LIST_ONLINE_GAMES,
+
+    GET_ONLINE_GAME,
+    CREATE_ONLINE_GAME,
+    SET_STATUS_READY,
+    SET_PLAYER_NAME,
+    GAME_START_READY,
+    LEAVE_ONLINE_GAME
   }
 
   /**

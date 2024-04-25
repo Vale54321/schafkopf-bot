@@ -13,8 +13,8 @@ public class BotPlayer extends Player {
   private KartenListe eigeneKarten;
   private KartenListe unbekannteKarten = KartenUtil.initializeSchafKopfCardDeck();
 
-  public BotPlayer() {
-    // TODO document why this constructor is empty
+  public BotPlayer(String name) {
+    super(name);
   }
 
   @Override

@@ -1,6 +1,5 @@
 package org.schafkopf;
 
-import com.google.gson.JsonObject;
 import java.net.URI;
 import java.util.concurrent.CountDownLatch;
 import org.eclipse.jetty.websocket.api.Session;
@@ -13,7 +12,6 @@ import org.eclipse.jetty.websocket.client.ClientUpgradeRequest;
 import org.eclipse.jetty.websocket.client.WebSocketClient;
 import org.schafkopf.SchafkopfMessage.SchafkopfBaseMessage;
 import org.schafkopf.SchafkopfMessage.SchafkopfMessageOrigin;
-import org.schafkopf.SchafkopfMessage.SchafkopfMessageType;
 
 /**
  * Main Class that represents the Backend Server.
@@ -75,7 +73,6 @@ public class DedicatedServerConnection implements MessageSender {
     try {
       session.getRemote().sendString(
           new SchafkopfMessage(SchafkopfMessageOrigin.BACKEND, message).getMessageAsString());
-      System.out.println("Sent message to server: " + message);
     } catch (Exception e) {
       System.err.println("Error sending message: " + e.getMessage());
     }
@@ -116,26 +113,5 @@ public class DedicatedServerConnection implements MessageSender {
       }
     });
     connectionThread.start();
-    start();
-  }
-
-  /**
-   * Class that represents one Frontend Connection.
-   */
-  public void start() {
-    JsonObject messageObject = new JsonObject();
-
-    messageObject.addProperty("message_type", "START_GAME");
-    sendMessage(new SchafkopfBaseMessage(SchafkopfMessageType.START_GAME));
-  }
-
-  /**
-   * Class that represents one Frontend Connection.
-   */
-  public void join() {
-    JsonObject messageObject = new JsonObject();
-
-    messageObject.addProperty("message_type", "JOIN_GAME");
-    sendMessage(new SchafkopfBaseMessage(SchafkopfMessageType.JOIN_GAME));
   }
 }

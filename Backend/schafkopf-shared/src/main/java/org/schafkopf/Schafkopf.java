@@ -28,7 +28,6 @@ public class Schafkopf {
   private final Player[] player;
 
   private GameState gameState = new GameState(GamePhase.GAME_STOP);
-  private Thread spielThread;
 
   /**
    * Constructor for the Schafkopf class.
@@ -100,8 +99,6 @@ public class Schafkopf {
       gameState = new GameState(GamePhase.GAME_STOP);
       setAndSendGameState(gameState);
     }
-
-    spielThread.interrupt();
   }
 
   /**

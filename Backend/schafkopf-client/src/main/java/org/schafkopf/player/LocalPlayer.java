@@ -1,6 +1,5 @@
 package org.schafkopf.player;
 
-import org.schafkopf.BackendServer;
 import org.schafkopf.cardreader.CardReader;
 import org.schafkopf.karte.Karte;
 import org.schafkopf.karte.KartenListe;
@@ -15,6 +14,7 @@ public class LocalPlayer extends Player {
   private final CardReader cardReader;
 
   public LocalPlayer(CardReader cardReader) {
+    super("Local Player");
     this.cardReader = cardReader;
   }
 
@@ -23,7 +23,9 @@ public class LocalPlayer extends Player {
     return wartetAufKarte();
   }
 
-  /** Waits for a Card and returns a Karte Object. */
+  /**
+   * Waits for a Card and returns a Karte Object.
+   */
   private Karte wartetAufKarte() {
     String uid = null;
     System.out.println("Starte Warten auf Karte");

@@ -23,9 +23,9 @@ export class BackendConnection {
         });
     }
 
-    public sendMessage(messageType: MessageType, message?: any): void {
+    public sendMessage(messageType: MessageType, content?: any): void {
         let jsonMessage;
-        if (message === undefined) {
+        if (content === undefined) {
             jsonMessage = {
                 origin: "FRONTEND",
                 message: {
@@ -37,7 +37,7 @@ export class BackendConnection {
                 origin: "FRONTEND",
                 message: {
                     message_type: messageType,
-                    content: message
+                    content: content
                 }
             };
         }
