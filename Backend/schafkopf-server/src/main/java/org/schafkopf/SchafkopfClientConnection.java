@@ -25,14 +25,9 @@ public class SchafkopfClientConnection extends WebSocketAdapter implements Messa
   private final CountDownLatch closureLatch = new CountDownLatch(1);
   private DedicatedServer dedicatedServer;
 
-  private GameSession gameSession;
-
-  private Session session;
+  private OnlineGameSession onlineGameSession;
 
   private OnlinePlayer onlinePlayer;
-
-  private boolean ready = false;
-  private String name = "player";
 
   /**
    * Class that represents one Frontend Connection.
@@ -40,11 +35,11 @@ public class SchafkopfClientConnection extends WebSocketAdapter implements Messa
   public SchafkopfClientConnection(DedicatedServer dedicatedServer) {
     this.dedicatedServer = dedicatedServer;
     this.connectionLatch = new CountDownLatch(1);
+    this.onlinePlayer = new OnlinePlayer(this, "DefaultName");
   }
 
   @Override
   public void onWebSocketConnect(Session session) {
-    this.session = session;
     super.onWebSocketConnect(session);
     String clientIp = session.getRemoteAddress().toString();
     logger.info("Endpoint connected from ip: " + clientIp);
@@ -74,9 +69,9 @@ public class SchafkopfClientConnection extends WebSocketAdapter implements Messa
         sendMessage(new SchafkopfBaseMessage(SchafkopfMessageType.HEARTBEAT_ACK));
         break;
       case JOIN_ONLINE_GAME:
-        GameSession gameSession = null;
+        OnlineGameSession onlineGameSession = null;
         try {
-          gameSession = dedicatedServer.getGameSessionByName(
+          onlineGameSession = dedicatedServer.getGameSessionByName(
               content.get("serverName").getAsString());
         } catch (NoGameSessionException e) {
           JsonObject messageObject = new JsonObject();
@@ -87,23 +82,24 @@ public class SchafkopfClientConnection extends WebSocketAdapter implements Messa
               messageObject));
           break;
         }
-        joinGame(gameSession);
+        joinGame(onlineGameSession);
         sendServerList();
         JsonObject messageObject = new JsonObject();
         messageObject.addProperty("message",
-            "Joined GameSession \"" + gameSession.getServerName() + "\".");
+            "Joined GameSession \"" + onlineGameSession.getServerName() + "\".");
         sendMessage(new SchafkopfBaseMessage(SchafkopfMessageType.INFO_MESSAGE,
             messageObject));
         break;
       case START_DEDICATED_GAME:
         try {
-          this.gameSession.startGame();
+          this.onlineGameSession.startGame();
         } catch (SchafkopfException e) {
           sendError(e);
         }
         break;
       case SET_PLAYER_NAME:
-        this.name = content.get("playerName").getAsString();
+        String name = content.get("playerName").getAsString();
+        onlinePlayer.setName(name);
         break;
       case PLAYER_CARD:
         onlinePlayer.receiveCard(Karte.valueOf(content.get("card").getAsString()));
@@ -112,22 +108,23 @@ public class SchafkopfClientConnection extends WebSocketAdapter implements Messa
         sendServerList();
         break;
       case GET_ONLINE_GAME:
-        this.gameSession.sendSessionInfo();
+        this.onlineGameSession.sendSessionInfo();
         break;
       case CREATE_ONLINE_GAME:
         String servername = content.get("serverName").getAsString();
-        GameSession gameSession2 = new GameSession(servername, this.dedicatedServer);
-        dedicatedServer.addGameSession(gameSession2);
-        joinGame(gameSession2);
+        OnlineGameSession onlineGameSession2 = new OnlineGameSession(servername,
+            this.dedicatedServer);
+        dedicatedServer.addGameSession(onlineGameSession2);
+        joinGame(onlineGameSession2);
         sendServerList();
         break;
       case SET_STATUS_READY:
-        ready = !ready;
-        this.gameSession.sendSessionInfo();
+        onlinePlayer.setReady(!onlinePlayer.isReady());
+        this.onlineGameSession.sendSessionInfo();
         break;
       case LEAVE_ONLINE_GAME:
-        this.gameSession.removePlayer(this);
-        this.gameSession = null;
+        this.onlineGameSession.removePlayer(this.onlinePlayer);
+        this.onlineGameSession = null;
         sendServerList();
         break;
       default:
@@ -137,19 +134,10 @@ public class SchafkopfClientConnection extends WebSocketAdapter implements Messa
     }
   }
 
-
-  public void setOnlinePlayer(OnlinePlayer onlinePlayer) {
-    this.onlinePlayer = onlinePlayer;
-  }
-
-  public OnlinePlayer getOnlinePlayer() {
-    return this.onlinePlayer;
-  }
-
   @Override
   public void onWebSocketClose(int statusCode, String reason) {
-    if (this.gameSession != null) {
-      this.gameSession.removePlayer(this);
+    if (this.onlineGameSession != null) {
+      this.onlineGameSession.removePlayer(this.onlinePlayer);
     }
     super.onWebSocketClose(statusCode, reason);
 
@@ -183,12 +171,12 @@ public class SchafkopfClientConnection extends WebSocketAdapter implements Messa
   /**
    * The main entrypoint of the Application.
    */
-  public void joinGame(GameSession gameSession) {
-    if (this.gameSession != null) {
-      this.gameSession.removePlayer(this);
+  public void joinGame(OnlineGameSession onlineGameSession) {
+    if (this.onlineGameSession != null) {
+      this.onlineGameSession.removePlayer(this.onlinePlayer);
     }
-    this.gameSession = gameSession;
-    gameSession.addPlayer(this);
+    this.onlineGameSession = onlineGameSession;
+    onlineGameSession.addPlayer(this.onlinePlayer);
   }
 
   private void sendServerList() {
@@ -206,18 +194,6 @@ public class SchafkopfClientConnection extends WebSocketAdapter implements Messa
 
     sendMessage(new SchafkopfBaseMessage(SchafkopfMessageType.LIST_ONLINE_GAMES,
         messageObject));
-  }
-
-  public boolean isReady() {
-    return ready;
-  }
-
-  public void resetReady() {
-    ready = false;
-  }
-
-  public String getName() {
-    return this.name;
   }
 
   /**

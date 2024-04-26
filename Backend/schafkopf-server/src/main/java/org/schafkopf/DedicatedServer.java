@@ -29,7 +29,7 @@ public class DedicatedServer {
 
   private final List<SchafkopfClientConnection> clientConnections = new ArrayList<>();
 
-  private final List<GameSession> gameSessions = new ArrayList<>();
+  private final List<OnlineGameSession> onlineGameSessions = new ArrayList<>();
 
   /**
    * Creates an Instance of the Backend Server.
@@ -116,25 +116,25 @@ public class DedicatedServer {
     clientConnections.remove(endpoint);
   }
 
-  public void addGameSession(GameSession gameSession) {
-    gameSessions.add(gameSession);
+  public void addGameSession(OnlineGameSession onlineGameSession) {
+    onlineGameSessions.add(onlineGameSession);
   }
 
-  public List<GameSession> getGameSessions() {
-    return gameSessions;
+  public List<OnlineGameSession> getGameSessions() {
+    return onlineGameSessions;
   }
 
   /**
    * The main entrypoint of the Application.
    */
   public JsonArray getGameSessionsAsJson() throws NoGameSessionException {
-    if (gameSessions.isEmpty()) {
+    if (onlineGameSessions.isEmpty()) {
       throw new NoGameSessionException();
     }
 
     JsonArray gameSessionsJson = new JsonArray();
-    for (GameSession gameSession : gameSessions) {
-      gameSessionsJson.add(gameSession.getJson());
+    for (OnlineGameSession onlineGameSession : onlineGameSessions) {
+      gameSessionsJson.add(onlineGameSession.getJson());
     }
     return gameSessionsJson;
   }
@@ -142,26 +142,26 @@ public class DedicatedServer {
   /**
    * The main entrypoint of the Application.
    */
-  public GameSession getCurrentGameSession() throws NoGameSessionException {
-    if (gameSessions.isEmpty()) {
+  public OnlineGameSession getCurrentGameSession() throws NoGameSessionException {
+    if (onlineGameSessions.isEmpty()) {
       throw new NoGameSessionException();
     }
-    return gameSessions.get(gameSessions.size() - 1);
+    return onlineGameSessions.get(onlineGameSessions.size() - 1);
   }
 
   /**
    * The main entrypoint of the Application.
    */
-  public GameSession getGameSessionByName(String gameId) throws NoGameSessionException {
-    for (GameSession gameSession : gameSessions) {
-      if (gameSession.getServerName().equals(gameId)) {
-        return gameSession;
+  public OnlineGameSession getGameSessionByName(String gameId) throws NoGameSessionException {
+    for (OnlineGameSession onlineGameSession : onlineGameSessions) {
+      if (onlineGameSession.getServerName().equals(gameId)) {
+        return onlineGameSession;
       }
     }
     throw new NoGameSessionException();
   }
 
-  public void removeGameSession(GameSession gameSession) {
-    gameSessions.remove(gameSession);
+  public void removeGameSession(OnlineGameSession onlineGameSession) {
+    onlineGameSessions.remove(onlineGameSession);
   }
 }

@@ -3,28 +3,18 @@ package org.schafkopf;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import java.util.ArrayList;
-import java.util.List;
-import org.schafkopf.SchafkopfException.NotEnoughPlayersException;
 import org.schafkopf.SchafkopfException.PlayerNotReadyException;
 import org.schafkopf.SchafkopfMessage.SchafkopfBaseMessage;
 import org.schafkopf.SchafkopfMessage.SchafkopfMessageType;
 import org.schafkopf.player.BotPlayer;
 import org.schafkopf.player.OnlinePlayer;
 import org.schafkopf.player.Player;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * The main entrypoint of the Application.
  */
-public class GameSession implements MessageSender {
+public class OnlineGameSession extends BaseGameSession {
 
-  private static final Logger logger = LoggerFactory.getLogger(GameSession.class);
-  private Schafkopf schafkopf;
-
-  private List<SchafkopfClientConnection> clients;
-
-  private Thread spielThread;
   private String serverName;
 
   private DedicatedServer dedicatedServer;
@@ -32,59 +22,32 @@ public class GameSession implements MessageSender {
   /**
    * The main entrypoint of the Application.
    */
-  public GameSession(String serverName, DedicatedServer dedicatedServer) {
+  public OnlineGameSession(String serverName, DedicatedServer dedicatedServer) {
+    this.players = new ArrayList<>();
     this.dedicatedServer = dedicatedServer;
     this.serverName = serverName;
-    this.clients = new ArrayList<>();
     logger.info(serverName + " created.");
   }
 
   /**
    * Class that represents one Frontend Connection.
    */
-  public void addPlayer(SchafkopfClientConnection client) {
-    if (this.clients.size() >= 4) {
+  public void addPlayer(Player player) {
+    if (this.players.size() >= 4) {
       throw new RuntimeException("Game is full");
     }
-    logger.info("Adding player to game: " + client);
-    clients.add(client);
+    logger.info("Adding player to game: " + player);
+    players.add(player);
 
-    OnlinePlayer onlinePlayer = new OnlinePlayer(client, client.getName());
-    client.setOnlinePlayer(onlinePlayer);
     this.sendSessionInfo();
   }
 
-  /**
-   * Class that represents one Frontend Connection.
-   */
-  public void removePlayer(SchafkopfClientConnection client) {
-    logger.info("Removing player from game: " + client);
-    clients.remove(client);
-
-    if (clients.isEmpty()) {
-      logger.info("No players left in game: " + serverName);
-      if (spielThread != null) {
-        spielThread.interrupt();
-      }
-      this.dedicatedServer.removeGameSession(this);
-      return;
-    }
-    this.sendSessionInfo();
-  }
 
   void startGame() throws PlayerNotReadyException {
-    logger.info("Starting game: " + serverName + " with " + clients.size() + " players");
-    List<Player> players = new ArrayList<>();
+    logger.info("Starting game: " + serverName + " with " + players.size() + " Onlineplayers");
 
-    for (SchafkopfClientConnection client : clients) {
-      players.add(client.getOnlinePlayer());
-    }
-    for (int i = players.size(); i < 4; i++) {
-      players.add(new BotPlayer("Bot " + i));
-    }
-
-    for (SchafkopfClientConnection client : clients) {
-      if (!client.isReady()) {
+    for (Player player : players) {
+      if (!player.isReady()) {
         throw new PlayerNotReadyException();
       }
     }
@@ -98,27 +61,32 @@ public class GameSession implements MessageSender {
       e.printStackTrace();
     }
 
-    spielThread = new Thread(() -> {
-      try {
-        schafkopf = new Schafkopf(players.toArray(Player[]::new), this);
-        schafkopf.startGame();
-        clients.forEach(client -> client.resetReady());
-      } catch (NotEnoughPlayersException e) {
-        throw new RuntimeException(e);
-      } catch (InterruptedException e) {
-        throw new RuntimeException(e);
+    super.startGame(players);
+    players.forEach(player -> player.resetReady());
+  }
+
+  /**
+   * Class that represents one Frontend Connection.
+   */
+  public void removePlayer(OnlinePlayer player) {
+    logger.info("Removing player from game: " + player.getName());
+    players.remove(player);
+
+    if (this.getPlayerCount() == 0) {
+      logger.info("No players left in game: " + serverName);
+      if (spielThread != null) {
+        spielThread.interrupt();
       }
-    });
-
-    spielThread.start();
-
-
+      this.dedicatedServer.removeGameSession(this);
+      return;
+    }
+    this.sendSessionInfo();
   }
 
   @Override
   public void sendMessage(SchafkopfBaseMessage message) {
-    for (SchafkopfClientConnection client : clients) {
-      client.sendMessage(message);
+    for (Player player : players) {
+      player.sendMessage(message);
     }
   }
 
@@ -132,15 +100,17 @@ public class GameSession implements MessageSender {
 
     // Create an array to hold player information
     JsonArray playersArray = new JsonArray();
-    for (SchafkopfClientConnection client : clients) {
+    for (Player player : players) {
       JsonObject playerObject = new JsonObject();
       playerObject.addProperty("playerName",
-          client.getName()); // Assuming you have a method to get player name
+          player.getName()); // Assuming you have a method to get player name
       playerObject.addProperty("isReady",
-          client.isReady()); // Assuming you have a method to check player readiness
+          player.isReady()); // Assuming you have a method to check player readiness
       playersArray.add(playerObject);
+      playerObject.addProperty("isBot",
+          player instanceof BotPlayer);
     }
-    for (int i = clients.size(); i < 4; i++) {
+    for (int i = players.size(); i < 4; i++) {
       JsonObject playerObject = new JsonObject();
       playerObject.addProperty("playerName",
           "Bot " + i); // Assuming you have a method to get player name
@@ -159,8 +129,17 @@ public class GameSession implements MessageSender {
     return serverName;
   }
 
+  /**
+   * The main entrypoint of the Application.
+   */
   public int getPlayerCount() {
-    return clients.size();
+    int onlinePlayerCount = 0;
+    for (Player player : players) {
+      if (player instanceof OnlinePlayer) {
+        onlinePlayerCount++;
+      }
+    }
+    return onlinePlayerCount;
   }
 
   /**

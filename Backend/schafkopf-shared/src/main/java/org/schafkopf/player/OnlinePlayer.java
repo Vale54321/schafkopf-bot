@@ -15,14 +15,12 @@ import org.schafkopf.spielcontroller.SpielController;
  */
 public class OnlinePlayer extends Player {
 
-  private final MessageSender messageSender;
   private final BlockingQueue<Karte> receivedCardQueue = new LinkedBlockingQueue<>();
 
   private KartenListe karten = new KartenListe();
 
   public OnlinePlayer(MessageSender messageSender, String name) {
-    super(name);
-    this.messageSender = messageSender;
+    super(name, messageSender);
   }
 
   /**
@@ -53,6 +51,11 @@ public class OnlinePlayer extends Player {
     return spielKarte;
   }
 
+  @Override
+  public void resetReady() {
+    this.setReady(false);
+  }
+
   private void sendPlayerCards() {
     JsonObject messageObject = new JsonObject();
     messageObject.add("cards", this.karten.getJson());
@@ -67,5 +70,10 @@ public class OnlinePlayer extends Player {
   public void receiveCard(Karte receivedCard) {
     System.out.println("Received Card before Queue: " + receivedCard.getName());
     receivedCardQueue.add(receivedCard);
+  }
+
+  @Override
+  public void sendMessage(SchafkopfBaseMessage message) {
+    messageSender.sendMessage(message);
   }
 }
