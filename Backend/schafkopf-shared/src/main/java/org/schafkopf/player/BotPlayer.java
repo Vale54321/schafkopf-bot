@@ -1,5 +1,7 @@
 package org.schafkopf.player;
 
+import org.schafkopf.MessageSender;
+import org.schafkopf.SchafkopfMessage.SchafkopfBaseMessage;
 import org.schafkopf.karte.Karte;
 import org.schafkopf.karte.KartenListe;
 import org.schafkopf.karte.KartenUtil;
@@ -13,8 +15,17 @@ public class BotPlayer extends Player {
   private KartenListe eigeneKarten;
   private KartenListe unbekannteKarten = KartenUtil.initializeSchafKopfCardDeck();
 
+  /**
+   * Constructor for the BotPlayer.
+   */
   public BotPlayer(String name) {
-    super(name);
+    super(name, new MessageSender() {
+      @Override
+      public void sendMessage(SchafkopfBaseMessage message) {
+        System.out.println("BotPlayer: " + message);
+      }
+    });
+    this.setReady(true);
   }
 
   @Override
@@ -44,5 +55,15 @@ public class BotPlayer extends Player {
     this.unbekannteKarten = KartenUtil.initializeSchafKopfCardDeck();
     this.unbekannteKarten.removeKarten(eigeneKarten);
     System.out.println("Eigene Karte fertig");
+  }
+
+  @Override
+  public void sendMessage(SchafkopfBaseMessage message) {
+
+  }
+
+  @Override
+  public void resetReady() {
+    // Not needed
   }
 }

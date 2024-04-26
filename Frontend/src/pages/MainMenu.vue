@@ -6,7 +6,7 @@ import {BackendMessage, MessageType} from "../BackendMessage.ts";
 
 const backendConnection = scg("BackendConnection");
 
-const serverAddress = ref("dyn.heiserer.de:8085")
+const serverAddress = ref("10.6.9.57:8085")
 const isConnected = ref<boolean>(false);
 const isPingInProgress = ref<boolean>(false);
 const secondsRemaining = ref<number>(10);
