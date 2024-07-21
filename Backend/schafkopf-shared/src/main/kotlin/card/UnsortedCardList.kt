@@ -1,24 +1,14 @@
-package de.heiserer
-
-interface CardList {
-    fun add(card: Card)
-    fun add(cards: CardList)
-    fun remove(card: Card): Card
-    fun remove(cards: CardList)
-    fun removeLast(): Card
-    fun get(index: Int): Card
-    fun getCopyOfCards(): List<Card>
-    fun size(): Int
-    fun print()
-    fun asSortedCardList(type: GameType): SortedCardList
-    fun removeFirst(): Card
-}
+package de.heiserer.cards
 
 open class UnsortedCardList(withAllCards: Boolean = false): CardList {
     private val cards: MutableList<Card> = if(withAllCards){
         enumValues<Card>().toMutableList()
     } else {
         mutableListOf()
+    }
+
+    override operator fun contains(card: Card): Boolean {
+        return cards.contains(card)
     }
 
     override fun add(card: Card) {
@@ -60,11 +50,19 @@ open class UnsortedCardList(withAllCards: Boolean = false): CardList {
         return cards.removeLast()
     }
 
+    override fun indexOf(card: Card): Int {
+        return cards.indexOf(card)
+    }
+
     override fun get(index: Int): Card {
         if(index < 0 || index >= cards.size){
             throw IllegalArgumentException("Index $index is out of bounds.")
         }
         return cards[index]
+    }
+
+    override fun getLast(): Card {
+        return cards[cards.size - 1]
     }
 
     protected fun get(color: CardColor): CardList {
@@ -128,53 +126,4 @@ open class UnsortedCardList(withAllCards: Boolean = false): CardList {
             }
         }.thenComparing(compareBy({ it.color.order }, { it.symbol.order })))
     }
-}
-
-class SortedCardList(private val gameType: GameType, withAllCards: Boolean = false) : UnsortedCardList(withAllCards) {
-    private fun sort() {
-        super.sortInternal(gameType.symbol, gameType.color)
-    }
-
-    fun getCardsWithoutTrumpf(color: CardColor? = null): SortedCardList {
-        val cardsWithoutTrumpf = SortedCardList(gameType)
-
-        color?.let { cardsWithoutTrumpf.add(get(it)) }?: cardsWithoutTrumpf.add(this)
-        try {
-            cardsWithoutTrumpf.remove(getTrumpf())
-        } catch (_: IllegalArgumentException) {
-        }
-
-        return cardsWithoutTrumpf
-    }
-
-    fun getTrumpf():SortedCardList {
-        val trumpf = SortedCardList(gameType)
-
-        gameType.symbol?.let {
-            trumpf.add(get(it))
-        } ?: run {
-            trumpf.add(get(CardSymbol.OBER))
-            trumpf.add(get(CardSymbol.UNTER))
-        }
-
-        gameType.color?.let { try{
-            trumpf.add(get(it))
-        } catch (_: CardAlreadyAddedException) {}
-        }
-
-        return trumpf
-    }
-
-    fun farbFreiOrTrumpf(firstCard: Card, gameType: GameType) =
-        firstCard.color == gameType.color || getCardsWithoutTrumpf(gameType.color).size() == 0
-
-    override fun add(card: Card) {
-        super.add(card)
-        sort()
-    }
-}
-
-class CardAlreadyAddedException(message: String, val card: Card) : RuntimeException(message) {
-
-    // You can add additional constructors or methods if needed, but for now, this is sufficient to handle the scenario of adding a card that's already in the list.
 }

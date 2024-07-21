@@ -1,4 +1,7 @@
-import de.heiserer.*
+import de.heiserer.cards.Card
+import de.heiserer.cards.CardColor
+import de.heiserer.cards.GameType
+import de.heiserer.cards.UnsortedCardList
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest

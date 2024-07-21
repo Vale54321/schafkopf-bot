@@ -1,9 +1,9 @@
-package de.heiserer
+package de.heiserer.cards
 
 enum class Card(val color: CardColor, val symbol: CardSymbol) {
     SCHELL_7(CardColor.SCHELL, CardSymbol.SIEBEN),
     SCHELL_8(CardColor.SCHELL, CardSymbol.ACHT),
-    SCHELL_9(CardColor.SCHELL, CardSymbol.NINE),
+    SCHELL_9(CardColor.SCHELL, CardSymbol.NEUN),
     SCHELL_U(CardColor.SCHELL, CardSymbol.UNTER),
     SCHELL_O(CardColor.SCHELL, CardSymbol.OBER),
     SCHELL_K(CardColor.SCHELL, CardSymbol.KOENIG),
@@ -11,7 +11,7 @@ enum class Card(val color: CardColor, val symbol: CardSymbol) {
     SCHELL_A(CardColor.SCHELL, CardSymbol.ASS),
     HERZ_7(CardColor.HERZ, CardSymbol.SIEBEN),
     HERZ_8(CardColor.HERZ, CardSymbol.ACHT),
-    HERZ_9(CardColor.HERZ, CardSymbol.NINE),
+    HERZ_9(CardColor.HERZ, CardSymbol.NEUN),
     HERZ_U(CardColor.HERZ, CardSymbol.UNTER),
     HERZ_O(CardColor.HERZ, CardSymbol.OBER),
     HERZ_K(CardColor.HERZ, CardSymbol.KOENIG),
@@ -19,7 +19,7 @@ enum class Card(val color: CardColor, val symbol: CardSymbol) {
     HERZ_A(CardColor.HERZ, CardSymbol.ASS),
     BLATT_7(CardColor.BLATT, CardSymbol.SIEBEN),
     BLATT_8(CardColor.BLATT, CardSymbol.ACHT),
-    BLATT_9(CardColor.BLATT, CardSymbol.NINE),
+    BLATT_9(CardColor.BLATT, CardSymbol.NEUN),
     BLATT_U(CardColor.BLATT, CardSymbol.UNTER),
     BLATT_O(CardColor.BLATT, CardSymbol.OBER),
     BLATT_K(CardColor.BLATT, CardSymbol.KOENIG),
@@ -27,7 +27,7 @@ enum class Card(val color: CardColor, val symbol: CardSymbol) {
     BLATT_A(CardColor.BLATT, CardSymbol.ASS),
     EICHEL_7(CardColor.EICHEL, CardSymbol.SIEBEN),
     EICHEL_8(CardColor.EICHEL, CardSymbol.ACHT),
-    EICHEL_9(CardColor.EICHEL, CardSymbol.NINE),
+    EICHEL_9(CardColor.EICHEL, CardSymbol.NEUN),
     EICHEL_U(CardColor.EICHEL, CardSymbol.UNTER),
     EICHEL_O(CardColor.EICHEL, CardSymbol.OBER),
     EICHEL_K(CardColor.EICHEL, CardSymbol.KOENIG),
@@ -49,7 +49,7 @@ enum class CardColor(val order: Int, val displayName: String) {
 enum class CardSymbol(val order: Int, val displayName: String, val value: Int) {
     SIEBEN(0,"7", 0),
     ACHT(1,"8", 0),
-    NINE(2,"9", 0),
+    NEUN(2,"9", 0),
     UNTER(3,"Unter", 2),
     OBER(4,"Ober", 3),
     KOENIG(5,"König", 4),
