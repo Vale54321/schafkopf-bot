@@ -1,4 +1,8 @@
-package de.heiserer.cards
+package card
+
+import de.heiserer.cards.Card
+import de.heiserer.cards.GameType
+import de.heiserer.cards.SortedCardList
 
 interface CardList {
     fun add(card: Card)

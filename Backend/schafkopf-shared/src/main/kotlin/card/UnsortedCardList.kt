@@ -1,5 +1,7 @@
 package de.heiserer.cards
 
+import card.CardList
+
 open class UnsortedCardList(withAllCards: Boolean = false): CardList {
     private val cards: MutableList<Card> = if(withAllCards){
         enumValues<Card>().toMutableList()

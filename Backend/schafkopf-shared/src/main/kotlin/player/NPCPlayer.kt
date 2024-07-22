@@ -1,5 +1,6 @@
 package de.heiserer.player
 
+import card.CardToolkit
 import de.heiserer.cards.*
 
 class NPCPlayer(name: String) : Player(name){

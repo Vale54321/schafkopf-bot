@@ -1,9 +1,13 @@
-package de.heiserer.cards
+package card
+
+import de.heiserer.cards.Card
+import de.heiserer.cards.GameType
+import de.heiserer.cards.UnsortedCardList
 
 class CardToolkit private constructor(private val gameType: GameType) {
     private val sortedCardList = UnsortedCardList(true).asSortedCardList(gameType)
 
-    fun isTrumpf(card: Card): Boolean = card in sortedCardList.getTrumpf().getCopyOfCards()
+    fun isTrumpf(card: Card): Boolean = card in sortedCardList.getTrumpf()
 
     fun whoTricks(cards: CardList): Int {
         if(cards.size() != 4){
